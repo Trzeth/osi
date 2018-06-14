@@ -9,13 +9,13 @@ namespace DownloadEngine
 {
     internal class _DownlaodHepler
     {
-        internal static class UriHepler2
-        {
-            public static void Parse(Uri uri,out )
-            {
+        //internal static class UriHepler2
+        //{
+        //    public static void Parse(Uri uri,out )
+        //    {
 
-            }
-        }
+        //    }
+        //}
         internal class UriHepler
         {
             internal bool IsValid
@@ -29,11 +29,6 @@ namespace DownloadEngine
             internal int Id
             {
                 get { return _id; }
-            }
-            internal enum IdType
-            {
-                BeatmapId,
-                BeatmapSetId
             }
 
             Regex _osuRegex = new Regex(@"^/(?<type>[bsdp])/(beatmap\?b\=)?(?<id>\d+)");

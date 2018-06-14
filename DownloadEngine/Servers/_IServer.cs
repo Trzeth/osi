@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DownloadEngine.Servers
 {
-    interface IServer
+    interface _IServer
     {
-        byte[] Download();
+         byte[] Download(Beatmapset b);
 
     }
 }

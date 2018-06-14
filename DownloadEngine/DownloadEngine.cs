@@ -17,16 +17,41 @@ namespace DownloadEngine
         Uugl
     }
 
+    public enum IdType
+    {
+        BeatmapId,
+        BeatmapSetId
+    }
+
     public class Beatmapset
     {
-        public Server DownloadFrom = Server.Inso;
+        public Server DownloadFrom { get { return _downloadFrom; } }
         public Uri Uri;
         public int BeatmapId;// beatmap_id is per difficulty
 
         //Major
         public int BeatmapSetId;// beatmapset_id groups difficulties into a set 
-        
-        public int Size;
+
+
+        private Server _downloadFrom;
+        public Beatmapset(int Id,IdType IdType,Server DownloadFrom)
+        {
+            switch (IdType)
+            {
+                case IdType.BeatmapId:
+                    BeatmapId = Id;
+                    break;
+                case IdType.BeatmapSetId:
+                    BeatmapSetId = Id;
+                    break;
+            }
+            _downloadFrom = DownloadFrom;
+        }
+        public Beatmapset(Uri Uri,Server DownloadFrom)
+        {
+            this.Uri = Uri;
+            _downloadFrom = DownloadFrom;
+        }
     }
 
     public class BeatmapsetInfo
@@ -59,30 +84,31 @@ namespace DownloadEngine
         }
         public static int[] transCount = new int[4];
     }
-    public class DownloadMgr
-    {
-        public BeatmapsetInfo _beatmapsetInfo;
 
-        static List<Beatmapset> _downloadList;
+    public class DownloadManager
+    {
+        private BeatmapsetInfo _beatmapsetInfo;
+
+        static List<Beatmapset> _downloadList = new List<Beatmapset>();
 
         bool _isInsoValid;
         bool _isBloodcatValid;
         
 
-        public void DownloaderMgr()
+        public DownloadManager()
         {
-            if (Inso.Cookie == null) { }
 
         }
-        public void DownloaderMgr(string Inso_Cookie)
+        public DownloadManager(string Inso_Cookie)
         {
             Inso.Cookie = Inso_Cookie;
             _isInsoValid = true;
         }
         public static void AddToDownloadList(Beatmapset beatmapset)
         {
-            if (beatmapset.BeatmapSetId == 0 || beatmapset.BeatmapId == 0) { beatmapset = Prase(beatmapset); }
+            if (beatmapset.BeatmapSetId == 0 && beatmapset.BeatmapId == 0) { beatmapset = Prase(beatmapset); }
             _downloadList.Add(beatmapset);
+            Check();
         }
 
         private static Beatmapset Prase(Beatmapset beatmapset)
@@ -92,10 +118,10 @@ namespace DownloadEngine
             {
                 switch (uri.Type)
                 {
-                    case UriHepler.IdType.BeatmapId:
+                    case IdType.BeatmapId:
                         beatmapset.BeatmapId = uri.Id;
                         break;
-                    case UriHepler.IdType.BeatmapSetId:
+                    case IdType.BeatmapSetId:
                         beatmapset.BeatmapSetId = uri.Id;
                         break;
                 }
@@ -107,21 +133,45 @@ namespace DownloadEngine
             return beatmapset;
         }
 
-        //private void Download()
-        //{
-        //    switch (_beatmapset.DownloadFrom)
-        //    {
-        //        case Server.Orgin:
-        //            break;
-        //        case Server.Inso:
-        //            Servers.Inso inso = new Servers.Inso();
-        //            inso.Download(_beatmapset);
-        //            break;
-        //        case Server.BlooadCat:
-        //            break;
-        //        case Server.Uugl:
-        //            break;
-        //    }
-        //}
+        private static void Check()
+        {
+            if(_downloadList.Count > 0)
+            {
+                for (int i=0; i<_downloadList.Count; i++)
+                {
+                    string FileName = null;
+                    byte[] data = null;
+
+                    bool succeed;
+                    try
+                    {
+                        switch (_downloadList[i].DownloadFrom)
+                        {
+                            case Server.Orgin:
+                                break;
+                            case Server.Inso:
+                                data = Inso.Download(_downloadList[i], out FileName);
+                                break;
+                            case Server.BlooadCat:
+                                break;
+                            case Server.Uugl:
+                                data = Uugl.Download(_downloadList[i], out FileName);
+                                break;
+                        }
+                        _FileHelper.FileWrite(data, FileName);
+                        succeed = true;
+                    }catch(Exception e)
+                    {
+                        succeed = false;
+                    }
+
+                    if (succeed == true)
+                    {
+                        _downloadList.Remove(_downloadList[i]);
+                    }
+
+                }
+            }
+        }
     }
 }

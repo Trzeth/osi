@@ -15,31 +15,73 @@ namespace ConsoleApplication1
 
             Console.WriteLine("START");
 
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var appsettings = config.AppSettings.Settings;
+            //Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            //var appsettings = config.AppSettings.Settings;
 
-            if (appsettings["Inso"].Value == String.Empty)
+            //if (appsettings["Inso"].Value == string.Empty)
+            //{
+            //    Console.WriteLine("Input Inso Cookie");
+            //    appsettings["Inso"].Value = Console.ReadLine();
+            //    config.Save();
+            //}
+
+            DownloadManager DownloadMgr = new DownloadManager();
+
+            Server server = Server.Uugl;
+            Console.WriteLine("Select A Download Server");
+            Console.WriteLine("A Uugl B Inso C Bloodcat");
+            switch (Console.ReadKey().Key)
             {
-                Console.WriteLine("Input Inso Cookie");
-                appsettings["Inso"].Value = Console.ReadLine();
-                config.Save();
+                case ConsoleKey.A:
+                    server = Server.Uugl;
+                    break;
+                case ConsoleKey.B:
+                    server = Server.Inso;
+                    break;
+                case ConsoleKey.C:
+                    server = Server.BlooadCat;
+                    break;
             }
-
-            DownloadEngine.Servers.Inso.Cookie = ConfigurationManager.AppSettings["Inso"];
+            Console.WriteLine();
+            Console.WriteLine("Press A to enter Beatmap ID");
+            Console.WriteLine("Press B to enter BeatmapSet ID");
+            Console.WriteLine("Press C to enter Beatmap Uri");
 
             while (true)
             {
-                Console.WriteLine("Input Uri");
-                try
+                Beatmapset beatmapset = null;
+                Uri uri;
+                ConsoleKey consoleKey = Console.ReadKey().Key;
+                Console.WriteLine();
+
+                switch (consoleKey)
                 {
-                    Beatmapset beatmapset = new Beatmapset();
-                    beatmapset.Uri = new Uri(Console.ReadLine());
-                    Downloader downloader = new Downloader(beatmapset);
+                    case (ConsoleKey.A):
+                        Console.WriteLine("Enter Beatmap ID");
+                        beatmapset = new Beatmapset(int.Parse(Console.ReadLine()),IdType.BeatmapId, server);
+                        break;
+                    case (ConsoleKey.B):
+                        Console.WriteLine("Enter BeatmapSet ID");
+                        beatmapset = new Beatmapset(int.Parse(Console.ReadLine()), IdType.BeatmapSetId, server);
+                        break;
+                    case (ConsoleKey.C):
+                        Console.WriteLine("Enter Beatmap Uri");
+                        
+                        try
+                        {
+                            uri = new Uri(Console.ReadLine());
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                            uri = null;
+                        }
+                        beatmapset = new Beatmapset(uri, Server.Uugl);
+                        break;
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
+
+                DownloadManager.AddToDownloadList(beatmapset);
+                Console.WriteLine("Finished!");
             }
         }
     }

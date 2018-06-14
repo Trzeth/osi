@@ -48,9 +48,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Servers\Bloodcat.cs" />
     <Compile Include="Servers\Inso.cs" />
-    <Compile Include="Servers\Server.cs" />
+    <Compile Include="Servers\WebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Servers\_IServer.cs" />
     <Compile Include="Servers\Uugl.cs" />
     <Compile Include="_DownlaodHepler.cs" />
+    <Compile Include="_FileHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

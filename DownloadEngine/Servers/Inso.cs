@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using System.IO;
 using System.Threading;
 using System.Collections;
 using System.Text.RegularExpressions;
 
 namespace DownloadEngine.Servers
 {
-    static class Inso : IServer
+    static class Inso
     {
         public static float current_timestamp;
         public class User
@@ -89,7 +86,11 @@ namespace DownloadEngine.Servers
             path = path + "source=osi";
             return path;
         }
-        internal static void Download(Beatmapset beatmapset)
+        static Inso()
+        {
+
+        }
+        internal static byte[] Download(Beatmapset beatmapset,out string fileName)
         {
             /*
             "package_url": {
@@ -103,6 +104,7 @@ namespace DownloadEngine.Servers
             */
 
             string bValve;
+            byte[] data = null;
 
             if (beatmapset.BeatmapId != 0)
             {
@@ -117,23 +119,28 @@ namespace DownloadEngine.Servers
             JObject result = null;
             while (!finished)
             {
-                result = JObject.Parse(HttpRequest(ApiPath(Methods.download, bValve)));
+                result = JObject.Parse(WebClient().DownloadString(ApiPath(Methods.download, bValve)));
 
                 switch ((int)result["return"])
                 {
-                    case -1: finished = true; break;
-                    case 5: finished = true; break;
-                    case 100: finished = true; _Download(result); break;
+                    case -1:
+                    case 5:
+                    case 999:
+                    case 1100: finished = true; break;
+                    
+                    case 100: finished = true; data = _download(result); break;
                     case 200: case 300: case 400: case 500:
                     case 201: case 301: case 401: case 501:
                     case 202: case 302: case 402: case 502:
                     case 203: case 303: case 403: case 503: Thread.Sleep(2000); break;
-                    case 999: finished = true; break;
-                    case 1100: finished = true; break;
                 }
             }
+
+            fileName = result["mapset"] + " " + result["info"]["artist"] + " - " + result["info"]["title"] + @".osz";
+            
+            return data;
         }
-        private static void _Download(JObject result)
+        private static byte[] _download(JObject result)
         {
             Packages packages = new Packages();
             JToken package_url = result["package_url"];
@@ -145,7 +152,7 @@ namespace DownloadEngine.Servers
             packages.storyboard = ((string)package_url["storyboard"] != string.Empty ? (Uri)package_url["storyboard"] : null);
             packages.central = (Uri)package_url["central"];
 
-            JObject centralIndexR = JObject.Parse(HttpRequest(ApiPath(Methods.ci_token,(string)result["ci_token"])));
+            JObject centralIndexR = JObject.Parse(WebClient().DownloadString(ApiPath(Methods.ci_token,(string)result["ci_token"])));
 
             int combination = 0;
             byte[] file = new byte[0];
@@ -153,7 +160,7 @@ namespace DownloadEngine.Servers
             {
                 if(packages.uri[i] != null)
                 {
-                    byte[] data = GetData(packages.uri[i].AbsoluteUri);
+                    byte[] data = WebClient().DownloadData(packages.uri[i].AbsoluteUri);
                     byte[] newData = Decode(data, centralIndexR["central_index"]);
                     Console.WriteLine("{0} {1}",data.Length,newData.Length);
                     if (i != 5)
@@ -182,14 +189,14 @@ namespace DownloadEngine.Servers
                     Console.WriteLine(file.Length);
                 }
             }
-            File.WriteAllBytes(Environment.CurrentDirectory + @"/downlaod/" + result["mapset"] + " " + result["info"]["artist"] + " - " + result["info"]["title"] + @".osz", file) ;
-
             GC.Collect();
+
+            return file;
         }
         public static User GetUserStatus()
         {
             User user = new User();
-            JObject result = JObject.Parse(HttpRequest(ApiPath(Methods.user,null)));
+            JObject result = JObject.Parse(WebClient().DownloadString(ApiPath(Methods.user,null)));
 
             user.username = (string)result["username"];
             user.user_id = (int)result["user_id"];
@@ -218,32 +225,20 @@ namespace DownloadEngine.Servers
                         newData[j] = (data[j]);
                     }
                 }
-
             }
+
+            centralIndex = null;
+            data = null;
+            central_index = null;
+
             return newData;
         }
-        private static string HttpRequest(string path)
+        public static WebClient WebClient()
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(path);
-            request.Headers.Add(HttpRequestHeader.Cookie, "do_not_remove_this_0w0" + '=' + Cookie);
-            request.UserAgent = "Mozilla / 4.0(compatible;.NET CLR 4.0.30319; osu!in)";
-            request.Method = "Get";
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            string result = new StreamReader(response.GetResponseStream()).ReadToEnd();
-            response.Dispose();
-
-            return result;
+            WebClient webclient = new WebClient();
+            webclient.AddCookie(new System.Net.Cookie("do_not_remove_this_0w0", Cookie));
+            return webclient;
         }
-        private static byte[] GetData(string path)
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(path);
-            request.UserAgent = "Mozilla / 4.0(compatible;.NET CLR 4.0.30319; osu!in)";
-            request.Method = "Get";
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            byte[] result = new BinaryReader(response.GetResponseStream()).ReadBytes((int)response.ContentLength);
-            response.Dispose();
 
-            return result;
-        }
     }
 }

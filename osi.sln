@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "Cons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "osi_Desktop", "osi_Desktop\osi_Desktop.csproj", "{2EBBF37C-6725-44C2-AD81-977351725F09}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "osi_Android", "osi_Android\osi_Android.csproj", "{102309A2-CB37-4581-8BC8-FE3AB0CCAF53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,12 @@ Global
 		{2EBBF37C-6725-44C2-AD81-977351725F09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EBBF37C-6725-44C2-AD81-977351725F09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EBBF37C-6725-44C2-AD81-977351725F09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{102309A2-CB37-4581-8BC8-FE3AB0CCAF53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{102309A2-CB37-4581-8BC8-FE3AB0CCAF53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{102309A2-CB37-4581-8BC8-FE3AB0CCAF53}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{102309A2-CB37-4581-8BC8-FE3AB0CCAF53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{102309A2-CB37-4581-8BC8-FE3AB0CCAF53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{102309A2-CB37-4581-8BC8-FE3AB0CCAF53}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
