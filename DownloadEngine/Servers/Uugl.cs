@@ -11,35 +11,18 @@ namespace DownloadEngine.Servers
 {
     class Uugl
     {
-        public static byte[] Download(Beatmapset Beatmapset,out string Filename)
+        public static byte[] Download(Beatmapset Beatmapset,out string fileName)
         {
             WebClient webclient = new WebClient();
             byte[] file = webclient.DownloadData(Path(Beatmapset));
             WebHeaderCollection responseHeaders = webclient.ResponseHeaders;
-
-            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create();
-            //request.UserAgent = DownloadManager.UserAgent;
-            //request.Method = "Get";
-            //HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
             if (int.Parse(responseHeaders.Get("Content-Length")) <= 0)
             {
                 throw new Exception("File Does't Exist");
             }
 
-            //Get File Name
-            Regex FilenameRegex = new Regex(@"\" + '"' + @"(?<Filename>[^" + '"' + "]*)" + @"\" + '"');
-            // \"(?<a>[^"]*)\"
-            // '"' = \"
-            if (FilenameRegex.IsMatch(responseHeaders.Get("Content-Disposition")))
-            {
-                Match valve = FilenameRegex.Match(responseHeaders.Get("Content-Disposition"));
-                Filename = valve.Groups["Filename"].Value;
-            }
-            else
-            {
-                throw new Exception("No Match Head");
-            }
+            fileName = WebClient.GetFileNameFromHeader(responseHeaders.Get("Content-Disposition"));
 
             webclient.Dispose();
             GC.Collect();

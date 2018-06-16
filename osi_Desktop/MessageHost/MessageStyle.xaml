@@ -13,13 +13,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid x:Name="Grid" Background="{TemplateBinding Background}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="0,0,5,0" HorizontalAlignment="Center" VerticalAlignment="Center">
-
-                        <Canvas x:Name="InsideShadow" Background="Black" Opacity="0">
-                            <Canvas.Effect>
-                                <BlurEffect Radius="1"/>
-                            </Canvas.Effect>
-                        </Canvas>
+                    <Grid x:Name="Grid" Background="{TemplateBinding Background}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="0,0,15,0" HorizontalAlignment="Center" VerticalAlignment="Center">
 
                         <ContentPresenter x:Name="Content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
@@ -29,20 +23,22 @@
                                     <Storyboard>
                                         <ThicknessAnimation Storyboard.TargetName="Grid" 
                                                             Storyboard.TargetProperty="Margin"
-                                                            To="0,0,10,0" Duration="0:0:0.15"/>
-                                        <DoubleAnimation Storyboard.TargetName="InsideShadow"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="0" Duration="0:0:0.15"/>
+                                                            To="0,0,15,0" Duration="0:0:0.20">
+                                            <ThicknessAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </ThicknessAnimation.EasingFunction>
+                                        </ThicknessAnimation>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="MouseOver">
                                     <Storyboard>
                                         <ThicknessAnimation Storyboard.TargetName="Grid" 
                                                             Storyboard.TargetProperty="Margin"
-                                                            To="0" Duration="0:0:0.15"/>
-                                        <DoubleAnimation Storyboard.TargetName="InsideShadow"
-                                                         Storyboard.TargetProperty="Opacity"
-                                                         To="0.15" Duration="0:0:0.15"/>
+                                                            To="0" Duration="0:0:0.20">
+                                            <ThicknessAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseOut"/>
+                                            </ThicknessAnimation.EasingFunction>
+                                        </ThicknessAnimation>
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>

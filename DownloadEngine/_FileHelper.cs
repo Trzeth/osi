@@ -19,13 +19,14 @@ namespace DownloadEngine
         }
         private static string CheckedFileName(string fileName)
         {
-            fileName = fileName.Replace(@"\", "-");
-            fileName = fileName.Replace(@"/", "-");
-            fileName = fileName.Replace(@":", "-");
-            fileName = fileName.Replace(@"*", "-");
-            fileName = fileName.Replace(@"<", "-");
-            fileName = fileName.Replace(@">", "-");
-            fileName = fileName.Replace(@"|", "-");
+            string replaceString = " ";
+            fileName = fileName.Replace(@"\", replaceString);
+            fileName = fileName.Replace(@"/", replaceString);
+            fileName = fileName.Replace(@":", replaceString);
+            fileName = fileName.Replace(@"*", replaceString);
+            fileName = fileName.Replace(@"<", replaceString);
+            fileName = fileName.Replace(@">", replaceString);
+            fileName = fileName.Replace(@"|", replaceString);
 
             return fileName;
         }

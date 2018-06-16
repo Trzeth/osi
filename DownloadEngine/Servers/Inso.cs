@@ -13,6 +13,7 @@ namespace DownloadEngine.Servers
     static class Inso
     {
         public static float current_timestamp;
+        private static System.Net.Cookie _cookie;//do_not_remove_this_0w0
         public class User
         {
             public string username;
@@ -21,7 +22,6 @@ namespace DownloadEngine.Servers
             public int vip_level;
             //"username":"Trzeth","user_id":"5106629","cd_timestamp":0,"vip_level":"2","current_timestamp":1512263695.486
         }
-        public static string Cookie = null;//do_not_remove_this_0w0
         private enum Methods
         {
             user,
@@ -86,10 +86,6 @@ namespace DownloadEngine.Servers
             path = path + "source=osi";
             return path;
         }
-        static Inso()
-        {
-
-        }
         internal static byte[] Download(Beatmapset beatmapset,out string fileName)
         {
             /*
@@ -119,6 +115,7 @@ namespace DownloadEngine.Servers
             JObject result = null;
             while (!finished)
             {
+
                 result = JObject.Parse(WebClient().DownloadString(ApiPath(Methods.download, bValve)));
 
                 switch ((int)result["return"])
@@ -128,7 +125,7 @@ namespace DownloadEngine.Servers
                     case 999:
                     case 1100: finished = true; break;
                     
-                    case 100: finished = true; data = _download(result); break;
+                    case 100: finished = true; data = Download(result); break;
                     case 200: case 300: case 400: case 500:
                     case 201: case 301: case 401: case 501:
                     case 202: case 302: case 402: case 502:
@@ -137,10 +134,10 @@ namespace DownloadEngine.Servers
             }
 
             fileName = result["mapset"] + " " + result["info"]["artist"] + " - " + result["info"]["title"] + @".osz";
-            
+
             return data;
         }
-        private static byte[] _download(JObject result)
+        private static byte[] Download(JObject result)
         {
             Packages packages = new Packages();
             JToken package_url = result["package_url"];
@@ -165,13 +162,8 @@ namespace DownloadEngine.Servers
                     Console.WriteLine("{0} {1}",data.Length,newData.Length);
                     if (i != 5)
                     {
-                        int m = 1;
-                        for (int n = 0; n < i; n++)
-                        {
-                            m *= 2;
-                        }
 
-                        combination += m;
+                        combination += (int)Math.Pow(2, i);
 
                         file = file.Concat(newData).ToArray();
                     }
@@ -186,14 +178,13 @@ namespace DownloadEngine.Servers
 
                         file = file.Concat(newData.Skip(start).Take(end)).ToArray();
                     }
-                    Console.WriteLine(file.Length);
                 }
             }
             GC.Collect();
 
             return file;
         }
-        public static User GetUserStatus()
+        internal static User GetUserStatus()
         {
             User user = new User();
             JObject result = JObject.Parse(WebClient().DownloadString(ApiPath(Methods.user,null)));
@@ -233,12 +224,23 @@ namespace DownloadEngine.Servers
 
             return newData;
         }
-        public static WebClient WebClient()
+        private static WebClient WebClient()
         {
             WebClient webclient = new WebClient();
-            webclient.AddCookie(new System.Net.Cookie("do_not_remove_this_0w0", Cookie));
+            webclient.AddCookie(_cookie);
             return webclient;
         }
+        internal static void SetCookie(string cookieString)
+        {
+            if(_cookie == null)
+            {
+                _cookie = new System.Net.Cookie();
+                _cookie.Name = "do_not_remove_this_0w0";
+                _cookie.Path = "/";
+                _cookie.Domain = ".inso.link";
+            }
 
+            _cookie.Value = cookieString;
+        }
     }
 }

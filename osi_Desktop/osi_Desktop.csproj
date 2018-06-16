@@ -61,11 +61,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MessageHost\Children.xaml">
+    <Page Include="MessageHost\MessageStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MessageHost\ChildrenStyle.xaml">
+    <Page Include="MessageHost\Message.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -75,8 +75,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MessageHost\Children.xaml.cs">
-      <DependentUpon>Children.xaml</DependentUpon>
+    <Compile Include="MessageHost\Message.xaml.cs">
+      <DependentUpon>Message.xaml</DependentUpon>
     </Compile>
     <Compile Include="MessageHost\MessageHost.xaml.cs">
       <DependentUpon>MessageHost.xaml</DependentUpon>

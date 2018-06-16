@@ -25,7 +25,8 @@ namespace ConsoleApplication1
             //    config.Save();
             //}
 
-            DownloadManager DownloadMgr = new DownloadManager();
+            DownloadManager DownloadMgr = new DownloadManager(ConfigurationManager.AppSettings["Inso"]);
+
 
             Server server = Server.Uugl;
             Console.WriteLine("Select A Download Server");
@@ -58,7 +59,7 @@ namespace ConsoleApplication1
                 {
                     case (ConsoleKey.A):
                         Console.WriteLine("Enter Beatmap ID");
-                        beatmapset = new Beatmapset(int.Parse(Console.ReadLine()),IdType.BeatmapId, server);
+                        beatmapset = new Beatmapset(int.Parse(Console.ReadLine()), IdType.BeatmapId, server);
                         break;
                     case (ConsoleKey.B):
                         Console.WriteLine("Enter BeatmapSet ID");
@@ -66,7 +67,7 @@ namespace ConsoleApplication1
                         break;
                     case (ConsoleKey.C):
                         Console.WriteLine("Enter Beatmap Uri");
-                        
+
                         try
                         {
                             uri = new Uri(Console.ReadLine());
@@ -76,7 +77,7 @@ namespace ConsoleApplication1
                             Console.WriteLine(e.Message);
                             uri = null;
                         }
-                        beatmapset = new Beatmapset(uri, Server.Uugl);
+                        beatmapset = new Beatmapset(uri, server);
                         break;
                 }
 

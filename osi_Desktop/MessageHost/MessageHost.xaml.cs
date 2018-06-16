@@ -28,6 +28,9 @@ namespace osi_Desktop.MessageHost
                 this.Top = System.Windows.Forms.SystemInformation.WorkingArea.Height - this.Height;
                 this.Left = System.Windows.Forms.SystemInformation.WorkingArea.Width - this.Width;
             };
+
+            Host.Children.Add(new Message("Purr","Nyao~"));
+            Host.Children.Add(new Message("Purrr", "Nyao~~"));
         }
     }
 }

@@ -142,6 +142,10 @@ namespace DownloadEngine
                     string FileName = null;
                     byte[] data = null;
 
+
+                    var a = new Bloodcat.CAPTCHAData();
+                    Bloodcat.GetCAPTCHA(new Uri("http://bloodcat.com/osu/s/791165"), out a);
+
                     bool succeed;
                     try
                     {
@@ -153,6 +157,7 @@ namespace DownloadEngine
                                 data = Inso.Download(_downloadList[i], out FileName);
                                 break;
                             case Server.BlooadCat:
+                                Bloodcat.GetCAPTCHA(new Uri("http://bloodcat.com/osu/s/791165"),out a);
                                 break;
                             case Server.Uugl:
                                 data = Uugl.Download(_downloadList[i], out FileName);
@@ -160,9 +165,11 @@ namespace DownloadEngine
                         }
                         _FileHelper.FileWrite(data, FileName);
                         succeed = true;
-                    }catch(Exception e)
+                    }
+                    catch (Exception e)
                     {
                         succeed = false;
+                        System.Diagnostics.Debug.Write(e.Message);
                     }
 
                     if (succeed == true)

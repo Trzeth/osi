@@ -4,13 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:osi_Desktop.MessageHost"
-        xmlns:c="clr-namespace:osi_Desktop.MessageHost"
+        xmlns:m="clr-namespace:osi_Desktop.MessageHost"
         mc:Ignorable="d"
-        Title="MessageHost" Width="370" WindowStyle="None" AllowsTransparency="True" Background="{x:Null}">
+        Title="MessageHost" Width="420" WindowStyle="None" AllowsTransparency="True" Background="{x:Null}">
     
-    <Grid Margin="10">
+    <Grid Margin="10,5">
         <StackPanel x:Name="Host" VerticalAlignment="Bottom">
-            <c:Children/>
         </StackPanel>
     </Grid>
 </Window>

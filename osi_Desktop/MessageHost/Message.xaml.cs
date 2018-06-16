@@ -16,14 +16,19 @@ using System.Windows.Shapes;
 namespace osi_Desktop.MessageHost
 {
     /// <summary>
-    /// Children.xaml 的交互逻辑
+    /// Message.xaml 的交互逻辑
     /// </summary>
-    public partial class Children : UserControl
+    public partial class Message : UserControl
     {
-        const int ButtonWidth = 55;
-        public Children()
+        public Message()
+        {
+        }
+        public Message(string title,string content)
         {
             InitializeComponent();
+
+            Title.Content = title;
+            Content.Text = content;
         }
     }
 }
