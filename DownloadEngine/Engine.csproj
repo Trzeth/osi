@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DownloadEngine</RootNamespace>
-    <AssemblyName>DownloadEngine</AssemblyName>
+    <AssemblyName>Engine</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,17 +44,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DownloadEngine.cs" />
+    <Compile Include="Beatmapset.cs" />
+    <Compile Include="DownloadManager\DownloadManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Servers\Bloodcat.cs" />
     <Compile Include="Servers\Inso.cs" />
-    <Compile Include="Servers\WebClient.cs">
+    <Compile Include="Servers\Server.cs" />
+    <Compile Include="DownloadManager\WebClient.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Servers\_IServer.cs" />
     <Compile Include="Servers\Uugl.cs" />
-    <Compile Include="_DownlaodHepler.cs" />
-    <Compile Include="_FileHelper.cs" />
+    <Compile Include="DownloadManager\_DownlaodHepler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

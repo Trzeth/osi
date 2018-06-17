@@ -9,11 +9,13 @@ using System.Text.RegularExpressions;
 
 namespace DownloadEngine.Servers
 {
-    class WebClient : System.Net.WebClient
+    class WebClient:System.Net.WebClient
     {
-        private const string UserAgent = "Mozilla / 4.0(compatible;.NET CLR 4.0.30319; osu!in)";
+        private const string UserAgent = "Mozilla/5.0 (compatible;.NET CLR 4.0.30319; osi)";
         private CookieContainer _cookieContainer = new CookieContainer();
         internal string Referer;
+        internal string Host;
+        internal string ContentType;
 
         internal WebClient()
         {
@@ -36,7 +38,9 @@ namespace DownloadEngine.Servers
             if (webRequest != null)
             {
                 webRequest.CookieContainer = _cookieContainer;
-                if (Referer != null) { webRequest.Referer = Referer; }
+                if (Referer != null) webRequest.Referer = Referer;
+                if (Host != null) webRequest.Host = Host;
+                if (ContentType != null) webRequest.ContentType = ContentType;
             }
             return request;
         }

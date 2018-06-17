@@ -7,13 +7,14 @@ using Newtonsoft.Json.Linq;
 using System.Threading;
 using System.Collections;
 using System.Text.RegularExpressions;
+using DownloadEngine.DownloadManager;
 
 namespace DownloadEngine.Servers
 {
     static class Inso
     {
         public static float current_timestamp;
-        private static System.Net.Cookie _cookie;//do_not_remove_this_0w0
+        private static System.Net.CookieCollection _cookieCollection;//do_not_remove_this_0w0
         public class User
         {
             public string username;
@@ -86,7 +87,7 @@ namespace DownloadEngine.Servers
             path = path + "source=osi";
             return path;
         }
-        internal static byte[] Download(Beatmapset beatmapset,out string fileName)
+        internal static byte[] Download(BeatmapsetPackage p,out string fileName)
         {
             /*
             "package_url": {
@@ -102,14 +103,7 @@ namespace DownloadEngine.Servers
             string bValve;
             byte[] data = null;
 
-            if (beatmapset.BeatmapId != 0)
-            {
-                bValve = "b" + "=" + beatmapset.BeatmapId;
-            }
-            else
-            {
-                bValve = "m" + "=" + beatmapset.BeatmapSetId;
-            }
+            bValve = "m" + "=" + p.BeatmapsetId;
 
             bool finished = false;
             JObject result = null;
@@ -227,20 +221,21 @@ namespace DownloadEngine.Servers
         private static WebClient WebClient()
         {
             WebClient webclient = new WebClient();
-            webclient.AddCookie(_cookie);
+            webclient.AddCookie(_cookieCollection);
             return webclient;
         }
         internal static void SetCookie(string cookieString)
         {
-            if(_cookie == null)
+            if(_cookieCollection == null)
             {
-                _cookie = new System.Net.Cookie();
-                _cookie.Name = "do_not_remove_this_0w0";
-                _cookie.Path = "/";
-                _cookie.Domain = ".inso.link";
+                _cookieCollection = new System.Net.CookieCollection();
             }
 
-            _cookie.Value = cookieString;
+            var cookie = new System.Net.Cookie();
+            cookie.Name = "do_not_remove_this_0w0";
+            cookie.Path = "/";
+            cookie.Domain = ".inso.link";
+            cookie.Value = cookieString;
         }
     }
 }

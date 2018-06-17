@@ -6,10 +6,15 @@
         xmlns:local="clr-namespace:osi_Desktop.MessageHost"
         xmlns:m="clr-namespace:osi_Desktop.MessageHost"
         mc:Ignorable="d"
-        Title="MessageHost" Width="420" WindowStyle="None" AllowsTransparency="True" Background="{x:Null}">
+        Title="MessageHost" Width="420" WindowStyle="None"
+        AllowsTransparency="True" Background="{x:Null}" Topmost="True">
     
     <Grid Margin="10,5">
         <StackPanel x:Name="Host" VerticalAlignment="Bottom">
+            
         </StackPanel>
+        <Image x:Name="image" HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="380"/>
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="10,115,0,0" VerticalAlignment="Top" Width="166" UndoLimit="0"/>
+        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="181,119,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
     </Grid>
 </Window>

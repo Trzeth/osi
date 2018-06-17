@@ -15,15 +15,15 @@ namespace ConsoleApplication1
 
             Console.WriteLine("START");
 
-            //Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            //var appsettings = config.AppSettings.Settings;
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var appsettings = config.AppSettings.Settings;
 
-            //if (appsettings["Inso"].Value == string.Empty)
-            //{
-            //    Console.WriteLine("Input Inso Cookie");
-            //    appsettings["Inso"].Value = Console.ReadLine();
-            //    config.Save();
-            //}
+            if (appsettings["Inso"].Value == string.Empty)
+            {
+                Console.WriteLine("Input Inso Cookie");
+                appsettings["Inso"].Value = Console.ReadLine();
+                config.Save();
+            }
 
             DownloadManager DownloadMgr = new DownloadManager(ConfigurationManager.AppSettings["Inso"]);
 

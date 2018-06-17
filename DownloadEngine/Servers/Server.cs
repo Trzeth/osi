@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace DownloadEngine.Servers
 {
-    interface _IServer
+    public enum Server
     {
-         byte[] Download(Beatmapset b);
-
+        Orgin,
+        Inso,
+        BlooadCat,
+        Uugl
     }
 }
