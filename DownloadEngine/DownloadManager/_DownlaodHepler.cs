@@ -40,5 +40,58 @@ namespace DownloadEngine.DownloadManager
                 return fileName;
             }
         }
+        internal class Downloader
+        {
+            static int _downloaderCount;
+            internal Downloader()
+            {
+                _downloaderCount++;
+            }
+
+        }
+        internal static Server ChooseServer(BeatmapsetPackage p)
+        {
+            if (p.BeatmapsetId >= 700000 && p.BeatmapsetId <= 740000)
+            {
+                return Server.Uugl;
+            }
+            else
+            {
+                Random r = new Random();
+                if (r.Next(0, 100) >= 50)
+                {
+                    return Server.Inso;
+                }
+                else
+                {
+                    return Server.Blooadcat;
+                }
+            }
+        }
+        internal static Server ChooseServer(FailedBeatmapset p)
+        {
+            if (p.FailedServerList.Count < 3)
+            {
+                if (p.FailedServerList.Exists(s => s == Server.Uugl) || p.BeatmapsetId <= 700000 || p.BeatmapsetId >= 740000)
+                {
+                    if (p.FailedServerList.Exists(s => s == Server.Blooadcat))
+                    {
+                        return Server.Inso;
+                    }
+                    else
+                    {
+                        return Server.Blooadcat;
+                    }
+                }
+                else
+                {
+                    return Server.Uugl;
+                }
+            }
+            else
+            {
+                throw new Exception("No Server to Choose");
+            }
+        }
     }
 }

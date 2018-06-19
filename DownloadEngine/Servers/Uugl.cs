@@ -18,7 +18,7 @@ namespace DownloadEngine.Servers
             byte[] file = webclient.DownloadData(Path(p));
             WebHeaderCollection responseHeaders = webclient.ResponseHeaders;
 
-            if (int.Parse(responseHeaders.Get("Content-Length")) <= 0)
+            if (responseHeaders.Get("Content-Length") == null)
             {
                 throw new Exception("File Does't Exist");
             }

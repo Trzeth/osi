@@ -8,9 +8,10 @@ namespace DownloadEngine.Servers
 {
     public enum Server
     {
+        Unset,
         Orgin,
         Inso,
-        BlooadCat,
+        Blooadcat,
         Uugl
     }
 }

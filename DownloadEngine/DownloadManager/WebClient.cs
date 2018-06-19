@@ -30,7 +30,6 @@ namespace DownloadEngine.Servers
         {
             _cookieContainer.Add(cookies);
         }
-
         protected override WebRequest GetWebRequest(Uri address)
         {
             WebRequest request = base.GetWebRequest(address);
@@ -45,10 +44,9 @@ namespace DownloadEngine.Servers
             return request;
         }
 
-        #region ParseCookie
+        #region GetCookie
         //From
         //https://stackoverflow.com/questions/4792638/mapping-header-cookie-string-to-cookiecollection-and-vice-versa
-
         public static CookieCollection GetAllCookiesFromHeader(string strHeader, string strHost)
         {
             ArrayList al = new ArrayList();
@@ -60,7 +58,6 @@ namespace DownloadEngine.Servers
             }
             return cc;
         }
-
         private static ArrayList ConvertCookieHeaderToArrayList(string strCookHeader)
         {
             strCookHeader = strCookHeader.Replace("\r", "");
@@ -84,8 +81,6 @@ namespace DownloadEngine.Servers
             }
             return al;
         }
-
-
         private static CookieCollection ConvertCookieArraysToCookieCollection(ArrayList al, string strHost)
         {
             CookieCollection cc = new CookieCollection();

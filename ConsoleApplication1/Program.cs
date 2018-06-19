@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using DownloadEngine;
+using DownloadEngine.Servers;
+using DownloadEngine.DownloadManager;
 
 namespace ConsoleApplication1
 {
@@ -25,65 +27,65 @@ namespace ConsoleApplication1
                 config.Save();
             }
 
-            DownloadManager DownloadMgr = new DownloadManager(ConfigurationManager.AppSettings["Inso"]);
+            DownloadManager.Config(ConfigurationManager.AppSettings["Inso"], Server.Inso);
+            DownloadManager.MaxDownloaderCount = 2;
+            DownloadManager.Add(new Beatmapset("https://osu.ppy.sh/beatmapsets/780349"),Server.Inso);
+            DownloadManager.Add(new Beatmapset("https://osu.ppy.sh/beatmapsets/737924"), Server.Uugl);
+            DownloadManager.Add(new Beatmapset("https://osu.ppy.sh/beatmapsets/331872"), Server.Inso);
 
 
-            Server server = Server.Uugl;
-            Console.WriteLine("Select A Download Server");
-            Console.WriteLine("A Uugl B Inso C Bloodcat");
-            switch (Console.ReadKey().Key)
-            {
-                case ConsoleKey.A:
-                    server = Server.Uugl;
-                    break;
-                case ConsoleKey.B:
-                    server = Server.Inso;
-                    break;
-                case ConsoleKey.C:
-                    server = Server.BlooadCat;
-                    break;
-            }
-            Console.WriteLine();
-            Console.WriteLine("Press A to enter Beatmap ID");
-            Console.WriteLine("Press B to enter BeatmapSet ID");
-            Console.WriteLine("Press C to enter Beatmap Uri");
+            //Server server = Server.Uugl;
+            //Console.WriteLine("Select A Download Server");
+            //Console.WriteLine("A Uugl B Inso C Bloodcat");
+            //switch (Console.ReadKey().Key)
+            //{
+            //    case ConsoleKey.A:
+            //        server = Server.Uugl;
+            //        break;
+            //    case ConsoleKey.B:
+            //        server = Server.Inso;
+            //        break;
+            //    case ConsoleKey.C:
+            //        server = Server.Blooadcat;
+            //        break;
+            //}
 
-            while (true)
-            {
-                Beatmapset beatmapset = null;
-                Uri uri;
-                ConsoleKey consoleKey = Console.ReadKey().Key;
-                Console.WriteLine();
+            //Console.WriteLine();
+            //Console.WriteLine("Press A to enter Beatmap ID");
+            //Console.WriteLine("Press B to enter BeatmapSet ID");
+            //Console.WriteLine("Press C to enter Beatmap Uri");
 
-                switch (consoleKey)
-                {
-                    case (ConsoleKey.A):
-                        Console.WriteLine("Enter Beatmap ID");
-                        beatmapset = new Beatmapset(int.Parse(Console.ReadLine()), IdType.BeatmapId, server);
-                        break;
-                    case (ConsoleKey.B):
-                        Console.WriteLine("Enter BeatmapSet ID");
-                        beatmapset = new Beatmapset(int.Parse(Console.ReadLine()), IdType.BeatmapSetId, server);
-                        break;
-                    case (ConsoleKey.C):
-                        Console.WriteLine("Enter Beatmap Uri");
+            //while (true)
+            //{
+            //    Beatmapset beatmapset = null;
+            //    Uri uri;
+            //    ConsoleKey consoleKey = Console.ReadKey().Key;
+            //    Console.WriteLine();
 
-                        try
-                        {
-                            uri = new Uri(Console.ReadLine());
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e.Message);
-                            uri = null;
-                        }
-                        beatmapset = new Beatmapset(uri, server);
-                        break;
-                }
+            //    switch (consoleKey)
+            //    {
+            //        case (ConsoleKey.B):
+            //            Console.WriteLine("Enter BeatmapSet ID");
+            //            beatmapset = new Beatmapset(int.Parse(Console.ReadLine()));
+            //            break;
+            //        case (ConsoleKey.C):
+            //            Console.WriteLine("Enter Beatmap Uri");
 
-                DownloadManager.AddToDownloadList(beatmapset);
-                Console.WriteLine("Finished!");
-            }
+            //            try
+            //            {
+            //                uri = new Uri(Console.ReadLine());
+            //            }
+            //            catch (Exception e)
+            //            {
+            //                Console.WriteLine(e.Message);
+            //                uri = null;
+            //            }
+            //            beatmapset = new Beatmapset(uri);
+            //            break;
+            //    }
+
+            //    DownloadManager.Add(beatmapset,server);
+            //    Console.WriteLine("Finished!");
         }
     }
 }

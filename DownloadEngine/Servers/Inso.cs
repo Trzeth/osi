@@ -236,6 +236,8 @@ namespace DownloadEngine.Servers
             cookie.Path = "/";
             cookie.Domain = ".inso.link";
             cookie.Value = cookieString;
+
+            _cookieCollection.Add(cookie);
         }
     }
 }

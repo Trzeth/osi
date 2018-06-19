@@ -9,6 +9,7 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using DownloadEngine.DownloadManager;
+using System.Windows.Media.Imaging;
 
 namespace DownloadEngine.Servers
 {
@@ -69,7 +70,7 @@ namespace DownloadEngine.Servers
             public string hash;
             public Uri uri;
         }
-        public static byte[] GetCAPTCHA(Uri uri, out CAPTCHAData data)
+        public static BitmapImage GetCAPTCHA(Uri uri, out CAPTCHAData data)
         {
             string image;
             string sync;
@@ -114,7 +115,14 @@ namespace DownloadEngine.Servers
                 data.hash = hash;
                 data.uri = uri;
             }
-            return Convert.FromBase64String(image);
+
+            BitmapImage bitmapImage = new BitmapImage();
+
+            bitmapImage.BeginInit();
+            bitmapImage.StreamSource = new MemoryStream(Convert.FromBase64String(image));
+            bitmapImage.EndInit();
+
+            return bitmapImage;
         }
         public static CookieCollection PostCAPTCHA(string response, CAPTCHAData data)
         {
