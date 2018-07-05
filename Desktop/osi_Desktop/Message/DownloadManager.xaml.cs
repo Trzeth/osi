@@ -13,22 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace osi_Desktop.MessageHost
+namespace osi_Desktop.Message
 {
     /// <summary>
-    /// Message.xaml 的交互逻辑
+    /// DownloadManager.xaml 的交互逻辑
     /// </summary>
-    public partial class Message : UserControl
+    public partial class DownloadManager : UserControl
     {
-        public Message()
-        {
-        }
-        public Message(string title,string content)
+        public DownloadManager()
         {
             InitializeComponent();
-
-            Title.Content = title;
-            Content.Text = content;
         }
     }
 }

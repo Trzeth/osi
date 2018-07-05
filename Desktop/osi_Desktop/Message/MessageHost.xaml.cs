@@ -12,16 +12,18 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using DownloadEngine.Servers;
+using DownloadEngine.DownloadManager;
 using DownloadEngine;
 
-namespace osi_Desktop.MessageHost
+namespace osi_Desktop.Message
 {
     /// <summary>
     /// MessageHost.xaml 的交互逻辑
     /// </summary>
     public partial class MessageHost : Window
     {
-        DownloadEngine.Servers.Bloodcat.CAPTCHAData CAPTCHAData = new DownloadEngine.Servers.Bloodcat.CAPTCHAData();
+        Bloodcat.CAPTCHAData CAPTCHAData = new Bloodcat.CAPTCHAData();
 
         public MessageHost()
         {
@@ -36,21 +38,17 @@ namespace osi_Desktop.MessageHost
             Host.Children.Add(new Message("Purr","Nyao~"));
             Host.Children.Add(new Message("Purrr", "Nyao~~"));
 
-            BitmapImage imagea = new BitmapImage();
+            //BitmapImage imagea = Bloodcat.GetCAPTCHA(new Uri("http://bloodcat.com/osu/s/317439"), out CAPTCHAData);
 
-            imagea.BeginInit();
-            imagea.StreamSource = new MemoryStream(DownloadEngine.Servers.Bloodcat.GetCAPTCHA(new Uri("http://bloodcat.com/osu/s/317439"), out CAPTCHAData));
-            imagea.EndInit();
-
-            image.Source = imagea;
+            //image.Source = imagea;
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            CAPTCHAData.response = textBox.Text;
-            DownloadEngine.Servers.Bloodcat._cookieCollection = DownloadEngine.Servers.Bloodcat.PostCAPTCHA(new Uri("http://bloodcat.com/osu/s/317439"),CAPTCHAData);
+            //string response = textBox.Text;
+            //DownloadManager.Config(Bloodcat.PostCAPTCHA(textBox.Text, CAPTCHAData), Server.Blooadcat);
 
-            DownloadManager.AddToDownloadList(new Beatmapset(new Uri("https://osu.ppy.sh/beatmapsets/628446#osu/1672509"),Server.BlooadCat));
+            //DownloadManager.Add(new Beatmapset(new Uri("https://osu.ppy.sh/beatmapsets/628446#osu/1672509")),Server.Blooadcat);
 
         }
     }

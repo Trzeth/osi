@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using DownloadEngine.DownloadManager;
+using WebClient = DownloadEngine.DownloadManager.WebClient;
 
 namespace DownloadEngine.Servers
 {
@@ -26,8 +27,6 @@ namespace DownloadEngine.Servers
             fileName = WebClient.GetFileNameFromHeader(responseHeaders.Get("Content-Disposition"));
 
             webclient.Dispose();
-            GC.Collect();
-
             return file;
         }
         private static string Path(BeatmapsetPackage p)

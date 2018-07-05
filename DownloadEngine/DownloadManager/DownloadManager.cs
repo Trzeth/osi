@@ -14,7 +14,7 @@ namespace DownloadEngine.DownloadManager
         internal Server Server { get; set; }
         internal int BeatmapsetId { get { return _beatmapsetId; } }
 
-        int _beatmapsetId;
+        protected int _beatmapsetId;
         internal BeatmapsetPackage() { }
         internal BeatmapsetPackage(Beatmapset beatmapset, Server server)
         {
@@ -30,10 +30,17 @@ namespace DownloadEngine.DownloadManager
     internal class FailedBeatmapset : BeatmapsetPackage
     {
         internal List<Server> FailedServerList { get; set; }
-
-        int _beatmapsetId;
         public FailedBeatmapset(BeatmapsetPackage bp)
         {
+            FailedServerList = new List<Server>();
+            FailedServerList.Add(bp.Server);
+            Server = Server.Unset;
+
+            _beatmapsetId = bp.BeatmapsetId;
+        }
+        public FailedBeatmapset(FailedBeatmapset bp)
+        {
+            FailedServerList = bp.FailedServerList;
             FailedServerList.Add(bp.Server);
             Server = Server.Unset;
 
@@ -80,12 +87,19 @@ namespace DownloadEngine.DownloadManager
                     break;
             }
         }
-        public static void Config(string insoCookie,string bloodcatCookie)
+        public static void Config(System.Net.CookieCollection cookieCollection,Server server)
         {
-            Inso.SetCookie(insoCookie);
-            Bloodcat.SetCookie(bloodcatCookie);
-            _isInsoValid = true;
-            _isBloodcatValid = true;
+            switch (server)
+            {
+                case Server.Inso:
+                    Inso.SetCookie(cookieCollection);
+                    _isInsoValid = true;
+                    break;
+                case Server.Blooadcat:
+                    if (Bloodcat.SetCookie(cookieCollection) != true) throw new CookieInvalid();
+                    _isBloodcatValid = true;
+                    break;
+            }
         }
         public static void Add(Beatmapset beatmapset,Server server)
         {
@@ -130,6 +144,8 @@ namespace DownloadEngine.DownloadManager
                     if (_pendingList.Count == 0)
                     {
                         _downloaderCount--;
+                        GC.Collect();
+                        Thread.CurrentThread.Abort();
                         break;
                     }
                     p = _pendingList.First();
@@ -155,15 +171,15 @@ namespace DownloadEngine.DownloadManager
                             case Server.Orgin:
                                 break;
                             case Server.Inso:
-                                if (_isInsoValid != true) throw new Exception();
+                                if (_isInsoValid != true) throw new ServerNotAvailable();
                                 data = Inso.Download(p, out fileName);
                                 break;
                             case Server.Blooadcat:
-                                if (_isBloodcatValid != true) throw new Exception();
+                                if (_isBloodcatValid != true) throw new ServerNotAvailable();
                                 data = Bloodcat.Downlaod(p, out fileName);
                                 break;
                             case Server.Uugl:
-                                if (_isUuglValid != true) throw new Exception();
+                                if (_isUuglValid != true) throw new ServerNotAvailable();
                                 data = Uugl.Download(p, out fileName);
                                 break;
                         }
@@ -171,14 +187,25 @@ namespace DownloadEngine.DownloadManager
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e.Message);
-                        FailedBeatmapset f = new FailedBeatmapset(p);
+                        FailedBeatmapset f;
+                        if (p is FailedBeatmapset)
+                        {
+                            f = new FailedBeatmapset(p as FailedBeatmapset);
+                        }
+                        else
+                        {
+                            f = new FailedBeatmapset(p as BeatmapsetPackage);
+                        }
                         lock (_pendingList) { _pendingList.Add(f); }
                     }
                 }
-                catch(Exception e)
+                catch (NoServerToChoose e)
                 {
                     lock (_failedList) { _failedList.Add(p as FailedBeatmapset); }
+                }
+                finally
+                {
+                    GC.Collect();
                 }
             }
         }

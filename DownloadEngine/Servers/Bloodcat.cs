@@ -10,12 +10,14 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using DownloadEngine.DownloadManager;
 using System.Windows.Media.Imaging;
+//using WebClient = DownloadEngine.DownloadManager.WebClient;
 
 namespace DownloadEngine.Servers
 {
     public static class Bloodcat
     {
-        internal static CookieCollection _cookieCollection;
+        static CookieCollection _cookieCollection;
+        static DownloadManager.WebClient _webclient;
         internal static byte[] Downlaod(BeatmapsetPackage p,out string fileName)
         {
             if(_cookieCollection == null)
@@ -23,14 +25,11 @@ namespace DownloadEngine.Servers
                 throw new Exception("Bloodcat No Cookie Existed.");
             }
 
-            WebClient webclient = new WebClient();
             byte[] file;
 
-            webclient.AddCookie(_cookieCollection);
-            file = webclient.DownloadData(Path(p));
+            file = WebClient().DownloadData(Path(p));
             
-            fileName = WebClient.GetFileNameFromHeader(webclient.ResponseHeaders.Get("Content-Disposition"));
-            webclient.Dispose();
+            fileName = DownloadManager.WebClient.GetFileNameFromHeader(WebClient().ResponseHeaders.Get("Content-Disposition"));
 
             return file;
         }
@@ -38,19 +37,57 @@ namespace DownloadEngine.Servers
         {
 
         }
-        internal static void SetCookie(string cookieString)
+        internal static bool SetCookie(string cookieString)
         {
-            if(_cookieCollection == null)
-            {
-                _cookieCollection = new CookieCollection();
-            }
+            CookieCollection cookieCollection = new CookieCollection();
 
             Cookie cookie = new Cookie();
             cookie.Name = "obm_human";
             cookie.Path = "/osu/";
             cookie.Domain = "bloodcat.com";
 
-            _cookieCollection.Add(cookie);
+            cookieCollection.Add(cookie);
+            if (IsCookieValid(cookieCollection))
+            {
+                _cookieCollection = cookieCollection;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        internal static bool SetCookie(CookieCollection cookieCollection)
+        {
+            if (IsCookieValid(_cookieCollection))
+            {
+                if (_cookieCollection == null)
+                {
+                    _cookieCollection = cookieCollection;
+                }
+                else
+                {
+                    _cookieCollection.Add(cookieCollection);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private static bool IsCookieValid(CookieCollection cookieCollectioin)
+        {
+            WebClient(cookieCollectioin).Method = "Head";
+            try
+            {
+                WebClient(cookieCollectioin).DownloadData("http://bloodcat.com/osu/s/4079");
+                return true;
+            }
+            catch(WebException e)
+            {
+                return false;
+            }
         }
         #region Search
         //internal static JObject Search()
@@ -83,18 +120,16 @@ namespace DownloadEngine.Servers
             Regex r_hash = new Regex("<input name=" + @"\" + '"' + "hash" + @"\" + '"' + " " + "type=" + @"\" + '"' + "hidden" + @"\" + '"' + " " + "value=" + @"\" + '"' + "(?<hash>[^" + '"' + "]*)" + @"\" + '"' + ">");
             //<input name=\"sync\" type=\"hidden\" value=\"(?<hash>[^"]*)\">
 
-            WebClient webclient = new WebClient();
             string CAPTCHAPage = null;
             try
             {
-                CAPTCHAPage = webclient.DownloadString(uri);
+                CAPTCHAPage = WebClient().DownloadString(uri);
             }
             catch (WebException e)
             {
                 StreamReader sR = new StreamReader(e.Response.GetResponseStream());
                 CAPTCHAPage = sR.ReadToEnd();
             }
-            webclient.Dispose();
 
             Match m_image = r_image.Match(CAPTCHAPage);
             Match m_sync = r_sync.Match(CAPTCHAPage);
@@ -127,15 +162,14 @@ namespace DownloadEngine.Servers
         public static CookieCollection PostCAPTCHA(string response, CAPTCHAData data)
         {
             string formData = "response=" + response + "&" + "sync=" + data.sync + "&" + "hash=" + data.hash;
-            WebClient webclient = new WebClient();
-            webclient.Referer = data.uri.ToString();
-            webclient.Host = data.uri.Host;
-            webclient.ContentType = "application/x-www-form-urlencoded";
-            webclient.UploadString(data.uri, formData);
-            string Header = webclient.ResponseHeaders.Get("Set-Cookie");
-            webclient.Dispose();
+            WebClient().Referer = data.uri.ToString();
+            WebClient().Host = data.uri.Host;
+            WebClient().ContentType = "application/x-www-form-urlencoded";
+            WebClient().UploadString(data.uri, formData);
+            string Header = WebClient().ResponseHeaders.Get("Set-Cookie");
+            WebClient().Dispose();
 
-            return WebClient.GetAllCookiesFromHeader(Header, data.uri.Host.ToString());
+            return DownloadManager.WebClient.GetAllCookiesFromHeader(Header, data.uri.Host.ToString());
         }
         #endregion
         private static string Path(BeatmapsetPackage p)
@@ -149,5 +183,17 @@ namespace DownloadEngine.Servers
 
 
         //}
+        private static DownloadManager.WebClient WebClient()
+        {
+            if (_webclient == null) _webclient = new DownloadManager.WebClient();
+            if (_cookieCollection != null) _webclient.AddCookie(_cookieCollection);
+            return _webclient;
+        }
+        private static DownloadManager.WebClient WebClient(CookieCollection cookieCollection)
+        {
+            if (_webclient == null) _webclient = new DownloadManager.WebClient();
+            if (cookieCollection != null) _webclient.AddCookie(cookieCollection);
+            return _webclient;
+        }
     }
 }

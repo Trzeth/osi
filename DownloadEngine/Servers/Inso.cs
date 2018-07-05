@@ -8,13 +8,15 @@ using System.Threading;
 using System.Collections;
 using System.Text.RegularExpressions;
 using DownloadEngine.DownloadManager;
+using WebClient = DownloadEngine.DownloadManager.WebClient;
 
 namespace DownloadEngine.Servers
 {
     static class Inso
     {
         public static float current_timestamp;
-        private static System.Net.CookieCollection _cookieCollection;//do_not_remove_this_0w0
+        static System.Net.CookieCollection _cookieCollection;//do_not_remove_this_0w0
+        static WebClient _webclient;
         public class User
         {
             public string username;
@@ -153,7 +155,6 @@ namespace DownloadEngine.Servers
                 {
                     byte[] data = WebClient().DownloadData(packages.uri[i].AbsoluteUri);
                     byte[] newData = Decode(data, centralIndexR["central_index"]);
-                    Console.WriteLine("{0} {1}",data.Length,newData.Length);
                     if (i != 5)
                     {
 
@@ -174,8 +175,6 @@ namespace DownloadEngine.Servers
                     }
                 }
             }
-            GC.Collect();
-
             return file;
         }
         internal static User GetUserStatus()
@@ -220,16 +219,20 @@ namespace DownloadEngine.Servers
         }
         private static WebClient WebClient()
         {
-            WebClient webclient = new WebClient();
-            webclient.AddCookie(_cookieCollection);
-            return webclient;
+            if (_webclient == null) _webclient = new WebClient();
+            if(_cookieCollection != null) _webclient.AddCookie(_cookieCollection);
+            return _webclient;
         }
-        internal static void SetCookie(string cookieString)
+        private static WebClient WebClient(System.Net.CookieCollection cookieCollection)
         {
-            if(_cookieCollection == null)
-            {
-                _cookieCollection = new System.Net.CookieCollection();
-            }
+            if (_webclient == null) _webclient = new WebClient();
+            if (cookieCollection != null) _webclient.AddCookie(cookieCollection);
+            return _webclient;
+        }
+        internal static bool SetCookie(string cookieString)
+        {
+
+            var cookieCollection = new System.Net.CookieCollection();
 
             var cookie = new System.Net.Cookie();
             cookie.Name = "do_not_remove_this_0w0";
@@ -237,7 +240,47 @@ namespace DownloadEngine.Servers
             cookie.Domain = ".inso.link";
             cookie.Value = cookieString;
 
-            _cookieCollection.Add(cookie);
+            cookieCollection.Add(cookie);
+            if (IsCookieValid(cookieCollection))
+            {
+                _cookieCollection = cookieCollection;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        internal static bool SetCookie(System.Net.CookieCollection cookieCollection)
+        {
+            if (IsCookieValid(cookieCollection))
+            {
+                if (_cookieCollection == null)
+                {
+                    _cookieCollection = cookieCollection;
+                }
+                else
+                {
+                    _cookieCollection.Add(cookieCollection);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private static bool IsCookieValid(System.Net.CookieCollection cookieCollection)
+        {
+            JObject result = JObject.Parse(WebClient(cookieCollection).DownloadString("http://inso.link/api/i.php"));
+            if ((string)result["logged_in"] == "true")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

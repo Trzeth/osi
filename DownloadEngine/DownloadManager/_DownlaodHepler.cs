@@ -11,12 +11,15 @@ namespace DownloadEngine.DownloadManager
 {
     internal class _DownlaodHepler
     {
+        public class NoServerToChoose : Exception { }
+        public class ServerNotAvailable : Exception { }
+        public class CookieInvalid : Exception { }
         internal static class FileHelper
         {
             static string _path;
             static FileHelper()
             {
-                _path = Environment.CurrentDirectory + @"/download/";
+                _path = Environment.CurrentDirectory + @"\download\";
                 if (!Directory.Exists(_path))
                 {
                     Directory.CreateDirectory(_path);
@@ -90,7 +93,7 @@ namespace DownloadEngine.DownloadManager
             }
             else
             {
-                throw new Exception("No Server to Choose");
+                throw new NoServerToChoose();
             }
         }
     }

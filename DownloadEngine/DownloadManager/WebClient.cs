@@ -7,7 +7,7 @@ using System.Net;
 using System.Collections;
 using System.Text.RegularExpressions;
 
-namespace DownloadEngine.Servers
+namespace DownloadEngine.DownloadManager
 {
     class WebClient:System.Net.WebClient
     {
@@ -16,6 +16,7 @@ namespace DownloadEngine.Servers
         internal string Referer;
         internal string Host;
         internal string ContentType;
+        internal string Method;
 
         internal WebClient()
         {
@@ -40,6 +41,7 @@ namespace DownloadEngine.Servers
                 if (Referer != null) webRequest.Referer = Referer;
                 if (Host != null) webRequest.Host = Host;
                 if (ContentType != null) webRequest.ContentType = ContentType;
+                if(Method != null) webRequest.Method = Method;
             }
             return request;
         }

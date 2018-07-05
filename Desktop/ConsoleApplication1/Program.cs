@@ -29,11 +29,12 @@ namespace ConsoleApplication1
 
             DownloadManager.Config(ConfigurationManager.AppSettings["Inso"], Server.Inso);
             DownloadManager.MaxDownloaderCount = 2;
-            DownloadManager.Add(new Beatmapset("https://osu.ppy.sh/beatmapsets/780349"),Server.Inso);
-            DownloadManager.Add(new Beatmapset("https://osu.ppy.sh/beatmapsets/737924"), Server.Uugl);
-            DownloadManager.Add(new Beatmapset("https://osu.ppy.sh/beatmapsets/331872"), Server.Inso);
 
+            //DownloadManager.Add(new Beatmapset("https://osu.ppy.sh/beatmapsets/765055"));
+            //DownloadManager.Add(new Beatmapset("https://osu.ppy.sh/beatmapsets/766867"));
+            DownloadManager.Add(new Beatmapset("https://osu.ppy.sh/beatmapsets/744238"),Server.Inso);
 
+            Console.ReadLine();
             //Server server = Server.Uugl;
             //Console.WriteLine("Select A Download Server");
             //Console.WriteLine("A Uugl B Inso C Bloodcat");
