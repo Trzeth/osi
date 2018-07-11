@@ -13,22 +13,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace osi_Desktop.Message
+namespace osi_Desktop.Messages
 {
     /// <summary>
     /// Message.xaml 的交互逻辑
     /// </summary>
-    public partial class Message : UserControl
+    public partial class Message : Page
     {
+        public UIElement element;
         public Message()
         {
-        }
-        public Message(string title,string content)
-        {
             InitializeComponent();
-
-            Title.Content = title;
-            Content.Text = content;
         }
     }
 }

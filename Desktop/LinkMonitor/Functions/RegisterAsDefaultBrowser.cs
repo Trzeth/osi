@@ -12,8 +12,16 @@ namespace LinkMonitor.Functions
 {
     static class RegisterAsDefaultBrowserFunction
     {
-        [DllImport("Shell32.dll", CharSet = CharSet.Auto)]
-        private static extern void SHChangeNotify(int wEventId, int uFlags, IntPtr dwItem1, IntPtr dwItem2);
+        static OSVersion osVersion = OSVersion.Unset;
+        static RegisterAsDefaultBrowserFunction()
+        {
+            if (osVersion == OSVersion.Unset)
+            {
+                osVersion = GetOSVersion(Environment.OSVersion.Version);
+            }
+        }
+        //[DllImport("Shell32.dll", CharSet = CharSet.Auto)]
+        //private static extern void _SHChangeNotify(int wEventId, int uFlags, IntPtr dwItem1, IntPtr dwItem2);
         private static void RegisterAsBrowser()
         {
             string path = Environment.CurrentDirectory;
@@ -47,36 +55,35 @@ namespace LinkMonitor.Functions
             URLAssociations_CU.Close();
 
             Registry.SetValue(@"HKEY_CURRENT_USER\Software\RegisteredApplications", "osi", @"Software\osi\Capabilities");
-
-            SHChangeNotify(0x08000000, 0x1000, IntPtr.Zero, IntPtr.Zero);
-            
+            //SHChangeNotify();
         }
         internal static void Register()
         {
             RegisterAsBrowser();
 
-            OSVersion osVersion = GetOSVersion(Environment.OSVersion.Version);
             if (osVersion == OSVersion.Windows_10_Above_And_Include_Build10122) //Windows 10
             {
                 Environment.Exit(ExitCode.HandledError);
             }
             else if (osVersion == OSVersion.Windows_10_Below_Build10122 || osVersion == OSVersion.Windows_8_And_Above || osVersion == OSVersion.Windows_7_And_Vista)  //Windows 8 Windows 10.0.10122
             {
-                System.Diagnostics.Process.Start("Control", "/name Microsoft.DefaultPrograms /page pageFileAssoc");
+                RegisterAsDefaultBrowser(null, null);
+                bool succeed = true;
 
-                bool succeed = false;
-                for (int i = 0; i < 100; i++) 
-                {
-                    if ((string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice\", "Progid", "") == "osiURL" && (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\https\UserChoice\", "Progid", "") == "osiURL")
-                    {
-                        succeed = true;
-                        break;
-                    }
-                    else
-                    {
-                        Thread.Sleep(5000);
-                    }
-                }
+                //System.Diagnostics.Process.Start("Control", "/name Microsoft.DefaultPrograms /page pageFileAssoc");
+
+                //for (int i = 0; i < 100; i++) 
+                //{
+                //    if ((string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice\", "Progid", "") == "osiURL" && (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\https\UserChoice\", "Progid", "") == "osiURL")
+                //    {
+                //        succeed = true;
+                //        break;
+                //    }
+                //    else
+                //    {
+                //        Thread.Sleep(5000);
+                //    }
+                //}
 
                 if (succeed)
                 {
@@ -110,10 +117,9 @@ namespace LinkMonitor.Functions
         }
         internal static void RegisterAsDefaultBrowser(string httpHash,string httpsHash)
         {
-            OSVersion osVersion = GetOSVersion(Environment.OSVersion.Version);
             if (osVersion == OSVersion.Windows_10_Above_And_Include_Build10122)
             {
-                throw new Exception();
+                Environment.Exit(ExitCode.HandledError);
             }
             else if (osVersion == OSVersion.Windows_10_Below_Build10122 || osVersion == OSVersion.Windows_8_And_Above || osVersion == OSVersion.Windows_7_And_Vista)
             {
@@ -138,7 +144,7 @@ namespace LinkMonitor.Functions
                 Environment.Exit(ExitCode.HandledError);
             }
 
-            Environment.Exit(ExitCode.Succeed);
+            //SHChangeNotify();
         }
         private static void RegisterAsDefaultBrowser_Xp()
         {
@@ -166,7 +172,8 @@ namespace LinkMonitor.Functions
             Windows_8_And_Above,
             Windows_7_And_Vista,
             Windows_2000_And_Xp,
-            Unknow
+            Unknow,
+            Unset
         }
         private static OSVersion GetOSVersion(Version osVersion)
         {
@@ -195,5 +202,10 @@ namespace LinkMonitor.Functions
                 return OSVersion.Unknow;
             }
         }
+
+        //private static void SHChangeNotify()
+        //{
+        //   _SHChangeNotify(0x08000000, 0x1000, IntPtr.Zero, IntPtr.Zero);
+        //}
     }
 }

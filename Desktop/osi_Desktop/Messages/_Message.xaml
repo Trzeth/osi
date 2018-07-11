@@ -12,14 +12,14 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Message/MessageStyle.xaml"/>
+                <ResourceDictionary Source="/Messages/MessageStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Border Background="White" CornerRadius="2">
         <Grid>
-            <Button x:Name="button" Height="150" Width="65" HorizontalAlignment="Left" Style="{DynamicResource ButtonStyle1}" Background="#FF0E90D2" Padding="0" VerticalContentAlignment="Center" Panel.ZIndex="5" >
+            <Button x:Name="button" Height="150" Width="65" HorizontalAlignment="Left" Style="{StaticResource ButtonStyle1}" Background="#FF0E90D2" Padding="0" VerticalContentAlignment="Center" Panel.ZIndex="5" >
                 <Button.Content>
                     <Viewbox Width="48" Height="48">
                         <Canvas Width="24" Height="24">

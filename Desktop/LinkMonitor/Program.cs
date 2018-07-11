@@ -106,7 +106,7 @@ namespace LinkMonitor
 #endif
                 Environment.Exit(ExitCode.Error);
             }
-
+            Environment.Exit(ExitCode.Succeed);
         }
     }
 }

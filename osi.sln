@@ -10,6 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Android", "Android", "{935D8955-D141-4C40-9232-DFE0C1BBEE12}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "osi_Desktop", "Desktop\osi_Desktop\osi_Desktop.csproj", "{2EBBF37C-6725-44C2-AD81-977351725F09}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B9CA6694-6F3F-4CFC-A8B3-CBE04D0037ED} = {B9CA6694-6F3F-4CFC-A8B3-CBE04D0037ED}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkMonitor", "Desktop\LinkMonitor\LinkMonitor.csproj", "{B9CA6694-6F3F-4CFC-A8B3-CBE04D0037ED}"
 EndProject

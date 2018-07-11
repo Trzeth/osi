@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -63,14 +66,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Message\DownloadManager.xaml.cs">
+    <Compile Include="MessageHost\DownloadManager.xaml.cs">
       <DependentUpon>DownloadManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Message\Message.xaml.cs">
+    <Compile Include="MessageHost\MessageHost.xaml.cs">
+      <DependentUpon>MessageHost.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Messages\Message.xaml.cs">
       <DependentUpon>Message.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Message\MessageHost.xaml.cs">
-      <DependentUpon>MessageHost.xaml</DependentUpon>
+    <Compile Include="Messages\FirstRun\Guide.xaml.cs">
+      <DependentUpon>Guide.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -101,30 +107,42 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DownloadEngine\Engine.csproj">
+    <ProjectReference Include="..\..\DownloadEngine\Engine.csproj">
       <Project>{79beb838-098a-45f8-9af9-6de8e2d27375}</Project>
       <Name>Engine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Message\DownloadManager.xaml">
+    <Page Include="MessageHost\DownloadManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Message\Message.xaml">
+    <Page Include="MessageHost\MessageHost.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Message\MessageHost.xaml">
+    <Page Include="Messages\Message.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Messages\MessageStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Message\MessageStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Messages\FirstRun\Guide.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>xcopy /s /e /y $(SolutionDir)Desktop\LinkMonitor\bin\Debug\LinkMonitor.exe $(TargetDir)</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
