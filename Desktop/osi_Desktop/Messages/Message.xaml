@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:osi_Desktop.Messages"
       mc:Ignorable="d" 
-      Title="Message" Style="{StaticResource Message}">
+      Title="Message">
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

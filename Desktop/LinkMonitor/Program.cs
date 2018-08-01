@@ -15,6 +15,7 @@ namespace LinkMonitor
 {
     class Program
     {
+
         internal const string Update = "--Update";
         internal static class UpdateArgument
         {
@@ -29,14 +30,9 @@ namespace LinkMonitor
             internal const string FirstRun = "FirstRun";
         }
 
+        internal static int exitCode;
         static void Main(string[] args)
         {
-#if DEBUG
-            if(args.Count() > 0)
-            {
-                MessageBox.Show("Wait For DEBUG");
-            }
-#endif
             try
             {
                 if (args.Count() > 0)
@@ -84,7 +80,7 @@ namespace LinkMonitor
                                 }
                                 else
                                 {
-                                    RegisterAsDefaultBrowserFunction.RegisterAsDefaultBrowser(null, null);
+                                    RegisterAsDefaultBrowserFunction.RegisterAsDefaultBrowser();
                                 }
                                 break;
                         }
@@ -104,9 +100,9 @@ namespace LinkMonitor
                                 + Environment.NewLine+
                                 e.StackTrace);
 #endif
-                Environment.Exit(ExitCode.Error);
+                exitCode = ExitCode.Error;
             }
-            Environment.Exit(ExitCode.Succeed);
+            Environment.Exit(exitCode);
         }
     }
 }

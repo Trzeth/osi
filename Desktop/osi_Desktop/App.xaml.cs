@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using DownloadEngine.DownloadManager;
 
 namespace osi_Desktop
 {
@@ -13,13 +16,9 @@ namespace osi_Desktop
     /// </summary>
     public partial class App : Application
     {
-        static MessageHost.MessageHost MessageHost;
+        public DownloadManager mgr = new DownloadManager();
         App()
         {
-            MessageHost = new MessageHost.MessageHost();
-            MessageHost.Show();
-
-            MessageHost.Add(new Messages.FirstRun.Guide());
         }
     }
 }

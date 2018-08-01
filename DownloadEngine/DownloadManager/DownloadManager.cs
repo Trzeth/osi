@@ -9,9 +9,18 @@ using System.Threading;
 
 namespace DownloadEngine.DownloadManager
 {
-    internal class BeatmapsetPackage
+    public enum DownloadStatus
     {
+        Downloading,
+        Pause,
+        Stop,
+        Failed
+    }
+    public class BeatmapsetPackage
+    {
+        public DownloadStatus Status;
         internal Server Server { get; set; }
+        internal List<Server> FailedServers;
         internal int BeatmapsetId { get { return _beatmapsetId; } }
 
         protected int _beatmapsetId;
@@ -53,6 +62,8 @@ namespace DownloadEngine.DownloadManager
         static bool _isBloodcatValid;
         static bool _isUuglValid = true;
 
+        public List<BeatmapsetPackage> BeatmapsetList = new List<BeatmapsetPackage>();
+        static Queue<BeatmapsetPackage> _pendingQueue = new Queue<BeatmapsetPackage>();
         static List<BeatmapsetPackage> _pendingList = new List<BeatmapsetPackage>();
         static List<FailedBeatmapset> _failedList = new List<FailedBeatmapset>();
         static int _downloaderCount;

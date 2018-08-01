@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using static LinkMonitor.Program;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -59,67 +60,50 @@ namespace LinkMonitor.Functions
         }
         internal static void Register()
         {
-            RegisterAsBrowser();
+            if (osVersion == OSVersion.Windows_10_Below_Build10122 || osVersion == OSVersion.Windows_8_And_Above || osVersion == OSVersion.Windows_7_And_Vista)
+            {
+                RegisterAsBrowser();
+            }
+
+            RegisterAsDefaultBrowser();
 
             if (osVersion == OSVersion.Windows_10_Above_And_Include_Build10122) //Windows 10
             {
-                Environment.Exit(ExitCode.HandledError);
+                exitCode = ExitCode.HandledError;
             }
             else if (osVersion == OSVersion.Windows_10_Below_Build10122 || osVersion == OSVersion.Windows_8_And_Above || osVersion == OSVersion.Windows_7_And_Vista)  //Windows 8 Windows 10.0.10122
             {
-                RegisterAsDefaultBrowser(null, null);
-                bool succeed = true;
-
-                //System.Diagnostics.Process.Start("Control", "/name Microsoft.DefaultPrograms /page pageFileAssoc");
-
-                //for (int i = 0; i < 100; i++) 
-                //{
-                //    if ((string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice\", "Progid", "") == "osiURL" && (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\Associations\UrlAssociations\https\UserChoice\", "Progid", "") == "osiURL")
-                //    {
-                //        succeed = true;
-                //        break;
-                //    }
-                //    else
-                //    {
-                //        Thread.Sleep(5000);
-                //    }
-                //}
-
-                if (succeed)
+                if (osVersion == OSVersion.Windows_10_Below_Build10122 || osVersion == OSVersion.Windows_8_And_Above)
                 {
-                    if (osVersion == OSVersion.Windows_10_Below_Build10122 || osVersion == OSVersion.Windows_8_And_Above)
-                    {
-                        //Windows 10 与 Windows 8 需要记录 Hash
-                        Environment.Exit(ExitCode.Continue);
-                    }
-                    else
-                    {
-                        //Windows 7 及 Vista 不需要
-                        Environment.Exit(ExitCode.Succeed);
-                    }
+                    //Windows 10 与 Windows 8 需要记录 Hash
+                    exitCode = ExitCode.Continue;
                 }
                 else
                 {
-                    // 5 * 100s 超时退出
-                    Environment.Exit(ExitCode.Failed);
+                    //Windows 7 及 Vista 不需要
+                    exitCode = ExitCode.Succeed;
                 }
+
             }
             else if (osVersion == OSVersion.Windows_2000_And_Xp)
             {
-                RegisterAsDefaultBrowser_Xp();
-                Environment.Exit(ExitCode.Alert);
+                exitCode = ExitCode.Alert;
             }
             else
             {
                 //不支持的系统
-                Environment.Exit(ExitCode.HandledError);
+                exitCode = ExitCode.HandledError;
             }
+        }
+        internal static void RegisterAsDefaultBrowser()
+        {
+            RegisterAsDefaultBrowser(null, null);
         }
         internal static void RegisterAsDefaultBrowser(string httpHash,string httpsHash)
         {
             if (osVersion == OSVersion.Windows_10_Above_And_Include_Build10122)
             {
-                Environment.Exit(ExitCode.HandledError);
+                exitCode = ExitCode.HandledError;
             }
             else if (osVersion == OSVersion.Windows_10_Below_Build10122 || osVersion == OSVersion.Windows_8_And_Above || osVersion == OSVersion.Windows_7_And_Vista)
             {
@@ -137,32 +121,27 @@ namespace LinkMonitor.Functions
             }
             else if (osVersion == OSVersion.Windows_2000_And_Xp)
             {
-                RegisterAsDefaultBrowser_Xp();
+                string path = Environment.CurrentDirectory;
+
+                string osiIconPath = '"' + path + @"\osi.exe" + '"' + ",0";
+                string lmPath = '"' + path + @"\LinkMonitor.exe" + '"';
+                string lmPathWithArg = lmPath + "--Link" + " " + '"' + "%1" + '"';
+
+                RegistryKey http = Registry.CurrentUser.OpenSubKey(@"Software\Classes\http", true);
+                http.OpenSubKey("DefaultIcon", true).SetValue("", osiIconPath);
+                http.OpenSubKey(@"shell\open\command", true).SetValue("", lmPathWithArg);
+                http.Close();
+                RegistryKey https = Registry.CurrentUser.OpenSubKey(@"Software\Classes\http", true);
+                https.OpenSubKey("DefaultIcon", true).SetValue("", osiIconPath);
+                https.OpenSubKey(@"shell\open\command", true).SetValue("", lmPathWithArg);
+                https.Close();
             }
             else
             {
-                Environment.Exit(ExitCode.HandledError);
+                exitCode = ExitCode.HandledError;
             }
 
             //SHChangeNotify();
-        }
-        private static void RegisterAsDefaultBrowser_Xp()
-        {
-            string path = Environment.CurrentDirectory;
-
-            string osiIconPath = '"' + path + @"\osi.exe" + '"' + ",0";
-            string lmPath = '"' + path + @"\LinkMonitor.exe" + '"';
-            string lmPathWithArg = lmPath + "--Link" + " " + '"' + "%1" + '"';
-
-            RegistryKey http = Registry.CurrentUser.OpenSubKey(@"Software\Classes\http", true);
-            http.OpenSubKey("DefaultIcon", true).SetValue("", osiIconPath);
-            http.OpenSubKey(@"shell\open\command", true).SetValue("", lmPathWithArg);
-            http.Close();
-            RegistryKey https = Registry.CurrentUser.OpenSubKey(@"Software\Classes\http", true);
-            https.OpenSubKey("DefaultIcon", true).SetValue("", osiIconPath);
-            https.OpenSubKey(@"shell\open\command", true).SetValue("", lmPathWithArg);
-            https.Close();
-
         }
         private enum OSVersion
         {

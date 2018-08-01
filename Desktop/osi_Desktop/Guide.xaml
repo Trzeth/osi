@@ -1,0 +1,54 @@
+﻿<Window x:Class="osi_Desktop.Guide"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:osi_Desktop"
+        mc:Ignorable="d"
+        Title="Guide" Height="300" Width="550" Background="{x:Null}" WindowStyle="None" AllowsTransparency="True"
+        BorderThickness="5" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Window.Effect>
+        <DropShadowEffect Color="Gray" ShadowDepth="0" Opacity="0.5" BlurRadius="5"/>
+    </Window.Effect>
+
+    <Grid ClipToBounds="True">
+        <Grid Name="Pages" Margin="0,5,0,5" ClipToBounds="True">
+            <Grid Background="#00E676" HorizontalAlignment="Left" Width="460" Margin="80,0,0,0" Name="Page3"/>
+            <Grid Background="#FFEB3B" HorizontalAlignment="Left" Width="460" Margin="80,0,0,0" Name="Page2">
+                <Grid.Effect>
+                    <DropShadowEffect Color="Gray" ShadowDepth="0" Opacity="0.5" BlurRadius="5" Direction="0"/>
+                </Grid.Effect>
+                <Grid.Resources>
+                    <Storyboard x:Key="a">
+                        <DoubleAnimation>
+
+                        </DoubleAnimation>
+                    </Storyboard>
+                </Grid.Resources>
+            </Grid>
+            <Grid Background="#2196F3" HorizontalAlignment="Left" Width="460" Margin="80,0,0,0" Name="Page1">
+                <Grid.Effect>
+                    <DropShadowEffect Color="Gray" ShadowDepth="0" Opacity="0.5" BlurRadius="5" Direction="0"/>
+                </Grid.Effect>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" ClipToBounds="True" FontSize="25" Foreground="#FFFFFF">
+                    正在为您设置
+                    <LineBreak/>
+                    请稍后
+                </TextBlock>
+            </Grid>
+            <Button x:Name="button" Content="下一步" HorizontalAlignment="Left" Margin="430,230,0,0" VerticalAlignment="Top" Width="83" Height="29" Click="button_Click" MouseEnter="button_MouseEnter" MouseLeave="button_MouseLeave"/>
+
+        </Grid>
+        
+        <Grid Name="Banner" HorizontalAlignment="Left" Width="80">
+            <Grid.Effect>
+                <DropShadowEffect Color="Gray" ShadowDepth="0" Opacity="0.5" BlurRadius="5" Direction="0"/>
+            </Grid.Effect>
+            <Rectangle Name="Page1_Background" Fill="#1976D2"/>
+            <Rectangle Name="Page2_Background" Fill="#FBC02D" Opacity="0"/>
+            <Rectangle Name="Page3_Background" Fill="#00C853" Opacity="0"/>
+            <TextBlock HorizontalAlignment="Center" Foreground="White" FontSize="40" FontFamily="Segoe UI Light" Width="48" Margin="0,10,0,0">osi</TextBlock>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#EEEEEE" FontSize="30" FontFamily="Microsoft YaHei" TextOptions.TextFormattingMode="Display">欢迎</TextBlock>
+        </Grid>
+    </Grid>
+</Window>
