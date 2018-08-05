@@ -54,7 +54,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DownloadEngine\Engine.csproj">
+    <ProjectReference Include="..\..\DownloadEngine\Engine.csproj">
       <Project>{79beb838-098a-45f8-9af9-6de8e2d27375}</Project>
       <Name>DownloadEngine</Name>
     </ProjectReference>

@@ -13,7 +13,7 @@ namespace DownloadEngine.Servers
 {
     class Uugl
     {
-        public static byte[] Download(BeatmapsetPackage p,out string fileName)
+        public byte[] Download(BeatmapsetPackage p,out string fileName)
         {
             WebClient webclient = new WebClient();
             byte[] file = webclient.DownloadData(Path(p));
@@ -29,7 +29,7 @@ namespace DownloadEngine.Servers
             webclient.Dispose();
             return file;
         }
-        private static string Path(BeatmapsetPackage p)
+        private string Path(BeatmapsetPackage p)
         {
             const string uriRoot = "http://osu.uu.gl/";
             return uriRoot + "s/" + p.BeatmapsetId;

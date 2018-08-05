@@ -69,19 +69,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Guide.xaml.cs">
-      <DependentUpon>Guide.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MessageHost\DownloadManager.xaml.cs">
+    <Compile Include="Windows\DownloadManager.xaml.cs">
       <DependentUpon>DownloadManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MessageHost\MessageHost.xaml.cs">
-      <DependentUpon>MessageHost.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Messages\Message.xaml.cs">
-      <DependentUpon>Message.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Messages\FirstRun\Guide.xaml.cs">
+    <Compile Include="Windows\Guide.xaml.cs">
       <DependentUpon>Guide.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -119,27 +110,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Guide.xaml">
+    <Page Include="Windows\DownloadManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MessageHost\DownloadManager.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MessageHost\MessageHost.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Messages\Message.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Messages\MessageStyle.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Messages\FirstRun\Guide.xaml">
+    <Page Include="Windows\Guide.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

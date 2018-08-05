@@ -10,18 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace osi_Desktop.Messages
+namespace osi_Desktop.Windows
 {
     /// <summary>
-    /// Message.xaml 的交互逻辑
+    /// DownloadManager.xaml 的交互逻辑
     /// </summary>
-    public partial class Message : Page
+    public partial class DownloadManager : Window
     {
-        public UIElement element;
-        public Message()
+        public DownloadManager()
         {
             InitializeComponent();
         }

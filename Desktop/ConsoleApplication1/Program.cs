@@ -20,6 +20,8 @@ namespace ConsoleApplication1
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var appsettings = config.AppSettings.Settings;
 
+            DownloadManager downloadMgr = new DownloadManager();
+
             if (appsettings["Inso"].Value == string.Empty)
             {
                 Console.WriteLine("Input Inso Cookie");
@@ -27,12 +29,12 @@ namespace ConsoleApplication1
                 config.Save();
             }
 
-            DownloadManager.Config(ConfigurationManager.AppSettings["Inso"], Server.Inso);
+            downloadMgr.Config(ConfigurationManager.AppSettings["Inso"], Server.Inso);
             DownloadManager.MaxDownloaderCount = 2;
 
             //DownloadManager.Add(new Beatmapset("https://osu.ppy.sh/beatmapsets/765055"));
             //DownloadManager.Add(new Beatmapset("https://osu.ppy.sh/beatmapsets/766867"));
-            DownloadManager.Add(new Beatmapset("https://osu.ppy.sh/beatmapsets/744238"),Server.Inso);
+            downloadMgr.Add(new Beatmapset("https://osu.ppy.sh/beatmapsets/744238"),Server.Inso);
 
             Console.ReadLine();
             //Server server = Server.Uugl;

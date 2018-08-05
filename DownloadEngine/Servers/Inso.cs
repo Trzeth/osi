@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System.Threading;
 using System.Collections;
 using System.Text.RegularExpressions;
 using DownloadEngine.DownloadManager;
 using WebClient = DownloadEngine.DownloadManager.WebClient;
+using Newtonsoft.Json.Linq;
+using System.Runtime.Serialization;
 
 namespace DownloadEngine.Servers
 {
-    static class Inso
+    class Inso:Server
     {
         public static float current_timestamp;
         static System.Net.CookieCollection _cookieCollection;//do_not_remove_this_0w0
@@ -25,50 +27,16 @@ namespace DownloadEngine.Servers
             public int vip_level;
             //"username":"Trzeth","user_id":"5106629","cd_timestamp":0,"vip_level":"2","current_timestamp":1512263695.486
         }
-        private enum Methods
+        enum Methods
         {
             user,
             download,
             ci_token,
         }
-        private class Packages
+        static string ApiPath(Methods methods,string valve)
         {
-            public Uri game_play
-            {
-                get { return uri[0]; }
-                set { uri[0] = value; }
-            }
-            public Uri skin_sound
-            {
-                get { return uri[1]; }
-                set { uri[1] = value; }
-            }
-            public Uri skin_image
-            {
-                get { return uri[2]; }
-                set { uri[2] = value; }
-            }
-            public Uri video
-            {
-                get { return uri[3]; }
-                set { uri[3] = value; }
-            }
-            public Uri storyboard
-            {
-                get { return uri[4]; }
-                set { uri[4] = value; }
-            }
-            public Uri central
-            {
-                get { return uri[5]; }
-                set { uri[5] = value; }
-            }
-            public Uri[]  uri = new Uri[6];
-            // game_play skin_sound skin_image video storyboard central
-        }
-        private static string ApiPath(Methods methods,string valve)
-        {
-            string apiRoot = "http://inso.link/api/";
+            //string apiRoot = "http://inso.link/api/";
+            string apiRoot = "http://127.0.0.1:8080/";
             string path;
             switch (methods)
             {
@@ -89,7 +57,49 @@ namespace DownloadEngine.Servers
             path = path + "source=osi";
             return path;
         }
-        internal static byte[] Download(BeatmapsetPackage p,out string fileName)
+        public class ReturnInformation
+        {
+            public class Base
+            {
+                //一定要全部都设置为 public
+                public int returnCode;
+                public int cd_timestamp;
+                public string current_timestamp;
+
+                [JsonExtensionData]
+                private IDictionary<string, JToken> _data;
+
+                public Base()
+                {
+                    _data = new Dictionary<string, JToken>();
+                }
+
+                [OnDeserialized]
+                private void OnDeserialized(StreamingContext context)
+                {
+                    returnCode = (int)_data["return"];
+                }
+            }
+            public class Download:Base
+            {
+                public Download() : base() { }
+                public Dictionary<string, string> info;
+                public int package_available;
+                public int cd_mapset;
+                public string expire_timestamp;
+                public Dictionary<string, Uri> package_url;
+                public int mapset;
+                public float cd_ratio;
+                public string error;
+                public string ci_token;
+            }
+            public class CentralIndex : Base
+            {
+                public CentralIndex() : base() { }
+                public Dictionary<int, int[]> central_index;
+            }
+        }
+        internal override byte[] Download(BeatmapsetPackage p,out string fileName)
         {
             /*
             "package_url": {
@@ -109,19 +119,20 @@ namespace DownloadEngine.Servers
 
             bool finished = false;
             JObject result = null;
+            ReturnInformation.Download d = null;
             while (!finished)
             {
+                var s = WebClient().DownloadString(ApiPath(Methods.download, bValve));
+                d = JsonConvert.DeserializeObject<ReturnInformation.Download>(s);
 
-                result = JObject.Parse(WebClient().DownloadString(ApiPath(Methods.download, bValve)));
-
-                switch ((int)result["return"])
+                switch (d.returnCode)
                 {
                     case -1:
                     case 5:
                     case 999:
                     case 1100: finished = true; break;
                     
-                    case 100: finished = true; data = Download(result); break;
+                    case 100: finished = true; data = Download(d.package_url,d.ci_token); break;
                     case 200: case 300: case 400: case 500:
                     case 201: case 301: case 401: case 501:
                     case 202: case 302: case 402: case 502:
@@ -129,35 +140,26 @@ namespace DownloadEngine.Servers
                 }
             }
 
-            fileName = result["mapset"] + " " + result["info"]["artist"] + " - " + result["info"]["title"] + @".osz";
+            fileName = d.mapset + " " + d.info["artist"] + "-" + d.info["title"] + ".osz";
 
             return data;
         }
-        private static byte[] Download(JObject result)
+        private static byte[] Download(Dictionary<string,Uri> uris,string ci_token)
         {
-            Packages packages = new Packages();
-            JToken package_url = result["package_url"];
-
-            packages.game_play = (Uri)package_url["game_play"];
-            packages.skin_sound = ((string)package_url["skin_sound"] != string.Empty ? (Uri)package_url["skin_sound"] : null);
-            packages.skin_image = ((string)package_url["skin_image"] != string.Empty ? (Uri)package_url["skin_image"] : null);
-            packages.video = ((string)package_url["video"] != string.Empty ? (Uri)package_url["video"] : null);
-            packages.storyboard = ((string)package_url["storyboard"] != string.Empty ? (Uri)package_url["storyboard"] : null);
-            packages.central = (Uri)package_url["central"];
-
-            JObject centralIndexR = JObject.Parse(WebClient().DownloadString(ApiPath(Methods.ci_token,(string)result["ci_token"])));
+            var s = WebClient().DownloadString(ApiPath(Methods.ci_token, ci_token));
+            ReturnInformation.CentralIndex c = JsonConvert.DeserializeObject<ReturnInformation.CentralIndex>(s);
 
             int combination = 0;
             byte[] file = new byte[0];
             for (int i = 0;i <= 5;i++)
             {
-                if(packages.uri[i] != null)
+                Uri uri = uris.Values.ToArray()[i];
+                if(uri != null)
                 {
-                    byte[] data = WebClient().DownloadData(packages.uri[i].AbsoluteUri);
-                    byte[] newData = Decode(data, centralIndexR["central_index"]);
+                    byte[] data = WebClient().DownloadData(uri.AbsoluteUri);
+                    byte[] newData = Decode(data, c.central_index[0]);
                     if (i != 5)
                     {
-
                         combination += (int)Math.Pow(2, i);
 
                         file = file.Concat(newData).ToArray();
@@ -166,8 +168,8 @@ namespace DownloadEngine.Servers
                     {
                         //Are you fu**ing kiding me?!! Repeat?!!
 
-                        int start = (int)centralIndexR["central_index"][combination.ToString()][0];
-                        int end = (int)centralIndexR["central_index"][combination.ToString()][1];
+                        int start = c.central_index[combination][0];
+                        int end = c.central_index[combination][1];
 
                         byte[] b = newData.Skip(start).Take(end).ToArray();
 
@@ -190,19 +192,17 @@ namespace DownloadEngine.Servers
 
             return user;
         }
-        private static byte[] Decode(byte[] data, JToken central_index)
+        private static byte[] Decode(byte[] data, int[] central_index)
         {
-            JValue[] centralIndex = central_index["0"].Cast<JValue>().ToArray();
-
             byte[] newData = new byte[data.Length];
 
             if (data.Length >= 64)
             {
                 for (int j = 0; j < data.Length; j++)
                 {
-                    if (j < centralIndex.Count())
+                    if (j < central_index.Count())
                     {
-                        newData[j] = (byte)(int.Parse(centralIndex[j].ToString()) ^ data[j]);
+                        newData[j] = (byte)(int.Parse(central_index[j].ToString()) ^ data[j]);
                     }
                     else
                     {
@@ -211,7 +211,6 @@ namespace DownloadEngine.Servers
                 }
             }
 
-            centralIndex = null;
             data = null;
             central_index = null;
 
@@ -270,7 +269,7 @@ namespace DownloadEngine.Servers
                 return false;
             }
         }
-        private static bool IsCookieValid(System.Net.CookieCollection cookieCollection)
+        public static bool IsCookieValid(System.Net.CookieCollection cookieCollection)
         {
             JObject result = JObject.Parse(WebClient(cookieCollection).DownloadString("http://inso.link/api/i.php"));
             if ((string)result["logged_in"] == "true")
@@ -282,5 +281,6 @@ namespace DownloadEngine.Servers
                 return false;
             }
         }
+
     }
 }

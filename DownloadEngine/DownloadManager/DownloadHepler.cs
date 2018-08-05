@@ -6,10 +6,12 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DownloadEngine.Servers;
+using DownloadEngine.DownloadManager;
+using System.Threading;
 
 namespace DownloadEngine.DownloadManager
 {
-    internal class _DownlaodHepler
+    internal class DownloadHepler
     {
         public class NoServerToChoose : Exception { }
         public class ServerNotAvailable : Exception { }
@@ -43,41 +45,18 @@ namespace DownloadEngine.DownloadManager
                 return fileName;
             }
         }
-        internal class Downloader
-        {
-            static int _downloaderCount;
-            internal Downloader()
-            {
-                _downloaderCount++;
-            }
-
-        }
         internal static Server ChooseServer(BeatmapsetPackage p)
         {
-            if (p.BeatmapsetId >= 700000 && p.BeatmapsetId <= 740000)
+            if (p.FailedServerList.Count == 0)
             {
-                return Server.Uugl;
-            }
-            else
-            {
-                Random r = new Random();
-                if (r.Next(0, 100) >= 50)
+                if (p.BeatmapsetId >= 700000 && p.BeatmapsetId <= 740000)
                 {
-                    return Server.Inso;
+                    return Server.Uugl;
                 }
                 else
                 {
-                    return Server.Blooadcat;
-                }
-            }
-        }
-        internal static Server ChooseServer(FailedBeatmapset p)
-        {
-            if (p.FailedServerList.Count < 3)
-            {
-                if (p.FailedServerList.Exists(s => s == Server.Uugl) || p.BeatmapsetId <= 700000 || p.BeatmapsetId >= 740000)
-                {
-                    if (p.FailedServerList.Exists(s => s == Server.Blooadcat))
+                    Random r = new Random();
+                    if (r.Next(0, 100) >= 50)
                     {
                         return Server.Inso;
                     }
@@ -86,14 +65,32 @@ namespace DownloadEngine.DownloadManager
                         return Server.Blooadcat;
                     }
                 }
-                else
-                {
-                    return Server.Uugl;
-                }
             }
             else
             {
-                throw new NoServerToChoose();
+                if (p.FailedServerList.Count < 3)
+                {
+                    if (p.FailedServerList.Exists(s => s == Server.Uugl) || p.BeatmapsetId <= 700000 || p.BeatmapsetId >= 740000)
+                    {
+                        if (p.FailedServerList.Exists(s => s == Server.Blooadcat))
+                        {
+                            return Server.Inso;
+                        }
+                        else
+                        {
+                            return Server.Blooadcat;
+                        }
+                    }
+                    else
+                    {
+                        return Server.Uugl;
+                    }
+                }
+                else
+                {
+                    throw new NoServerToChoose();
+                }
+
             }
         }
     }
