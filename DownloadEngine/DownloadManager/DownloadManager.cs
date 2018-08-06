@@ -152,6 +152,7 @@ namespace DownloadEngine.DownloadManager
                 for (int i = 0; i < (_maxDownloaderCount - DownloaderList.Count); i++)
                 {
                     DownloaderList.Add(new Downloader());
+                    int a;
                 }
             }
         }

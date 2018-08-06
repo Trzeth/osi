@@ -75,13 +75,14 @@ namespace DownloadEngine.DownloadManager
 
                     byte[] data = null;
                     string fileName = null;
+
+                    Servers.Server server = GetServer(p.Server);
+                    if (!DownloadManager.IsServerVaild[p.Server]) throw new ServerNotAvailable();
+                    data = server.Download(p, out fileName);
+                    FileHelper.FileWrite(data, fileName);
+
                     try
                     {
-                        i++;
-                        Servers.Server server = GetServer(p.Server);
-                        if (!DownloadManager.IsServerVaild[p.Server]) throw new ServerNotAvailable();
-                        data = server.Download(p, out fileName);
-                        FileHelper.FileWrite(data, fileName);
                         _succeed = true;
                     }
                     catch (Exception e)

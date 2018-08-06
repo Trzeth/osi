@@ -33,10 +33,19 @@ namespace DownloadEngine.Servers
             download,
             ci_token,
         }
+        enum Package
+        {
+            game_play,
+            skin_sound,
+            skin_image,
+            video,
+            storyboard,
+            central
+        }
         static string ApiPath(Methods methods,string valve)
         {
-            //string apiRoot = "http://inso.link/api/";
-            string apiRoot = "http://127.0.0.1:8080/";
+            string apiRoot = "http://inso.link/api/";
+            //string apiRoot = "http://127.0.0.1:8080/";
             string path;
             switch (methods)
             {
@@ -118,7 +127,6 @@ namespace DownloadEngine.Servers
             bValve = "m" + "=" + p.BeatmapsetId;
 
             bool finished = false;
-            JObject result = null;
             ReturnInformation.Download d = null;
             while (!finished)
             {
@@ -144,39 +152,40 @@ namespace DownloadEngine.Servers
 
             return data;
         }
-        private static byte[] Download(Dictionary<string,Uri> uris,string ci_token)
+        private byte[] Download(Dictionary<string,Uri> uris,string ci_token,List<Package> selectedPackages = null)
         {
+            string[] order = SortedPackage(selectedPackages);
             var s = WebClient().DownloadString(ApiPath(Methods.ci_token, ci_token));
             ReturnInformation.CentralIndex c = JsonConvert.DeserializeObject<ReturnInformation.CentralIndex>(s);
 
             int combination = 0;
             byte[] file = new byte[0];
-            for (int i = 0;i <= 5;i++)
+
+            int i = 0;
+            foreach (string packageName in order)
             {
-                Uri uri = uris.Values.ToArray()[i];
-                if(uri != null)
+                if (packageName != null && uris[packageName] != null)
                 {
-                    byte[] data = WebClient().DownloadData(uri.AbsoluteUri);
+                    byte[] data = WebClient().DownloadData(uris[packageName].AbsoluteUri);
                     byte[] newData = Decode(data, c.central_index[0]);
-                    if (i != 5)
+
+                    if (packageName != "central")
                     {
                         combination += (int)Math.Pow(2, i);
-
                         file = file.Concat(newData).ToArray();
                     }
                     else
                     {
                         //Are you fu**ing kiding me?!! Repeat?!!
-
                         int start = c.central_index[combination][0];
                         int end = c.central_index[combination][1];
-
-                        byte[] b = newData.Skip(start).Take(end).ToArray();
 
                         file = file.Concat(newData.Skip(start).Take(end)).ToArray();
                     }
                 }
+                i++;
             }
+
             return file;
         }
         internal static User GetUserStatus()
@@ -281,6 +290,30 @@ namespace DownloadEngine.Servers
                 return false;
             }
         }
-
+        private string[] SortedPackage(List<Package> selectedPackages)
+        {
+            string[] order = new string[]{ "game_play", "skin_sound","skin_image","video","storyboard","central"};
+            if (selectedPackages != null)
+            {
+                string[] sortedPackages = new string[6];
+                int i = 0;
+                foreach (string s in order)
+                {
+                    if (selectedPackages.Exists(x => nameof(x) == s))
+                    {
+                        sortedPackages[i] = s;
+                    }else
+                    {
+                        sortedPackages[i] = null;
+                    }
+                    i++;
+                }
+                return sortedPackages;
+            }
+            else
+            {
+                return order;
+            }
+        }
     }
 }

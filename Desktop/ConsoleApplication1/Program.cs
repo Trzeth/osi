@@ -14,7 +14,6 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-
             Console.WriteLine("START");
 
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
