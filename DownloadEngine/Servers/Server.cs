@@ -14,5 +14,6 @@ namespace DownloadEngine.Servers
     }
     interface IServer
     {
+
     }
 }

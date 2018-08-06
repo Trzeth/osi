@@ -57,7 +57,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Servers\Server.cs" />
-    <Compile Include="Servers\Uugl.cs" />
     <Compile Include="DownloadManager\DownloadHepler.cs" />
   </ItemGroup>
   <ItemGroup>

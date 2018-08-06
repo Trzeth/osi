@@ -120,7 +120,6 @@ namespace DownloadEngine.DownloadManager
         }
         private static void CheckDownloadersState()
         {
-            //
             if (MonitoringDownloader < _maxDownloaderCount)
             {
                 int _monitoringDownloaderCount = 0;

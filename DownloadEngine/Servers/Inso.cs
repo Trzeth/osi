@@ -16,24 +16,15 @@ namespace DownloadEngine.Servers
 {
     class Inso:Server
     {
-        public static float current_timestamp;
         static System.Net.CookieCollection _cookieCollection;//do_not_remove_this_0w0
         static WebClient _webclient;
-        public class User
-        {
-            public string username;
-            public int user_id;
-            public int cd_timestamp;
-            public int vip_level;
-            //"username":"Trzeth","user_id":"5106629","cd_timestamp":0,"vip_level":"2","current_timestamp":1512263695.486
-        }
         enum Methods
         {
             user,
             download,
             ci_token,
         }
-        enum Package
+        public enum Package
         {
             game_play,
             skin_sound,
@@ -71,6 +62,7 @@ namespace DownloadEngine.Servers
             public class Base
             {
                 //一定要全部都设置为 public
+                public string error;
                 public int returnCode;
                 public int cd_timestamp;
                 public string current_timestamp;
@@ -106,6 +98,14 @@ namespace DownloadEngine.Servers
             {
                 public CentralIndex() : base() { }
                 public Dictionary<int, int[]> central_index;
+            }
+            public class User:Base
+            {
+                public User() : base() { }
+                public bool logged_in;
+                public string username;
+                public string user_id;
+                public int vip_level;
             }
         }
         internal override byte[] Download(BeatmapsetPackage p,out string fileName)
@@ -188,19 +188,6 @@ namespace DownloadEngine.Servers
 
             return file;
         }
-        internal static User GetUserStatus()
-        {
-            User user = new User();
-            JObject result = JObject.Parse(WebClient().DownloadString(ApiPath(Methods.user,null)));
-
-            user.username = (string)result["username"];
-            user.user_id = (int)result["user_id"];
-            user.cd_timestamp = (int)result["cd_timestamp"];
-            user.vip_level = (int)result["vip_level"];
-            current_timestamp = (float)result["current_timestamp"];
-
-            return user;
-        }
         private static byte[] Decode(byte[] data, int[] central_index)
         {
             byte[] newData = new byte[data.Length];
@@ -239,7 +226,6 @@ namespace DownloadEngine.Servers
         }
         internal static bool SetCookie(string cookieString)
         {
-
             var cookieCollection = new System.Net.CookieCollection();
 
             var cookie = new System.Net.Cookie();
@@ -249,15 +235,8 @@ namespace DownloadEngine.Servers
             cookie.Value = cookieString;
 
             cookieCollection.Add(cookie);
-            if (IsCookieValid(cookieCollection))
-            {
-                _cookieCollection = cookieCollection;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+
+            return SetCookie(cookieCollection);
         }
         internal static bool SetCookie(System.Net.CookieCollection cookieCollection)
         {
@@ -280,8 +259,9 @@ namespace DownloadEngine.Servers
         }
         public static bool IsCookieValid(System.Net.CookieCollection cookieCollection)
         {
-            JObject result = JObject.Parse(WebClient(cookieCollection).DownloadString("http://inso.link/api/i.php"));
-            if ((string)result["logged_in"] == "true")
+            string s = WebClient(cookieCollection).DownloadString("http://inso.link/api/i.php");
+            ReturnInformation.User user = JsonConvert.DeserializeObject<ReturnInformation.User>(s);
+            if (user.logged_in)
             {
                 return true;
             }
@@ -292,12 +272,12 @@ namespace DownloadEngine.Servers
         }
         private string[] SortedPackage(List<Package> selectedPackages)
         {
-            string[] order = new string[]{ "game_play", "skin_sound","skin_image","video","storyboard","central"};
+            string[] defaultOrder = new string[]{ "game_play", "skin_sound","skin_image","video","storyboard","central"};
             if (selectedPackages != null)
             {
                 string[] sortedPackages = new string[6];
                 int i = 0;
-                foreach (string s in order)
+                foreach (string s in defaultOrder)
                 {
                     if (selectedPackages.Exists(x => nameof(x) == s))
                     {
@@ -312,7 +292,7 @@ namespace DownloadEngine.Servers
             }
             else
             {
-                return order;
+                return defaultOrder;
             }
         }
     }
