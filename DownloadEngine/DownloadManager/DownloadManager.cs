@@ -10,46 +10,16 @@ using System.Threading;
 
 namespace DownloadEngine.DownloadManager
 {
-    public enum DownloadStatus
-    {
-        Downloading,
-        Pause,
-        Stop,
-        Failed
-    }
-    public class BeatmapsetPackage
-    {
-        public Beatmapset Beatmapset { get; set; }
-        public DownloadStatus Status { get; set; }
-        internal Server Server { get; set; }
-        internal List<Server> FailedServerList;
-        internal int BeatmapsetId { get { return _beatmapsetId; } }
-
-        protected int _beatmapsetId;
-        internal BeatmapsetPackage() { }
-        internal BeatmapsetPackage(Beatmapset beatmapset, Server server)
-        {
-            _beatmapsetId = beatmapset.BeatmapsetId;
-            Server = server;
-            FailedServerList = new List<Server>();
-        }
-        internal BeatmapsetPackage(Beatmapset beatmapset)
-        {
-            _beatmapsetId = beatmapset.BeatmapsetId;
-            Beatmapset = beatmapset;
-            Server = Server.Unset;
-            FailedServerList = new List<Server>();
-        }
-    }
     public class DownloadManager
     {
         internal static Dictionary<Server, bool> IsServerVaild;
         internal static bool _isInsoValid;
         internal static bool _isBloodcatValid;
         internal static bool _isUuglValid = true;
+        internal FileWriter FileWriter { get { return _fileWriter; } }
 
-        public static List<Beatmapset> BeatmapsetList;
-        public static int MaxDownloaderCount
+        //public static List<Beatmapset> BeatmapsetList;
+        public int MaxDownloaderCount
         {
             get { return _maxDownloaderCount; }
             set
@@ -65,13 +35,15 @@ namespace DownloadEngine.DownloadManager
                 }
             }
         }
+
         static int _maxDownloaderCount = 2;
+        private FileWriter _fileWriter;
         public DownloadManager()
         {
-            if (BeatmapsetList == null)
-            {
-                BeatmapsetList = new List<Beatmapset>();
-            }
+            //if (BeatmapsetList == null)
+            //{
+            //    BeatmapsetList = new List<Beatmapset>();
+            //}
             if (IsServerVaild == null)
             {
                 IsServerVaild = new Dictionary<Server, bool>();
@@ -88,16 +60,17 @@ namespace DownloadEngine.DownloadManager
         }
         public void Config(string cookie,Server server)
         {
+            bool isVaild = false;
             switch (server)
             {
                 case Server.Inso:
-                    Inso.SetCookie(cookie);
+                    isVaild = Inso.SetCookie(cookie);
                     break;
                 case Server.Blooadcat:
-                    Bloodcat.SetCookie(cookie);
+                    isVaild = Bloodcat.SetCookie(cookie);
                     break;
             }
-            IsServerVaild[server] = true;
+            IsServerVaild[server] = isVaild;
         }
         public void Config(System.Net.CookieCollection cookieCollection,Server server)
         {
@@ -112,32 +85,32 @@ namespace DownloadEngine.DownloadManager
             }
             IsServerVaild[server] = true;
         }
-        public void Add(Beatmapset beatmapset,Server server = Server.Unset)
+        public void Add(Beatmapset beatmapset,Server? server = null)
         {
-            BeatmapsetList.Add(beatmapset);
-            PendingQueue.Enqueue(new BeatmapsetPackage(beatmapset, server));
+            //BeatmapsetList.Add(beatmapset);
+            Add(new BeatmapsetPackage(beatmapset, server));
+        }
+        public void Add(BeatmapsetPackage beatmapsetPackage)
+        {
+            PendingQueue.Enqueue(beatmapsetPackage);
             CheckDownloadersState();
         }
-        private static void CheckDownloadersState()
+        private void CheckDownloadersState()
         {
             if (MonitoringDownloader < _maxDownloaderCount)
             {
                 int _monitoringDownloaderCount = 0;
-                for (int i = 0; i < DownloaderList.Count; i++)
+                for (int i = 0; i < DownloaderList.Count || _monitoringDownloaderCount >= PendingQueue.Count; i++)
                 {
                     if (DownloaderList[i].IsMonitoring != true)
                     {
                         DownloaderList[i].Monitor();
                         _monitoringDownloaderCount++;
                     }
-                    if (_monitoringDownloaderCount >= PendingQueue.Count)
-                    {
-                        break;
-                    }
                 }
             }
         }
-        private static void CheckDownloaderQuantity()
+        private void CheckDownloaderQuantity()
         {
             if (DownloaderList.Count > _maxDownloaderCount)
             {
@@ -150,8 +123,7 @@ namespace DownloadEngine.DownloadManager
             {
                 for (int i = 0; i < (_maxDownloaderCount - DownloaderList.Count); i++)
                 {
-                    DownloaderList.Add(new Downloader());
-                    int a;
+                    DownloaderList.Add(new Downloader(this));
                 }
             }
         }

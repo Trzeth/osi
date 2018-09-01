@@ -1,15 +1,16 @@
 ﻿using Microsoft.Win32;
 using System;
-using static LinkMonitor.Program;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace LinkMonitor.Functions
+namespace osi_Console.Functions
 {
     static class RegisterAsDefaultBrowserFunction
     {
@@ -19,6 +20,24 @@ namespace LinkMonitor.Functions
             if (osVersion == OSVersion.Unset)
             {
                 osVersion = GetOSVersion(Environment.OSVersion.Version);
+            }
+        }
+        internal static void Register(out string HttpHash,out string HttpsHash)
+        {
+            if (osVersion == OSVersion.Windows_10_Below_Build10122 || osVersion == OSVersion.Windows_8_And_Above || osVersion == OSVersion.Windows_7_And_Vista)
+            {
+                RegisterAsBrowser();
+            }
+
+            RegisterAsDefaultBrowser(null,null);
+
+            if (osVersion == OSVersion.Windows_10_Below_Build10122 || osVersion == OSVersion.Windows_8_And_Above || osVersion == OSVersion.Windows_7_And_Vista)
+            {
+                GetHash(out HttpHash,out HttpsHash);
+            }else
+            {
+                HttpHash = null;
+                HttpsHash = null;
             }
         }
         private static void RegisterAsBrowser()
@@ -54,54 +73,12 @@ namespace LinkMonitor.Functions
             URLAssociations_CU.Close();
 
             Registry.SetValue(@"HKEY_CURRENT_USER\Software\RegisteredApplications", "osi", @"Software\osi\Capabilities");
-            //SHChangeNotify();
         }
-        internal static void Register()
-        {
-            if (osVersion == OSVersion.Windows_10_Below_Build10122 || osVersion == OSVersion.Windows_8_And_Above || osVersion == OSVersion.Windows_7_And_Vista)
-            {
-                RegisterAsBrowser();
-            }
-
-            RegisterAsDefaultBrowser();
-
-            if (osVersion == OSVersion.Windows_10_Above_And_Include_Build10122) //Windows 10
-            {
-                exitCode = ExitCode.HandledError;
-            }
-            else if (osVersion == OSVersion.Windows_10_Below_Build10122 || osVersion == OSVersion.Windows_8_And_Above || osVersion == OSVersion.Windows_7_And_Vista)  //Windows 8 Windows 10.0.10122
-            {
-                if (osVersion == OSVersion.Windows_10_Below_Build10122 || osVersion == OSVersion.Windows_8_And_Above)
-                {
-                    //Windows 10 与 Windows 8 需要记录 Hash
-                    exitCode = ExitCode.Continue;
-                }
-                else
-                {
-                    //Windows 7 及 Vista 不需要
-                    exitCode = ExitCode.Succeed;
-                }
-
-            }
-            else if (osVersion == OSVersion.Windows_2000_And_Xp)
-            {
-                exitCode = ExitCode.Alert;
-            }
-            else
-            {
-                //不支持的系统
-                exitCode = ExitCode.HandledError;
-            }
-        }
-        internal static void RegisterAsDefaultBrowser()
-        {
-            RegisterAsDefaultBrowser(null, null);
-        }
-        internal static void RegisterAsDefaultBrowser(string httpHash,string httpsHash)
+        internal static void RegisterAsDefaultBrowser(string HttpHash,string HttpsHash)
         {
             if (osVersion == OSVersion.Windows_10_Above_And_Include_Build10122)
             {
-                exitCode = ExitCode.HandledError;
+                throw new Exception("UnSupport");
             }
             else if (osVersion == OSVersion.Windows_10_Below_Build10122 || osVersion == OSVersion.Windows_8_And_Above || osVersion == OSVersion.Windows_7_And_Vista)
             {
@@ -111,10 +88,10 @@ namespace LinkMonitor.Functions
                 httpUserChoice.SetValue("Progid", "osiURL");
                 httpsUserChoice.SetValue("Progid", "osiURL");
 
-                if (httpHash != null && httpsHash != null)
+                if (HttpHash != null && HttpsHash != null)
                 {
-                    httpUserChoice.SetValue("Hash", httpHash);
-                    httpsUserChoice.SetValue("Hash", httpsHash);
+                    httpUserChoice.SetValue("Hash", HttpHash);
+                    httpsUserChoice.SetValue("Hash", HttpsHash);
                 }
             }
             else if (osVersion == OSVersion.Windows_2000_And_Xp)
@@ -136,10 +113,37 @@ namespace LinkMonitor.Functions
             }
             else
             {
-                exitCode = ExitCode.HandledError;
+                //exitCode = ExitCode.HandledError;
             }
+        }
+        internal static void GetHash(out string HttpHash,out string HttpsHash)
+        {
+            NamedPipeServerStream server = new NamedPipeServerStream("osi", PipeDirection.In);
 
-            //SHChangeNotify();
+            Console.WriteLine("请在之后出现的选项中选择 osi Link Monitor。");
+            Process.Start(@"http://config.osi/getHttpHash");
+            bool getHttpHash = false, getHttpsHash = false;
+            while (!(getHttpHash && getHttpsHash))
+            {
+                server.WaitForConnection();
+
+                StreamReader sr = new StreamReader(server);
+                string link = sr.ReadToEnd();
+                if (link == "http://config.osi/getHttpHash")
+                {
+                    getHttpHash = true;
+                    Process.Start(@"https://config.osi/getHttpsHash");
+                }
+                else if (link == "https://config.osi/getHttpsHash")
+                {
+                    getHttpsHash = true;
+                }
+                server.Disconnect();
+            }
+            RegistryKey httpUserChoice = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice", true);
+            RegistryKey httpsUserChoice = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\Shell\Associations\UrlAssociations\https\UserChoice", true);
+            HttpHash = httpUserChoice.GetValue("Hash").ToString();
+            HttpsHash = httpsUserChoice.GetValue("Hash").ToString();
         }
         private enum OSVersion
         {

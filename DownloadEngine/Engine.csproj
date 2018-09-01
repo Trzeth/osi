@@ -47,8 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Beatmapset.cs" />
+    <Compile Include="DownloadManager\BeatmapsetPackage.cs" />
     <Compile Include="DownloadManager\Downloader.cs" />
     <Compile Include="DownloadManager\DownloadManager.cs" />
+    <Compile Include="DownloadManager\FileWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Servers\Bloodcat.cs" />
     <Compile Include="Servers\Inso.cs" />

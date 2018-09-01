@@ -17,6 +17,7 @@ namespace DownloadEngine.DownloadManager
         static int _monitoringDownloader;
         bool _isMonitoring;
 
+        private DownloadManager _downloadMgr;
         internal static Queue<BeatmapsetPackage> PendingQueue { get { return _pendingQueue; } }
         internal static List<Downloader> DownloaderList
         {
@@ -25,7 +26,7 @@ namespace DownloadEngine.DownloadManager
         }
         internal static int MonitoringDownloader { get { return _monitoringDownloader; } }
         internal bool IsMonitoring { get { return _isMonitoring; } }
-        internal Downloader()
+        internal Downloader(DownloadManager DownloadManager)
         {
             if (_downloaderList == null)
             {
@@ -35,6 +36,7 @@ namespace DownloadEngine.DownloadManager
             {
                 _pendingQueue = new Queue<BeatmapsetPackage>();
             }
+            _downloadMgr = DownloadManager;
             _isMonitoring = false;
         }
         internal void Monitor()
@@ -57,11 +59,9 @@ namespace DownloadEngine.DownloadManager
                     p = _pendingQueue.Dequeue();
                 }
 
-                bool _succeed = false;
-                int i = 0;
                 while (true)
                 {
-                    if (p.Server == Server.Unset)
+                    if (p.Server == null)
                     {
                         try
                         {
@@ -76,29 +76,21 @@ namespace DownloadEngine.DownloadManager
                     byte[] data = null;
                     string fileName = null;
 
-                    Servers.Server server = GetServer(p.Server);
-                    if (!DownloadManager.IsServerVaild[p.Server]) throw new ServerNotAvailable();
-                    data = server.Download(p, out fileName);
-                    FileHelper.FileWrite(data, fileName);
-
                     try
                     {
-                        _succeed = true;
+                        Servers.Server server = GetServer((Server)p.Server);
+                        if (!DownloadManager.IsServerVaild[(Server)p.Server]) throw new ServerNotAvailable();
+                        data = server.Download(p, out fileName);
+                        _downloadMgr.FileWriter(data, fileName);
+                        break;
                     }
                     catch (Exception e)
                     {
-                        p.FailedServerList.Add(p.Server);
-                        p.Server = Server.Unset;
-                    }
-                    finally
-                    {
-                        GC.Collect();
-                    }
-                    if (_succeed)
-                    {
-                        break;
+                        p.FailedServerList.Add((Server)p.Server);
+                        p.Server = null;
                     }
                 }
+                GC.Collect();
             }
 
             _isMonitoring = false;
@@ -111,11 +103,9 @@ namespace DownloadEngine.DownloadManager
                 case Server.Inso:
                     return new Inso();
                 case Server.Blooadcat:
-                    return new Inso();
-                case Server.Uugl:
-                    return new Inso();
+                    return new Bloodcat();
                 default:
-                    return new Inso();
+                    return null;
             }
         }
     }

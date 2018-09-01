@@ -54,9 +54,8 @@ namespace DownloadEngine
     public class Beatmapset
     {
         public int BeatmapsetId { get { return _beatmapsetId; } }
-        int _beatmapsetId;
-        List<Beatmap> beatmaps = new List<Beatmap>();
-        public JObject BeatmapsetInfo;
+        private int _beatmapsetId;
+        public List<Beatmap> Beatmap;
 
         public Beatmapset(int BeatmapsetId)
         {
@@ -72,7 +71,7 @@ namespace DownloadEngine
         }
         public void Add(Beatmap beatmap)
         {
-            beatmaps.Add(beatmap);
+            Beatmap.Add(beatmap);
         }
         private int ToBeatmapsetId(Uri uri)
         {

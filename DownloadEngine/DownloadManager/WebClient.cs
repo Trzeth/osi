@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace DownloadEngine.DownloadManager
 {
-    class WebClient:System.Net.WebClient
+    public class WebClient:System.Net.WebClient
     {
         private const string UserAgent = "Mozilla/5.0 (compatible;.NET CLR 4.0.30319; osi)";
         private CookieContainer _cookieContainer = new CookieContainer();

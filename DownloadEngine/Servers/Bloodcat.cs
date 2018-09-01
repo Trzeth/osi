@@ -7,36 +7,114 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net;
 using System.IO;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using DownloadEngine.DownloadManager;
 using System.Windows.Media.Imaging;
-//using WebClient = DownloadEngine.DownloadManager.WebClient;
+using Webclient = DownloadEngine.DownloadManager.WebClient;
 
 namespace DownloadEngine.Servers
 {
-    public static class Bloodcat
+    public class Bloodcat:Server
     {
-        static CookieCollection _cookieCollection;
-        static DownloadManager.WebClient _webclient;
-        internal static byte[] Downlaod(BeatmapsetPackage p,out string fileName)
+        public class ReturnInformation
+        {
+            public class Beatmapset
+            {
+                public DateTime synced;
+                public Status status;
+                public string title;
+                public string titleU;
+                public string artist;
+                public string artistU;
+                public int creatorId;
+                public string creator;
+                public DateTime? rankedAt;
+                public string tags;
+                public string source;
+                public Genre genreId;
+                public Language languageId;
+                public int downloads;
+                public int id;
+                public Beatmap[] beatmaps;
+
+                public override string ToString()
+                {
+                    return id + " " + artist + "-" + title;
+                }
+            }
+            public class Beatmap
+            {
+                public int id;
+                public string name;
+                public Mode mode;
+                public float hp;
+                public float cs;
+                public float od;
+                public float ar;
+                public float bpm;
+                public int length;
+                public float star;
+                public string hash_md5;
+                public Status status;
+                public string author;
+            }
+            public class Return : List<Beatmapset> { }
+        }
+        public class QueryArgs
+        {
+            public class Character
+            {
+                public const char BeatmapId = 'b';
+                public const char BeatmapSetId = 's';
+                public const char CreatorId = 'u';
+                public const char Other = 'o';
+            }
+            public enum Status
+            {
+                Unranked,
+                Ranked, 
+                Approved, 
+                Qualified
+            }
+            public enum Mode
+            {
+                Standard,
+                Taiko, 
+                Catch_the_Beat, 
+                Mania
+            }
+        }
+        internal override byte[] Download(BeatmapsetPackage p,out string fileName)
         {
             if(_cookieCollection == null)
             {
                 throw new Exception("Bloodcat No Cookie Existed.");
             }
+            ReturnInformation.Return r = Search(p.BeatmapsetId.ToString(),QueryArgs.Character.BeatmapSetId);
+            ReturnInformation.Beatmapset beatmapset;
+            if (r.Count() > 1||r.Count() == 0)
+            {
+                throw new Exception("Result More than one or Doesn't Exist.");
+            }
+            else
+            {
+                beatmapset = r[0];
+            }
+            BeatmapsetPackage.BeatmapsetInfo info = new BeatmapsetPackage.BeatmapsetInfo();
+            info.beatmapsetId = beatmapset.id;
+            info.artist = beatmapset.artist;
+            info.creator = beatmapset.creator;
+            info.title = beatmapset.title;
+            p.OnGetInfoCompleted(info);
 
             byte[] file;
-
             file = WebClient().DownloadData(Path(p));
-            
-            fileName = DownloadManager.WebClient.GetFileNameFromHeader(WebClient().ResponseHeaders.Get("Content-Disposition"));
+            fileName = Webclient.GetFileNameFromHeader(WebClient().ResponseHeaders.Get("Content-Disposition"));
 
             return file;
         }
-        internal static void AddSetting()
-        {
 
-        }
+        #region Set Cookie
         internal static bool SetCookie(string cookieString)
         {
             CookieCollection cookieCollection = new CookieCollection();
@@ -47,19 +125,11 @@ namespace DownloadEngine.Servers
             cookie.Domain = "bloodcat.com";
 
             cookieCollection.Add(cookie);
-            if (IsCookieValid(cookieCollection))
-            {
-                _cookieCollection = cookieCollection;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return SetCookie(cookieCollection);
         }
         internal static bool SetCookie(CookieCollection cookieCollection)
         {
-            if (IsCookieValid(_cookieCollection))
+            if (IsCookieValid(cookieCollection))
             {
                 if (_cookieCollection == null)
                 {
@@ -76,32 +146,43 @@ namespace DownloadEngine.Servers
                 return false;
             }
         }
-        private static bool IsCookieValid(CookieCollection cookieCollectioin)
+        public static bool IsCookieValid(string cookieString)
         {
-            WebClient(cookieCollectioin).Method = "Head";
+            CookieCollection cookieCollection = new CookieCollection();
+
+            Cookie cookie = new Cookie();
+            cookie.Name = "obm_human";
+            cookie.Path = "/osu/";
+            cookie.Domain = "bloodcat.com";
+
+            cookieCollection.Add(cookie);
+            return IsCookieValid(cookieCollection);
+        }
+        public static bool IsCookieValid(CookieCollection cookieCollection)
+        {
+            //BUG
+            WebClient(cookieCollection).Method = "Head";
             try
             {
-                WebClient(cookieCollectioin).DownloadData("http://bloodcat.com/osu/s/4079");
+                WebClient(cookieCollection).DownloadData("http://bloodcat.com/osu/s/4079");
                 return true;
             }
             catch(WebException e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
         }
-        #region Search
-        //internal static JObject Search()
-        //{
-
-        //}
-        //private static JObject Search()
-        //{
-        //    WebClient webclient = new WebClient();
-        //    webclient.DownloadString(Path("a"));
-        //}
         #endregion
+        public static ReturnInformation.Return Search(string query,char? character = null,QueryArgs.Status? status = null,QueryArgs.Mode? mode = null,int? page = null)
+        {
+            Webclient webclient = new Webclient();
+            string s = webclient.DownloadString(Path(query,character,status,mode,page));
+            ReturnInformation.Return r = JsonConvert.DeserializeObject<ReturnInformation.Return>(s);
+            return r;
+        }
         #region CAPTCHA
-        public struct CAPTCHAData
+        public class CAPTCHAData
         {
             public string sync;
             public string hash;
@@ -169,7 +250,7 @@ namespace DownloadEngine.Servers
             string Header = WebClient().ResponseHeaders.Get("Set-Cookie");
             WebClient().Dispose();
 
-            return DownloadManager.WebClient.GetAllCookiesFromHeader(Header, data.uri.Host.ToString());
+            return Webclient.GetAllCookiesFromHeader(Header, data.uri.Host.ToString());
         }
         #endregion
         private static string Path(BeatmapsetPackage p)
@@ -178,22 +259,19 @@ namespace DownloadEngine.Servers
 
             return uriRoot + "s/" + p.BeatmapsetId;
         }
-        //private static string Path(string q,)
-        //{
-
-
-        //}
-        private static DownloadManager.WebClient WebClient()
+        private static string Path(string query, char? character = null, QueryArgs.Status? status = null, QueryArgs.Mode? mode = null, int? page = null)
         {
-            if (_webclient == null) _webclient = new DownloadManager.WebClient();
-            if (_cookieCollection != null) _webclient.AddCookie(_cookieCollection);
-            return _webclient;
-        }
-        private static DownloadManager.WebClient WebClient(CookieCollection cookieCollection)
-        {
-            if (_webclient == null) _webclient = new DownloadManager.WebClient();
-            if (cookieCollection != null) _webclient.AddCookie(cookieCollection);
-            return _webclient;
+            string root = "http://bloodcat.com/osu/";
+
+            Dictionary<object, object> d = new Dictionary<object, object>();
+            d.Add("mod","json");
+            d.Add('q', query);
+            if (character != null) { d.Add('c', character); }
+            if (status != null) { d.Add('s', status); }
+            if (mode != null) { d.Add('m', mode); }
+            if (page != null) { d.Add('p', page); }
+
+            return root + BuildQueryString(d);
         }
     }
 }

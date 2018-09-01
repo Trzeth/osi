@@ -9,15 +9,16 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using DownloadEngine.DownloadManager;
 using WebClient = DownloadEngine.DownloadManager.WebClient;
+using CookieCollection = System.Net.CookieCollection;
 using Newtonsoft.Json.Linq;
 using System.Runtime.Serialization;
 
 namespace DownloadEngine.Servers
 {
-    class Inso:Server
+    public class Inso:Server
     {
-        static System.Net.CookieCollection _cookieCollection;//do_not_remove_this_0w0
-        static WebClient _webclient;
+        BeatmapsetPackage package;
+        //Cookie do_not_remove_this_0w0
         enum Methods
         {
             user,
@@ -33,29 +34,41 @@ namespace DownloadEngine.Servers
             storyboard,
             central
         }
-        static string ApiPath(Methods methods,string valve)
+        private class QueryArgs
         {
-            string apiRoot = "http://inso.link/api/";
+            public class Download
+            {
+                public const string BeatmapsetId = "m";
+                public const string BeatmapId = "b";
+            }
+            public const string Ci_Token = "ci_token";
+        }
+        private static string Path(Methods methods,string Key,string Value)
+        {
+            string root = "http://inso.link/api/";
+            Dictionary<object, object> d = new Dictionary<object, object>();
             //string apiRoot = "http://127.0.0.1:8080/";
             string path;
             switch (methods)
             {
                 case Methods.user:
-                    path = apiRoot + "i.php?";
+                    path = root + "i.php";
                     break;
                 case Methods.download:
-                    path = apiRoot + "n.php?" + valve + "&ir=1" + '&';
+                    path = root + "n.php";
+                    d.Add("ir","1");
                     //valve: [m/b]=[id]
                     break;
                 case Methods.ci_token:
-                    path = apiRoot + "s.php?" + "ci_token=" + valve + '&';
+                    path = root + "s.php";
                     break;
                 default:
-                    path = apiRoot;
+                    path = root;
                     break;
             }
-            path = path + "source=osi";
-            return path;
+            d.Add(Key, Value);
+            d.Add("source","osi");
+            return path + BuildQueryString(d);
         }
         public class ReturnInformation
         {
@@ -69,12 +82,10 @@ namespace DownloadEngine.Servers
 
                 [JsonExtensionData]
                 private IDictionary<string, JToken> _data;
-
                 public Base()
                 {
                     _data = new Dictionary<string, JToken>();
                 }
-
                 [OnDeserialized]
                 private void OnDeserialized(StreamingContext context)
                 {
@@ -84,14 +95,13 @@ namespace DownloadEngine.Servers
             public class Download:Base
             {
                 public Download() : base() { }
-                public Dictionary<string, string> info;
+                public Infomation info;
                 public int package_available;
                 public int cd_mapset;
                 public string expire_timestamp;
                 public Dictionary<string, Uri> package_url;
                 public int mapset;
                 public float cd_ratio;
-                public string error;
                 public string ci_token;
             }
             public class CentralIndex : Base
@@ -107,6 +117,48 @@ namespace DownloadEngine.Servers
                 public string user_id;
                 public int vip_level;
             }
+            public class Infomation
+            {
+                [JsonExtensionData]
+                private IDictionary<string, JToken> _data;
+                public Infomation()
+                {
+                    _data = new Dictionary<string, JToken>();
+                }
+                [OnDeserialized]
+                private void OnDeserialized(StreamingContext context)
+                {
+                    string[] sArray = _data["beatmaps"].ToString().Split(';');
+                    beatmapCollection = new Beatmap[sArray.Count()];
+                    int i = 0;
+                    foreach (string s in sArray)
+                    {
+                        string[] t = s.Split(',');
+                        Beatmap beatmap = new Beatmap();
+                        beatmap.id = int.Parse(t[0]);
+                        beatmap.name = t[1];
+                        beatmap.star = float.Parse(t[2]);
+                        beatmap.mode = (Mode)int.Parse(t[3]);
+                        beatmapCollection[i] = beatmap;
+                    }
+                }
+
+                public Beatmap[] beatmapCollection;
+                public string creator;
+                public string title;
+                public int bpm;
+                public int drain_time;
+                public string artist;
+                public int approved;
+                public string tags;
+            }
+            public class Beatmap
+            {
+                public int id;
+                public string name;
+                public Mode mode;
+                public float star;
+            }
         }
         internal override byte[] Download(BeatmapsetPackage p,out string fileName)
         {
@@ -120,18 +172,22 @@ namespace DownloadEngine.Servers
                 "skin_sound": "http://7xkvc9.com1.z0.glb.clouddn.com/199244/skin_sound.inso?e=1512266906&token=yyRfcFuGuTEVPCMRl1TvF_GD3zx6nBalXoZKwupW:JFkYwLruGbxO1rDeE5NyAhOn05E="
             },       
             */
-
-            string bValve;
+            package = p;
             byte[] data = null;
-
-            bValve = "m" + "=" + p.BeatmapsetId;
 
             bool finished = false;
             ReturnInformation.Download d = null;
             while (!finished)
             {
-                var s = WebClient().DownloadString(ApiPath(Methods.download, bValve));
+                var s = WebClient().DownloadString(Path(Methods.download, QueryArgs.Download.BeatmapsetId,p.BeatmapsetId.ToString()));
                 d = JsonConvert.DeserializeObject<ReturnInformation.Download>(s);
+
+                var info = new BeatmapsetPackage.BeatmapsetInfo();
+                info.artist = d.info.artist;
+                info.beatmapsetId = d.mapset;
+                info.creator = d.info.creator;
+                info.title = d.info.title;
+                package.OnGetInfoCompleted(info);
 
                 switch (d.returnCode)
                 {
@@ -148,14 +204,14 @@ namespace DownloadEngine.Servers
                 }
             }
 
-            fileName = d.mapset + " " + d.info["artist"] + "-" + d.info["title"] + ".osz";
+            fileName = d.mapset + " " + d.info.artist + "-" + d.info.title + ".osz";
 
             return data;
         }
         private byte[] Download(Dictionary<string,Uri> uris,string ci_token,List<Package> selectedPackages = null)
         {
             string[] order = SortedPackage(selectedPackages);
-            var s = WebClient().DownloadString(ApiPath(Methods.ci_token, ci_token));
+            var s = WebClient().DownloadString(Path(Methods.ci_token, QueryArgs.Ci_Token,ci_token));
             ReturnInformation.CentralIndex c = JsonConvert.DeserializeObject<ReturnInformation.CentralIndex>(s);
 
             int combination = 0;
@@ -164,7 +220,7 @@ namespace DownloadEngine.Servers
             int i = 0;
             foreach (string packageName in order)
             {
-                if (packageName != null && uris[packageName] != null)
+                if (uris[packageName] != null)
                 {
                     byte[] data = WebClient().DownloadData(uris[packageName].AbsoluteUri);
                     byte[] newData = Decode(data, c.central_index[0]);
@@ -212,21 +268,9 @@ namespace DownloadEngine.Servers
 
             return newData;
         }
-        private static WebClient WebClient()
-        {
-            if (_webclient == null) _webclient = new WebClient();
-            if(_cookieCollection != null) _webclient.AddCookie(_cookieCollection);
-            return _webclient;
-        }
-        private static WebClient WebClient(System.Net.CookieCollection cookieCollection)
-        {
-            if (_webclient == null) _webclient = new WebClient();
-            if (cookieCollection != null) _webclient.AddCookie(cookieCollection);
-            return _webclient;
-        }
         internal static bool SetCookie(string cookieString)
         {
-            var cookieCollection = new System.Net.CookieCollection();
+            var cookieCollection = new CookieCollection();
 
             var cookie = new System.Net.Cookie();
             cookie.Name = "do_not_remove_this_0w0";
@@ -238,7 +282,7 @@ namespace DownloadEngine.Servers
 
             return SetCookie(cookieCollection);
         }
-        internal static bool SetCookie(System.Net.CookieCollection cookieCollection)
+        internal static bool SetCookie(CookieCollection cookieCollection)
         {
             if (IsCookieValid(cookieCollection))
             {
@@ -257,7 +301,20 @@ namespace DownloadEngine.Servers
                 return false;
             }
         }
-        public static bool IsCookieValid(System.Net.CookieCollection cookieCollection)
+        public static bool IsCookieValid(string cookieString)
+        {
+            var cookieCollection = new CookieCollection();
+
+            var cookie = new System.Net.Cookie();
+            cookie.Name = "do_not_remove_this_0w0";
+            cookie.Path = "/";
+            cookie.Domain = ".inso.link";
+            cookie.Value = cookieString;
+
+            cookieCollection.Add(cookie);
+            return IsCookieValid(cookieCollection);
+        }
+        public static bool IsCookieValid(CookieCollection cookieCollection)
         {
             string s = WebClient(cookieCollection).DownloadString("http://inso.link/api/i.php");
             ReturnInformation.User user = JsonConvert.DeserializeObject<ReturnInformation.User>(s);
@@ -275,18 +332,15 @@ namespace DownloadEngine.Servers
             string[] defaultOrder = new string[]{ "game_play", "skin_sound","skin_image","video","storyboard","central"};
             if (selectedPackages != null)
             {
-                string[] sortedPackages = new string[6];
+                string[] sortedPackages = new string[selectedPackages.Count];
                 int i = 0;
                 foreach (string s in defaultOrder)
                 {
                     if (selectedPackages.Exists(x => nameof(x) == s))
                     {
                         sortedPackages[i] = s;
-                    }else
-                    {
-                        sortedPackages[i] = null;
-                    }
-                    i++;
+                        i++;
+                    } 
                 }
                 return sortedPackages;
             }

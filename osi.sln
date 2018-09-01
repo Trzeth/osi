@@ -16,9 +16,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "osi_Desktop", "Desktop\osi_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkMonitor", "Desktop\LinkMonitor\LinkMonitor.csproj", "{B9CA6694-6F3F-4CFC-A8B3-CBE04D0037ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "Desktop\ConsoleApplication1\ConsoleApplication1.csproj", "{83B2F167-54A9-48E2-B5AF-73C0C87D682B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "osi_Android", "Android\osi_Android\osi_Android.csproj", "{102309A2-CB37-4581-8BC8-FE3AB0CCAF53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "osi_Console", "Desktop\osi_Console\osi_Console.csproj", "{83B2F167-54A9-48E2-B5AF-73C0C87D682B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,16 +38,16 @@ Global
 		{B9CA6694-6F3F-4CFC-A8B3-CBE04D0037ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9CA6694-6F3F-4CFC-A8B3-CBE04D0037ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9CA6694-6F3F-4CFC-A8B3-CBE04D0037ED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{83B2F167-54A9-48E2-B5AF-73C0C87D682B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{83B2F167-54A9-48E2-B5AF-73C0C87D682B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{83B2F167-54A9-48E2-B5AF-73C0C87D682B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{83B2F167-54A9-48E2-B5AF-73C0C87D682B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{102309A2-CB37-4581-8BC8-FE3AB0CCAF53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{102309A2-CB37-4581-8BC8-FE3AB0CCAF53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{102309A2-CB37-4581-8BC8-FE3AB0CCAF53}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{102309A2-CB37-4581-8BC8-FE3AB0CCAF53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{102309A2-CB37-4581-8BC8-FE3AB0CCAF53}.Release|Any CPU.Build.0 = Release|Any CPU
 		{102309A2-CB37-4581-8BC8-FE3AB0CCAF53}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{83B2F167-54A9-48E2-B5AF-73C0C87D682B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83B2F167-54A9-48E2-B5AF-73C0C87D682B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83B2F167-54A9-48E2-B5AF-73C0C87D682B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83B2F167-54A9-48E2-B5AF-73C0C87D682B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,7 +55,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{2EBBF37C-6725-44C2-AD81-977351725F09} = {5DCB6A9F-23DA-4420-B5FD-DD3EA458E196}
 		{B9CA6694-6F3F-4CFC-A8B3-CBE04D0037ED} = {5DCB6A9F-23DA-4420-B5FD-DD3EA458E196}
-		{83B2F167-54A9-48E2-B5AF-73C0C87D682B} = {5DCB6A9F-23DA-4420-B5FD-DD3EA458E196}
 		{102309A2-CB37-4581-8BC8-FE3AB0CCAF53} = {935D8955-D141-4C40-9232-DFE0C1BBEE12}
+		{83B2F167-54A9-48E2-B5AF-73C0C87D682B} = {5DCB6A9F-23DA-4420-B5FD-DD3EA458E196}
 	EndGlobalSection
 EndGlobal
