@@ -9,6 +9,8 @@ using DownloadEngine.Servers;
 using DownloadEngine.DownloadManager;
 using Server = DownloadEngine.Server;
 using osi_Console.Functions;
+using System.IO.Pipes;
+using System.IO;
 
 namespace osi_Console
 {
@@ -57,47 +59,73 @@ namespace osi_Console
             {
                 InsoCookie = appsettings["InsoCookie"].Value;
                 BloodcatCookie = appsettings["BloodcatCookie"].Value;
-                if (!Inso.IsCookieValid(InsoCookie))
+                if (InsoCookie != null)
                 {
-                    Console.WriteLine("Inso Cookie已失效 请重新输入。");
-                    InputCookieFunction.InputInsoCookie(out InsoCookie);
-                    appsettings["InsoCookie"].Value = InsoCookie;
+                    if (!Inso.IsCookieValid(InsoCookie))
+                    {
+                        Console.WriteLine("Inso Cookie已失效 请重新输入。");
+                        InputCookieFunction.InputInsoCookie(out InsoCookie);
+                        appsettings["InsoCookie"].Value = InsoCookie;
+                    }
+                    else
+                    {
+                        Console.WriteLine("do_not_remove_this_0w0" + " = " + InsoCookie);
+                        Console.WriteLine("Inso Cookie有效。");
+                    }
+
                 }
-                else
+                if (BloodcatCookie != null)
                 {
-                    Console.WriteLine("do_not_remove_this_0w0" + " = " + InsoCookie);
-                    Console.WriteLine("Inso Cookie有效。");
+                    if (!Bloodcat.IsCookieValid(BloodcatCookie))
+                    {
+                        Console.WriteLine("Bloodcat Cookie已失效 请重新输入。");
+                        InputCookieFunction.InputBloodcatCookie(out BloodcatCookie);
+                        appsettings["BloodcatCookie"].Value = BloodcatCookie;
+                    }
+                    else
+                    {
+                        Console.WriteLine("obm_human" + " = " + BloodcatCookie);
+                        Console.WriteLine("Bloodcat Cookie有效。");
+                    }
                 }
-                if (!Bloodcat.IsCookieValid(BloodcatCookie))
-                {
-                    Console.WriteLine("Bloodcat Cookie已失效 请重新输入。");
-                    InputCookieFunction.InputBloodcatCookie(out BloodcatCookie);
-                    appsettings["BloodcatCookie"].Value = BloodcatCookie;
-                }
-                else
-                {
-                    Console.WriteLine("obm_human" + " = " + BloodcatCookie);
-                    Console.WriteLine("Bloodcat Cookie有效。");
-                }
+
             }
             config.Save();
 
             DownloadManager downloadMgr = new DownloadManager();
 
-            downloadMgr.Config(InsoCookie, Server.Inso);
-            downloadMgr.Config(BloodcatCookie,Server.Blooadcat);
+            downloadMgr.Config(InsoCookie, Server.Inso,true);
+            downloadMgr.Config(BloodcatCookie,Server.Blooadcat,true);
             downloadMgr.MaxDownloaderCount = 2;
+            downloadMgr.FileWriter = DownloadHepler.FileHelper.FileWrite;
+
+            Console.WriteLine("OK.Start Monitor.");
+            NamedPipeServerStream server = new NamedPipeServerStream("osi", PipeDirection.In);
 
             while (true)
             {
-                BeatmapsetPackage p = new BeatmapsetPackage(new Beatmapset("https://osu.ppy.sh/beatmapsets/744238"), Server.Inso);
-                p.GetInfoCompleted += new EventHandler<BeatmapsetPackage.BeatmapsetInfo>(delegate (object e, BeatmapsetPackage.BeatmapsetInfo info)
+                server.WaitForConnection();
+
+                StreamReader sr = new StreamReader(server);
+                string link = sr.ReadToEnd();
+                Console.WriteLine("Get Link" + " " + link);
+
+                BeatmapsetPackage package = new BeatmapsetPackage(new Beatmapset(link),Server.Inso);
+                package.GetInfoCompleted += delegate(object sender,BeatmapsetPackage.BeatmapsetInfo e) 
                 {
-                    Console.WriteLine(info.beatmapsetId + " " + info.artist + "-" + info.title);
-                });
-                downloadMgr.Add(p);
+                    Console.WriteLine(e.beatmapsetId + " " + e.artist + "-" + e.title);
+                };
+                package.DownloadProgressChanged += delegate(object sender, BeatmapsetPackage.DownloadProgressChangedArgs e)
+                {
+                    Console.WriteLine(e.Status);
+                };
+                package.WriteFileCompleted += delegate (object sender, BeatmapsetPackage.WriteFileCompletedArg e)
+                {
+                    System.Diagnostics.Process.Start(e.Path);
+                };
+                downloadMgr.Add(package);
+                server.Disconnect();
             }
-            Console.ReadLine();
         }
     }
 }

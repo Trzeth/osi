@@ -11,12 +11,12 @@ using System.Threading;
 
 namespace DownloadEngine.DownloadManager
 {
-    internal class DownloadHepler
+    public class DownloadHepler
     {
         public class NoServerToChoose : Exception { }
         public class ServerNotAvailable : Exception { }
         public class CookieInvalid : Exception { }
-        internal static class FileHelper
+        public static class FileHelper
         {
             static string _path;
             static FileHelper()
@@ -27,9 +27,11 @@ namespace DownloadEngine.DownloadManager
                     Directory.CreateDirectory(_path);
                 }
             }
-            public static void FileWrite(byte[] file, string fileName)
+            public static string FileWrite(byte[] file, string fileName)
             {
-                File.WriteAllBytes(_path + CheckedFileName(fileName), file);
+                string path = _path + CheckedFileName(fileName);
+                File.WriteAllBytes(path, file);
+                return path;
             }
             private static string CheckedFileName(string fileName)
             {

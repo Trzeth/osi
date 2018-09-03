@@ -10,12 +10,17 @@ using System.IO;
 using Newtonsoft.Json;
 using DownloadEngine.DownloadManager;
 using System.Windows.Media.Imaging;
-using Webclient = DownloadEngine.DownloadManager.WebClient;
+using WebClient = DownloadEngine.DownloadManager.WebClient;
 
 namespace DownloadEngine.Servers
 {
     public class Bloodcat:Server
     {
+        internal static CookieCollection CookieCollection
+        {
+            get { return _cookieCollection; }
+        }
+        private static CookieCollection _cookieCollection;
         public class ReturnInformation
         {
             public class Beatmapset
@@ -108,14 +113,18 @@ namespace DownloadEngine.Servers
             p.OnGetInfoCompleted(info);
 
             byte[] file;
-            file = WebClient().DownloadData(Path(p));
-            fileName = Webclient.GetFileNameFromHeader(WebClient().ResponseHeaders.Get("Content-Disposition"));
+            WebClient client = new WebClient();
+            client.AddCookie(_cookieCollection);
+            p.OnDownloadProgressChanged(new BeatmapsetPackage.DownloadProgressChangedArgs("Downloading"));
+            file = client.DownloadData(Path(p));
+            p.OnDownloadProgressChanged(new BeatmapsetPackage.DownloadProgressChangedArgs("Download Complete"));
+            fileName = info.beatmapsetId + " " + info.artist + "-" + info.title + ".osz";
 
             return file;
         }
 
         #region Set Cookie
-        internal static bool SetCookie(string cookieString)
+        internal static void SetCookie(string cookieString)
         {
             CookieCollection cookieCollection = new CookieCollection();
 
@@ -123,28 +132,14 @@ namespace DownloadEngine.Servers
             cookie.Name = "obm_human";
             cookie.Path = "/osu/";
             cookie.Domain = "bloodcat.com";
+            cookie.Value = cookieString;
 
             cookieCollection.Add(cookie);
-            return SetCookie(cookieCollection);
+            SetCookie(cookieCollection);
         }
-        internal static bool SetCookie(CookieCollection cookieCollection)
+        internal static void SetCookie(CookieCollection cookieCollection)
         {
-            if (IsCookieValid(cookieCollection))
-            {
-                if (_cookieCollection == null)
-                {
-                    _cookieCollection = cookieCollection;
-                }
-                else
-                {
-                    _cookieCollection.Add(cookieCollection);
-                }
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            _cookieCollection = cookieCollection;
         }
         public static bool IsCookieValid(string cookieString)
         {
@@ -154,17 +149,20 @@ namespace DownloadEngine.Servers
             cookie.Name = "obm_human";
             cookie.Path = "/osu/";
             cookie.Domain = "bloodcat.com";
+            cookie.Value = cookieString;
 
             cookieCollection.Add(cookie);
             return IsCookieValid(cookieCollection);
         }
         public static bool IsCookieValid(CookieCollection cookieCollection)
         {
-            //BUG
-            WebClient(cookieCollection).Method = "Head";
+            WebClient client = new WebClient();
+            client.AddCookie(cookieCollection);
+            client.Method = "Head";
+            //Bloodcat 对 Cookie 进行加密 与 User-Agent 配合验证
             try
             {
-                WebClient(cookieCollection).DownloadData("http://bloodcat.com/osu/s/4079");
+                client.DownloadData("http://bloodcat.com/osu/s/4079");
                 return true;
             }
             catch(WebException e)
@@ -176,7 +174,7 @@ namespace DownloadEngine.Servers
         #endregion
         public static ReturnInformation.Return Search(string query,char? character = null,QueryArgs.Status? status = null,QueryArgs.Mode? mode = null,int? page = null)
         {
-            Webclient webclient = new Webclient();
+            WebClient webclient = new WebClient();
             string s = webclient.DownloadString(Path(query,character,status,mode,page));
             ReturnInformation.Return r = JsonConvert.DeserializeObject<ReturnInformation.Return>(s);
             return r;
@@ -204,7 +202,7 @@ namespace DownloadEngine.Servers
             string CAPTCHAPage = null;
             try
             {
-                CAPTCHAPage = WebClient().DownloadString(uri);
+                CAPTCHAPage = new WebClient().DownloadString(uri);
             }
             catch (WebException e)
             {
@@ -242,26 +240,27 @@ namespace DownloadEngine.Servers
         }
         public static CookieCollection PostCAPTCHA(string response, CAPTCHAData data)
         {
+            WebClient client = new WebClient();
             string formData = "response=" + response + "&" + "sync=" + data.sync + "&" + "hash=" + data.hash;
-            WebClient().Referer = data.uri.ToString();
-            WebClient().Host = data.uri.Host;
-            WebClient().ContentType = "application/x-www-form-urlencoded";
-            WebClient().UploadString(data.uri, formData);
-            string Header = WebClient().ResponseHeaders.Get("Set-Cookie");
-            WebClient().Dispose();
+            client.Referer = data.uri.ToString();
+            client.Host = data.uri.Host;
+            client.ContentType = "application/x-www-form-urlencoded";
+            client.UploadString(data.uri, formData);
+            string Header = client.ResponseHeaders.Get("Set-Cookie");
+            client.Dispose();
 
-            return Webclient.GetAllCookiesFromHeader(Header, data.uri.Host.ToString());
+            return WebClient.GetAllCookiesFromHeader(Header, data.uri.Host.ToString());
         }
         #endregion
         private static string Path(BeatmapsetPackage p)
         {
-            const string uriRoot = "http://bloodcat.com/osu/";
+            const string uriRoot = "https://bloodcat.com/osu/";
 
             return uriRoot + "s/" + p.BeatmapsetId;
         }
         private static string Path(string query, char? character = null, QueryArgs.Status? status = null, QueryArgs.Mode? mode = null, int? page = null)
         {
-            string root = "http://bloodcat.com/osu/";
+            string root = "https://bloodcat.com/osu/";
 
             Dictionary<object, object> d = new Dictionary<object, object>();
             d.Add("mod","json");

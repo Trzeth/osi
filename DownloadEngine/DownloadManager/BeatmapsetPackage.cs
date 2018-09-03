@@ -53,11 +53,31 @@ namespace DownloadEngine.DownloadManager
         public class DownloadProgressChangedArgs:EventArgs
         {
             public string Status;
+            public DownloadProgressChangedArgs() { }
+            public DownloadProgressChangedArgs(string s)
+            {
+                Status = s;
+            }
         }
         public event EventHandler<DownloadProgressChangedArgs> DownloadProgressChanged;
         internal void OnDownloadProgressChanged(DownloadProgressChangedArgs e)
         {
             DownloadProgressChanged(this,e);
+        }
+
+        public class WriteFileCompletedArg : EventArgs
+        {
+            public string Path;
+            public WriteFileCompletedArg() { }
+            public WriteFileCompletedArg(string s)
+            {
+                Path = s;
+            }
+        }
+        public event EventHandler<WriteFileCompletedArg> WriteFileCompleted;
+        internal void OnWriteFileComplete(WriteFileCompletedArg e)
+        {
+            WriteFileCompleted(this,e);
         }
     }
 }

@@ -11,8 +11,8 @@ namespace DownloadEngine.DownloadManager
 {
     class Downloader
     {
-        static Queue<BeatmapsetPackage> _pendingQueue;
-        static List<Downloader> _downloaderList;
+        static Queue<BeatmapsetPackage> _pendingQueue = new Queue<BeatmapsetPackage>();
+        static List<Downloader> _downloaderList = new List<Downloader>();
         static int _downloaderCount;
         static int _monitoringDownloader;
         bool _isMonitoring;
@@ -28,14 +28,6 @@ namespace DownloadEngine.DownloadManager
         internal bool IsMonitoring { get { return _isMonitoring; } }
         internal Downloader(DownloadManager DownloadManager)
         {
-            if (_downloaderList == null)
-            {
-                _downloaderList = new List<Downloader>();
-            }
-            if (_pendingQueue == null)
-            {
-                _pendingQueue = new Queue<BeatmapsetPackage>();
-            }
             _downloadMgr = DownloadManager;
             _isMonitoring = false;
         }
@@ -81,7 +73,8 @@ namespace DownloadEngine.DownloadManager
                         Servers.Server server = GetServer((Server)p.Server);
                         if (!DownloadManager.IsServerVaild[(Server)p.Server]) throw new ServerNotAvailable();
                         data = server.Download(p, out fileName);
-                        _downloadMgr.FileWriter(data, fileName);
+                        string s = _downloadMgr.FileWriter(data, fileName);
+                        p.OnWriteFileComplete(new BeatmapsetPackage.WriteFileCompletedArg(s));
                         break;
                     }
                     catch (Exception e)

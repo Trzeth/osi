@@ -17,7 +17,12 @@ namespace DownloadEngine.Servers
 {
     public class Inso:Server
     {
-        BeatmapsetPackage package;
+        internal static CookieCollection CookieCollection
+        {
+            get { return _cookieCollection; }
+        }
+        private static CookieCollection _cookieCollection;
+        private BeatmapsetPackage package;
         //Cookie do_not_remove_this_0w0
         enum Methods
         {
@@ -43,7 +48,7 @@ namespace DownloadEngine.Servers
             }
             public const string Ci_Token = "ci_token";
         }
-        private static string Path(Methods methods,string Key,string Value)
+        private static string Path(Methods methods,string Key = null,string Value = null)
         {
             string root = "http://inso.link/api/";
             Dictionary<object, object> d = new Dictionary<object, object>();
@@ -66,7 +71,10 @@ namespace DownloadEngine.Servers
                     path = root;
                     break;
             }
-            d.Add(Key, Value);
+            if (Key != null && Value != null)
+            {
+                d.Add(Key, Value);
+            }
             d.Add("source","osi");
             return path + BuildQueryString(d);
         }
@@ -146,7 +154,7 @@ namespace DownloadEngine.Servers
                 public Beatmap[] beatmapCollection;
                 public string creator;
                 public string title;
-                public int bpm;
+                public float bpm;
                 public int drain_time;
                 public string artist;
                 public int approved;
@@ -194,7 +202,7 @@ namespace DownloadEngine.Servers
                     case -1:
                     case 5:
                     case 999:
-                    case 1100: finished = true; break;
+                    case 1100: throw new Exception(); break;
                     
                     case 100: finished = true; data = Download(d.package_url,d.ci_token); break;
                     case 200: case 300: case 400: case 500:
@@ -238,10 +246,12 @@ namespace DownloadEngine.Servers
 
                         file = file.Concat(newData.Skip(start).Take(end)).ToArray();
                     }
+                    package.OnDownloadProgressChanged(new BeatmapsetPackage.DownloadProgressChangedArgs("Download Package " + packageName + " Completed"));
                 }
+                //怕 是 有 BUG
                 i++;
             }
-
+            package.OnDownloadProgressChanged(new BeatmapsetPackage.DownloadProgressChangedArgs("Download Completed"));
             return file;
         }
         private static byte[] Decode(byte[] data, int[] central_index)
@@ -268,7 +278,7 @@ namespace DownloadEngine.Servers
 
             return newData;
         }
-        internal static bool SetCookie(string cookieString)
+        internal static void SetCookie(string cookieString)
         {
             var cookieCollection = new CookieCollection();
 
@@ -280,26 +290,11 @@ namespace DownloadEngine.Servers
 
             cookieCollection.Add(cookie);
 
-            return SetCookie(cookieCollection);
+            SetCookie(cookieCollection);
         }
-        internal static bool SetCookie(CookieCollection cookieCollection)
+        internal static void SetCookie(CookieCollection cookieCollection)
         {
-            if (IsCookieValid(cookieCollection))
-            {
-                if (_cookieCollection == null)
-                {
-                    _cookieCollection = cookieCollection;
-                }
-                else
-                {
-                    _cookieCollection.Add(cookieCollection);
-                }
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            _cookieCollection = cookieCollection;
         }
         public static bool IsCookieValid(string cookieString)
         {
@@ -316,7 +311,9 @@ namespace DownloadEngine.Servers
         }
         public static bool IsCookieValid(CookieCollection cookieCollection)
         {
-            string s = WebClient(cookieCollection).DownloadString("http://inso.link/api/i.php");
+            WebClient client = new WebClient();
+            client.AddCookie(cookieCollection);
+            string s = client.DownloadString(Path(Methods.user));
             ReturnInformation.User user = JsonConvert.DeserializeObject<ReturnInformation.User>(s);
             if (user.logged_in)
             {
@@ -348,6 +345,12 @@ namespace DownloadEngine.Servers
             {
                 return defaultOrder;
             }
+        }
+        protected WebClient WebClient()
+        {
+            WebClient client = new WebClient();
+            client.AddCookie(_cookieCollection);
+            return client;
         }
     }
 }

@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace DownloadEngine.DownloadManager
 {
-    public delegate void FileWriter(byte[] file, string fileName);
+    public delegate string FileWriter(byte[] file, string fileName);
 }

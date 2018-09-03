@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DownloadEngine.Servers;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
+using DownloadEngine.DownloadManager;
 
 namespace DownloadEngine
 {
@@ -134,7 +135,11 @@ namespace DownloadEngine
         }
         private int ToBeatmapsetId(int BeatmapId)
         {
-            return -1;
+            WebClient client = new WebClient();
+            client.Method = "Head";
+            client.AllowAutoRedirect = false;
+            client.DownloadString("http://osu.ppy.sh/b/" + BeatmapId);
+            return ToBeatmapsetId(new Uri(client.ResponseHeaders["Location"]));
         }
     }
     public class BeatmapsetInfo

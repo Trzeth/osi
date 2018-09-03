@@ -11,25 +11,35 @@ namespace DownloadEngine.DownloadManager
 {
     public class WebClient:System.Net.WebClient
     {
-        private const string UserAgent = "Mozilla/5.0 (compatible;.NET CLR 4.0.30319; osi)";
-        private CookieContainer _cookieContainer = new CookieContainer();
+        private const string UserAgent = "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0";
+        private CookieContainer m_Container;
         internal string Referer;
         internal string Host;
         internal string ContentType;
         internal string Method;
+        internal bool AllowAutoRedirect = true;
 
-        internal WebClient()
+        internal WebClient():base()
         {
             Proxy = null;
             Headers.Add(HttpRequestHeader.UserAgent, UserAgent);
         }
         internal void AddCookie(Cookie cookie)
         {
-            _cookieContainer.Add(cookie);
+            if (m_Container == null)
+            {
+                m_Container = new CookieContainer();
+            }
+            m_Container.Add(cookie);
         }
         internal void AddCookie(CookieCollection cookies)
         {
-            _cookieContainer.Add(cookies);
+            if (m_Container == null)
+            {
+                m_Container = new CookieContainer();
+            }
+
+            m_Container.Add(cookies);
         }
         protected override WebRequest GetWebRequest(Uri address)
         {
@@ -37,11 +47,12 @@ namespace DownloadEngine.DownloadManager
             HttpWebRequest webRequest = request as HttpWebRequest;
             if (webRequest != null)
             {
-                webRequest.CookieContainer = _cookieContainer;
+                if (m_Container != null) webRequest.CookieContainer = m_Container;
                 if (Referer != null) webRequest.Referer = Referer;
                 if (Host != null) webRequest.Host = Host;
                 if (ContentType != null) webRequest.ContentType = ContentType;
-                if(Method != null) webRequest.Method = Method;
+                if (Method != null) webRequest.Method = Method;
+                webRequest.AllowAutoRedirect = AllowAutoRedirect;
             }
             return request;
         }

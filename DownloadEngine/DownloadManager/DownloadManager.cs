@@ -12,13 +12,18 @@ namespace DownloadEngine.DownloadManager
 {
     public class DownloadManager
     {
-        internal static Dictionary<Server, bool> IsServerVaild;
-        internal static bool _isInsoValid;
-        internal static bool _isBloodcatValid;
-        internal static bool _isUuglValid = true;
-        internal FileWriter FileWriter { get { return _fileWriter; } }
+        internal static Dictionary<Server, bool> IsServerVaild = new Dictionary<Server, bool> ()
+        {
+            { Server.Inso,false },
+            { Server.Blooadcat,false},
+            { Server.Orgin,false}
+        };
+        public FileWriter FileWriter
+        {
+            get { return _fileWriter; }
+            set { _fileWriter = value; }
+        }
 
-        //public static List<Beatmapset> BeatmapsetList;
         public int MaxDownloaderCount
         {
             get { return _maxDownloaderCount; }
@@ -35,59 +40,45 @@ namespace DownloadEngine.DownloadManager
                 }
             }
         }
-
-        static int _maxDownloaderCount = 2;
+        private static int _maxDownloaderCount = 2;
         private FileWriter _fileWriter;
-        public DownloadManager()
+        public DownloadManager() { }
+        public bool Config(string cookie, Server server, bool skipVerification = false)
         {
-            //if (BeatmapsetList == null)
-            //{
-            //    BeatmapsetList = new List<Beatmapset>();
-            //}
-            if (IsServerVaild == null)
+            if (!skipVerification)
             {
-                IsServerVaild = new Dictionary<Server, bool>();
-                foreach (Server server in Enum.GetValues(typeof(Server)))
+                bool isVaild = false;
+                switch (server)
                 {
-                    IsServerVaild.Add(server, false);
+                    case Server.Inso:
+                        isVaild = Inso.IsCookieValid(cookie);
+                        if(isVaild) Inso.SetCookie(cookie);
+                        break;
+                    case Server.Blooadcat:
+                        isVaild = Bloodcat.IsCookieValid(cookie);
+                        if (isVaild) Bloodcat.SetCookie(cookie);
+                        break;
                 }
+                IsServerVaild[server] = isVaild;
+                return isVaild;
             }
-            if (DownloaderList == null)
+            else
             {
-                DownloaderList = new List<Downloader>();
-                CheckDownloaderQuantity();
+                switch (server)
+                {
+                    case Server.Inso:
+                        Inso.SetCookie(cookie);
+                        break;
+                    case Server.Blooadcat:
+                        Bloodcat.SetCookie(cookie);
+                        break;
+                }
+                IsServerVaild[server] = true;
+                return true;
             }
-        }
-        public void Config(string cookie,Server server)
-        {
-            bool isVaild = false;
-            switch (server)
-            {
-                case Server.Inso:
-                    isVaild = Inso.SetCookie(cookie);
-                    break;
-                case Server.Blooadcat:
-                    isVaild = Bloodcat.SetCookie(cookie);
-                    break;
-            }
-            IsServerVaild[server] = isVaild;
-        }
-        public void Config(System.Net.CookieCollection cookieCollection,Server server)
-        {
-            switch (server)
-            {
-                case Server.Inso:
-                    Inso.SetCookie(cookieCollection);
-                    break;
-                case Server.Blooadcat:
-                    if (Bloodcat.SetCookie(cookieCollection) != true) throw new CookieInvalid();
-                    break;
-            }
-            IsServerVaild[server] = true;
         }
         public void Add(Beatmapset beatmapset,Server? server = null)
         {
-            //BeatmapsetList.Add(beatmapset);
             Add(new BeatmapsetPackage(beatmapset, server));
         }
         public void Add(BeatmapsetPackage beatmapsetPackage)
@@ -100,11 +91,14 @@ namespace DownloadEngine.DownloadManager
             if (MonitoringDownloader < _maxDownloaderCount)
             {
                 int _monitoringDownloaderCount = 0;
-                for (int i = 0; i < DownloaderList.Count || _monitoringDownloaderCount >= PendingQueue.Count; i++)
+                for (int i = 0; i < DownloaderList.Count && _monitoringDownloaderCount < PendingQueue.Count; i++)
                 {
                     if (DownloaderList[i].IsMonitoring != true)
                     {
-                        DownloaderList[i].Monitor();
+                        Thread t = new Thread(new ThreadStart(delegate {
+                            DownloaderList[i].Monitor();
+                        }));
+                        t.Start();
                         _monitoringDownloaderCount++;
                     }
                 }
@@ -121,9 +115,11 @@ namespace DownloadEngine.DownloadManager
             }
             else
             {
-                for (int i = 0; i < (_maxDownloaderCount - DownloaderList.Count); i++)
+                int c = _maxDownloaderCount - DownloaderList.Count;
+                for (int i = 0; i < c; i++)
                 {
                     DownloaderList.Add(new Downloader(this));
+                    Console.WriteLine(DownloaderList.Count());
                 }
             }
         }
