@@ -11,6 +11,7 @@ using Server = DownloadEngine.Server;
 using osi_Console.Functions;
 using System.IO.Pipes;
 using System.IO;
+using Console = Colorful.Console;
 
 namespace osi_Console
 {
@@ -99,7 +100,7 @@ namespace osi_Console
             downloadMgr.MaxDownloaderCount = 2;
             downloadMgr.FileWriter = DownloadHepler.FileHelper.FileWrite;
 
-            Console.WriteLine("OK.Start Monitor.");
+            Console.WriteLine("Start Monitor",System.Drawing.Color.White);
             NamedPipeServerStream server = new NamedPipeServerStream("osi", PipeDirection.In);
 
             while (true)

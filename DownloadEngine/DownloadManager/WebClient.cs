@@ -11,7 +11,7 @@ namespace DownloadEngine.DownloadManager
 {
     public class WebClient:System.Net.WebClient
     {
-        private const string UserAgent = "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:61.0) Gecko/20100101 Firefox/61.0";
+        private const string UserAgent = "Mozilla/5.0 (compatible;.NET CLR 4.0.30319; osi)";
         private CookieContainer m_Container;
         internal string Referer;
         internal string Host;
