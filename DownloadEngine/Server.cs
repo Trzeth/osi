@@ -11,6 +11,7 @@ namespace DownloadEngine
     {
         Orgin,
         Inso,
-        Blooadcat
+        Blooadcat,
+        Unset
     }
 }

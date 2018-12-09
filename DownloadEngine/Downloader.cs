@@ -14,8 +14,15 @@ namespace DownloadEngine
     {
         public BeatmapsetPackage BeatmapsetPackage
         {
-            get { return _beatmapsetPackage; }
-            set { _beatmapsetPackage = value; }
+            get
+            {
+                return _beatmapsetPackage;
+            }
+            set
+            {
+                _beatmapsetPackage = value;
+                Server = _beatmapsetPackage.Server;
+            }
         }
         private BeatmapsetPackage _beatmapsetPackage;
         public FileWriter FileWriter {
@@ -26,6 +33,42 @@ namespace DownloadEngine
             set { _fileWriter = value; }
         }
         private FileWriter _fileWriter;
+
+        public Server Server
+        {
+            get
+            {
+                //NoServerChoose Exception
+                if (_server == Server.Unset)
+                {
+                    Server = ChooseServer(BeatmapsetPackage);
+                    return _server;
+                }
+                else return _server;
+            }
+            set
+            {
+                _server = value;
+                switch (_server)
+                {
+                    case Server.Inso:
+                        _serverClass = new Inso(BeatmapsetPackage);
+                        break;
+                    case Server.Blooadcat:
+                        _serverClass = new Bloodcat(BeatmapsetPackage);
+                        break;
+                    default:
+                        _serverClass = null;
+                        break;
+                }
+
+            }
+        }
+        private Server _server;
+        private Servers.Server _serverClass;
+
+        private byte[] _data;
+
         public Downloader() { }
         public Downloader(BeatmapsetPackage p,FileWriter fileWriter=null)
         {
@@ -38,53 +81,52 @@ namespace DownloadEngine
                 this.FileWriter = FileHelper.FileWrite;
             }
 
-            _beatmapsetPackage = p;
+            BeatmapsetPackage = p;
         }
-        public void Downloade()
+        public void Download()
         {
+            GetInformation();
+            DownloadData();
+            WriteToFile();
+        }
+        public BeatmapsetInfo GetInformation()
+        {
+            if (_beatmapsetPackage == null)
+            {
+                throw new Exception("Beatmapset didn't set.");
+            }
+
+            return _serverClass.GetInformation();
+        }
+        public void DownloadData()
+        {
+            if (_beatmapsetPackage == null)
+            {
+                throw new Exception("Beatmapset didn't set.");
+            }
+
             while (true)
             {
-                if (_beatmapsetPackage.Server == null)
-                {
-                    _beatmapsetPackage.Server = ChooseServer(_beatmapsetPackage);
-                    //NoServerToChoose Exception
-                }
-
                 try
                 {
-                    byte[] data = null;
-                    string fileName = null;
-
-                    Servers.Server server = GetServer((Server)_beatmapsetPackage.Server);
-                    data = server.Download(_beatmapsetPackage, out fileName);
-                    string s = FileWriter(data, fileName);
-                    _beatmapsetPackage.OnProgressChanged(new ProgressChangedEventArgs(100,"已写入文件"));
-                    _beatmapsetPackage.OnWriteFileComplete(new BeatmapsetPackage.WriteFileCompletedArg(s));
+                    _data = null;
+                    _data = _serverClass.Download();
+                    _beatmapsetPackage.OnProgressChanged(new ProgressChangedEventArgs(100,"下载完成"));
                     break;
                 }
                 catch (Exception e)
                 {
-                    _beatmapsetPackage.FailedServerList.Add((Server)_beatmapsetPackage.Server);
-                    _beatmapsetPackage.Server = null;
-                }
-                finally
-                {
-                    GC.Collect();
+                    _beatmapsetPackage.FailedServerList.Add(_beatmapsetPackage.Server);
+                    Server = Server.Unset;
                 }
             }
+            GC.Collect();
         }
-        private Servers.Server GetServer(Server server)
+        public void WriteToFile()
         {
-            switch (server)
-            {
-                case Server.Inso:
-                    return new Inso();
-                case Server.Blooadcat:
-                    return new Bloodcat();
-                default:
-                    return null;
-            }
+            if(_data==null)throw new Exception("data为Null 无法写入");
+            string s = FileWriter(_data, _serverClass.FileName);
+            _beatmapsetPackage.OnWriteFileComplete(new BeatmapsetPackage.WriteFileCompletedArg(s));
         }
-
     }
 }

@@ -18,13 +18,13 @@ namespace DownloadEngine.DownloadManager
     {
         public Beatmapset Beatmapset { get; set; }
         //public DownloadStatus Status { get; set; }
-        internal Server? Server { get; set; }
+        internal Server Server { get; set; }
         internal List<Server> FailedServerList { get; set; }
         internal int BeatmapsetId { get { return _beatmapsetId; } }
 
         protected int _beatmapsetId;
         public BeatmapsetPackage() { }
-        public BeatmapsetPackage(Beatmapset beatmapset, Server? server)
+        public BeatmapsetPackage(Beatmapset beatmapset, Server server)
         {
             _beatmapsetId = beatmapset.BeatmapsetId;
             Server = server;
@@ -34,22 +34,9 @@ namespace DownloadEngine.DownloadManager
         {
             _beatmapsetId = beatmapset.BeatmapsetId;
             Beatmapset = beatmapset;
-            Server = null;
+            Server = Server.Unset;
             FailedServerList = new List<Server>();
         }
-
-        //public class BeatmapsetInfo : EventArgs
-        //{
-        //    public int beatmapsetId;
-        //    public string creator;
-        //    public string title;
-        //    public string artist;
-        //}
-        //public event EventHandler<BeatmapsetInfo> GetInfoCompleted;
-        //internal void OnGetInfoCompleted(BeatmapsetInfo e)
-        //{
-        //    GetInfoCompleted(this, e);
-        //}
 
         public event ProgressChangedEventHandler ProgressChanged;
         public void OnProgressChanged(ProgressChangedEventArgs e)

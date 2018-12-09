@@ -12,13 +12,28 @@ namespace DownloadEngine.Servers
 {
     public abstract class Server
     {
+        public string FileName
+        {
+            get
+            {
+                if (_fileName == null) GetInformation();
+                return _fileName;
+            }
+        }
+        internal string _fileName;
+        internal BeatmapsetPackage _beatmapsetPackage;
+
+        public Server(BeatmapsetPackage package)
+        {
+            _beatmapsetPackage = package;
+        }
         public event ProgressChangedEventHandler ProgressChanged;
         public void OnProgressChanged(ProgressChangedEventArgs e)
         {
             if (ProgressChanged != null) ProgressChanged(this, e);
         }
         internal abstract BeatmapsetInfo GetInformation();
-        internal abstract byte[] Download(BeatmapsetPackage p, out string fileName);
+        internal abstract byte[] Download();
         protected static string BuildQueryString(object key, object value = null,string query = null)
         {
             string s = query;

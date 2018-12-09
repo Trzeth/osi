@@ -22,6 +22,9 @@ namespace DownloadEngine.Servers
             get { return _cookieCollection; }
         }
         private static CookieCollection _cookieCollection;
+
+        public Bloodcat(BeatmapsetPackage package) : base(package) { }
+
         public class ReturnInformation
         {
             public class Beatmapset
@@ -90,16 +93,11 @@ namespace DownloadEngine.Servers
                 Mania
             }
         }
-
-        internal override byte[] Download(BeatmapsetPackage p,out string fileName)
+        internal override BeatmapsetInfo GetInformation()
         {
-            if(_cookieCollection == null)
-            {
-                throw new Exception("Bloodcat No Cookie Existed.");
-            }
-            ReturnInformation.Return r = Search(p.BeatmapsetId.ToString(),QueryArgs.Character.BeatmapSetId);
+            ReturnInformation.Return r = Search(_beatmapsetPackage.BeatmapsetId.ToString(), QueryArgs.Character.BeatmapSetId);
             ReturnInformation.Beatmapset beatmapset;
-            if (r.Count() > 1||r.Count() == 0)
+            if (r.Count()!=1)
             {
                 throw new Exception("Result More than one or Doesn't Exist.");
             }
@@ -107,20 +105,27 @@ namespace DownloadEngine.Servers
             {
                 beatmapset = r[0];
             }
-            BeatmapsetPackage.BeatmapsetInfo info = new BeatmapsetPackage.BeatmapsetInfo();
-            info.beatmapsetId = beatmapset.id;
+            BeatmapsetInfo info = new BeatmapsetInfo();
+            info.id = beatmapset.id;
             info.artist = beatmapset.artist;
             info.creator = beatmapset.creator;
             info.title = beatmapset.title;
-            p.OnGetInfoCompleted(info);
+            _fileName = string.Format("{0} {1}-{2}.osz", info.id, info.artist, info.title);
 
+            return info;
+        }
+        internal override byte[] Download()
+        {
+            if(_cookieCollection == null)
+            {
+                throw new Exception("Bloodcat No Cookie Existed.");
+            }
             byte[] file;
             WebClient client = new WebClient();
             client.AddCookie(_cookieCollection);
-            p.OnProgressChanged(new ProgressChangedEventArgs(0,"Downloading"));
-            file = client.DownloadData(Path(p));
-            p.OnProgressChanged(new ProgressChangedEventArgs(90,"Download Complete"));
-            fileName = info.beatmapsetId + " " + info.artist + "-" + info.title + ".osz";
+            _beatmapsetPackage.OnProgressChanged(new ProgressChangedEventArgs(0,"Downloading"));
+            file = client.DownloadData(Path(_beatmapsetPackage));
+            _beatmapsetPackage.OnProgressChanged(new ProgressChangedEventArgs(90,"Download Complete"));
 
             return file;
         }

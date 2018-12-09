@@ -7,12 +7,12 @@ using Newtonsoft.Json;
 using System.Threading;
 using System.Collections;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using DownloadEngine.DownloadManager;
 using WebClient = DownloadEngine.DownloadManager.WebClient;
 using CookieCollection = System.Net.CookieCollection;
 using Newtonsoft.Json.Linq;
-using System.Runtime.Serialization;
 
 namespace DownloadEngine.Servers
 {
@@ -23,7 +23,6 @@ namespace DownloadEngine.Servers
             get { return _cookieCollection; }
         }
         private static CookieCollection _cookieCollection;
-        private BeatmapsetPackage package;
         //Cookie do_not_remove_this_0w0
         enum Methods
         {
@@ -169,8 +168,28 @@ namespace DownloadEngine.Servers
                 public float star;
             }
         }
+        private ReturnInformation.Download _downloadReturn;
+        public Inso(BeatmapsetPackage package) : base(package) { }
+        internal override BeatmapsetInfo GetInformation()
+        {
+            _beatmapsetPackage.OnProgressChanged(new ProgressChangedEventArgs(0, "获取信息"));
+            var s = WebClient().DownloadString(Path(Methods.download, QueryArgs.Download.BeatmapsetId,
+                _beatmapsetPackage.BeatmapsetId.ToString()));
+            _downloadReturn = JsonConvert.DeserializeObject<ReturnInformation.Download>(s);
 
-        internal override byte[] Download(BeatmapsetPackage p,out string fileName)
+            var info = new BeatmapsetInfo();
+            info.artist = _downloadReturn.info.artist;
+            info.id = _downloadReturn.mapset;
+            info.creator = _downloadReturn.info.creator;
+            info.title = _downloadReturn.info.title;
+
+            _beatmapsetPackage.OnProgressChanged(new ProgressChangedEventArgs(5, "等待中"));
+
+            _fileName = string.Format("{0} {1}-{2}.osz", _downloadReturn.mapset, _downloadReturn.info.artist, _downloadReturn.info.title);
+
+            return info;
+        }
+        internal override byte[] Download()
         {
             /*
             "package_url": {
@@ -182,33 +201,17 @@ namespace DownloadEngine.Servers
                 "skin_sound": "http://7xkvc9.com1.z0.glb.clouddn.com/199244/skin_sound.inso?e=1512266906&token=yyRfcFuGuTEVPCMRl1TvF_GD3zx6nBalXoZKwupW:JFkYwLruGbxO1rDeE5NyAhOn05E="
             },       
             */
-            package = p;
-            byte[] data = null;
-
             bool finished = false;
-            ReturnInformation.Download d = null;
             while (!finished)
             {
-                package.OnProgressChanged(new ProgressChangedEventArgs(0, "获取信息"));
-                var s = WebClient().DownloadString(Path(Methods.download, QueryArgs.Download.BeatmapsetId,p.BeatmapsetId.ToString()));
-                d = JsonConvert.DeserializeObject<ReturnInformation.Download>(s);
-
-                var info = new BeatmapsetPackage.BeatmapsetInfo();
-                info.artist = d.info.artist;
-                info.beatmapsetId = d.mapset;
-                info.creator = d.info.creator;
-                info.title = d.info.title;
-                package.OnGetInfoCompleted(info);
-
-                package.OnProgressChanged(new ProgressChangedEventArgs(5,"等待中"));
-                switch (d.returnCode)
+                switch (_downloadReturn.returnCode)
                 {
                     case -1:
                     case 5:
                     case 999:
-                    case 1100: throw new Exception(); break;
+                    case 1100: throw new Exception();
                     
-                    case 100: finished = true; data = Download(d.package_url,d.ci_token); break;
+                    case 100: finished = true;break;
                     case 200: case 300: case 400: case 500:
                     case 201: case 301: case 401: case 501:
                     case 202: case 302: case 402: case 502:
@@ -216,9 +219,7 @@ namespace DownloadEngine.Servers
                 }
             }
 
-            fileName = d.mapset + " " + d.info.artist + "-" + d.info.title + ".osz";
-
-            return data;
+            return Download(_downloadReturn.package_url, _downloadReturn.ci_token);
         }
         private byte[] Download(Dictionary<string,Uri> uris,string ci_token,List<Package> selectedPackages = null)
         {
@@ -245,14 +246,14 @@ namespace DownloadEngine.Servers
                     }
                     else
                     {
-                        //Are you fu**ing kiding me?!! Repeat?!!
+                        //Are you fu**ing kidding me?!! Repeat?!!
                         int start = c.central_index[combination][0];
                         int end = c.central_index[combination][1];
 
                         file = file.Concat(newData.Skip(start).Take(end)).ToArray();
                     }
                     count++;
-                    package.OnProgressChanged(new ProgressChangedEventArgs(85/uris.Count*count,"Download Package"));
+                    _beatmapsetPackage.OnProgressChanged(new ProgressChangedEventArgs(85/uris.Count*count,"Download Package"));
                 }
                 //怕 是 有 BUG
                 i++;

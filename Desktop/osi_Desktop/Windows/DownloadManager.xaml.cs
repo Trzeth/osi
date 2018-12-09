@@ -30,19 +30,19 @@ namespace osi_Desktop.Windows
         private int downloaderCount = 2;
         ObservableCollection<DownloadPackage> packageCollection;
         Queue<string> pendingQueue;
-        BackgroundWorker[] downloader;
+        BackgroundWorker[] downloaders;
         BackgroundWorker linkMonitor;
         public DownloadManager()
         {
             InitializeComponent();
             pendingQueue = new Queue<string>();
             packageCollection = new ObservableCollection<DownloadPackage>();
-            downloader = new BackgroundWorker[downloaderCount];
+            downloaders = new BackgroundWorker[downloaderCount];
             for (int i = 0; i < downloaderCount; i++)
             {
-                downloader[i] = new BackgroundWorker();
-                downloader[i].DoWork += Downloader_DoWork;
-                downloader[i].RunWorkerCompleted += Downloader_Complete;
+                downloaders[i] = new BackgroundWorker();
+                downloaders[i].DoWork += Downloader_DoWork;
+                downloaders[i].RunWorkerCompleted += Downloader_Complete;
             }
             linkMonitor = new BackgroundWorker();
             linkMonitor.DoWork += LinkMonitor_DoWork;
@@ -78,9 +78,9 @@ namespace osi_Desktop.Windows
                 int i;
                 for (i = 0; i < downloaderCount; i++)
                 {
-                    if (!downloader[i].IsBusy)
+                    if (!downloaders[i].IsBusy)
                     {
-                        downloader[i].RunWorkerAsync(link);
+                        downloaders[i].RunWorkerAsync(link);
                         break;
                     }
                 }
@@ -92,7 +92,9 @@ namespace osi_Desktop.Windows
             DownloadEngine.Downloader downloader = new Downloader();
             BeatmapsetPackage beatmapsetPackage = new BeatmapsetPackage(new Beatmapset(((string)e.Argument)));
             downloader.BeatmapsetPackage = beatmapsetPackage;
+
             DownloadPackage downloadPackage = new DownloadPackage(beatmapsetPackage.Beatmapset);
+            packageCollection.Add(downloadPackage);
             beatmapsetPackage.ProgressChanged += delegate(object o, ProgressChangedEventArgs args)
             {
                 downloadPackage.ProgressPercentage = args.ProgressPercentage;
@@ -101,6 +103,7 @@ namespace osi_Desktop.Windows
             {
                 e.Result = arg.Path;
             };
+            downloader.Download();
         }
     }
 }
