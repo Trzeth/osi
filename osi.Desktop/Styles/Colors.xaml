@@ -4,8 +4,8 @@
 
     <Color x:Key="Primary">#2196F3</Color>
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
-    
-    <Color x:Key="PrimaryVeryDark">#1976d2</Color>
+
+    <Color x:Key="PrimaryVeryDark">#0c79b1</Color>
     <SolidColorBrush x:Key="PrimaryVeryDarkBrush" Color="{StaticResource PrimaryVeryDark}"/>
 
     <Color x:Key="BackgroundVeryLight">#fafafa</Color>
@@ -14,8 +14,14 @@
     <Color x:Key="BackgroundLight">#efefef</Color>
     <SolidColorBrush x:Key="BackgroundLightBrush" Color="{StaticResource BackgroundLight}"/>
 
-    <Color x:Key="ForegroundVeryDark">#fafafa</Color>
+    <Color x:Key="ForegroundVeryDark">#34495e</Color>
     <SolidColorBrush x:Key="ForegroundVeryDarkBrush" Color="{StaticResource ForegroundVeryDark}"/>
+
+    <Color x:Key="ForegroundDark">#2c3e50</Color>
+    <SolidColorBrush x:Key="ForegroundDarkBrush" Color="{StaticResource ForegroundDark}"/>
+
+    <Color x:Key="ForegroundVeryLight">#fafafa</Color>
+    <SolidColorBrush x:Key="ForegroundVeryLightBrush" Color="{StaticResource ForegroundVeryLight}"/>
 
     <Color x:Key="ForegroundLight">#ffffff</Color>
     <SolidColorBrush x:Key="ForegroundLightBrush" Color="{StaticResource ForegroundLight}"/>

@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "osi_Desktop", "Desktop\osi_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkMonitor", "Desktop\LinkMonitor\LinkMonitor.csproj", "{B9CA6694-6F3F-4CFC-A8B3-CBE04D0037ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "osi_Console", "Desktop\osi_Console\osi_Console.csproj", "{83B2F167-54A9-48E2-B5AF-73C0C87D682B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "osi.Console", "Desktop\osi_Console\osi.Console.csproj", "{83B2F167-54A9-48E2-B5AF-73C0C87D682B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "osi_Android.Android", "Android\osi_Android\osi_Android.Android\osi_Android.Android.csproj", "{2B12F906-C0F1-45F0-B351-0AABF41409BD}"
 EndProject

@@ -6,48 +6,97 @@
         xmlns:local="clr-namespace:osi.Desktop"
         mc:Ignorable="d"
         WindowStyle="None"
+        ResizeMode="NoResize"
         AllowsTransparency="True"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" 
+        Width="400"
+        Height="300">
     <Window.Resources>
         <Style TargetType="{x:Type local:MainWindow}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Window">
                         <!-- Outer Border that for dropshadow -->
-                        <Border Padding="{Binding Path=BorderMarginThickness,FallbackValue=10}">
-                            
+                        <Border Padding="{Binding Path=OuterBorderPaddingThickness,FallbackValue=10}">
                             <!-- MainWindow -->
                             <Grid>
-                                <!-- Dropshadow -->
+
+                                <!-- Dropshadow And Side Decoration -->
                                 <Border Background="{StaticResource BackgroundVeryLightBrush}">
                                     <Border.Effect>
-                                        <DropShadowEffect ShadowDepth="0" Opacity="0.2"></DropShadowEffect>
+                                        <DropShadowEffect ShadowDepth="0" Opacity="0.2"/>
                                     </Border.Effect>
                                 </Border>
-                                
-                                <!-- MainWindow Content-->
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <!--Titlbe Bar-->
-                                        <RowDefinition Height="{Binding Path=TitleHeight,FallbackValue=50}"></RowDefinition>
-                                        <!-- Drop Shadow-->
-                                        <RowDefinition Height="Auto"/>
-                                        <!-- Content -->
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
 
-                                        <Viewbox Grid.Column="0">
-                                            <TextBlock>OSI</TextBlock>
-                                        </Viewbox>
-                                        <Button Grid.Column="1">X</Button>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Rectangle Grid.Column="0" Width="10">
+                                        <Rectangle.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                <GradientStop Offset="0.95" Color="{StaticResource PrimaryVeryDark}"></GradientStop>
+                                                <GradientStop Offset="1" Color="{StaticResource BackgroundVeryLight}"/>
+                                            </LinearGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <!-- MainWindow Content -->
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <!--Titlbe Bar -->
+                                            <RowDefinition Height="{Binding Path=TitleHeight,FallbackValue=40}"/>
+                                            <!-- Content -->
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Title Bar -->
+                                        <Grid Grid.Row="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Title -->
+                                            <Viewbox Grid.Column="0" Margin="0,8">
+                                                <TextBlock Style="{StaticResource BaseTextBlockStyle}">OSI</TextBlock>
+                                            </Viewbox>
+
+                                            <!-- Buttons -->
+                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+                                                <!-- Setting Button -->
+                                                <Button Style="{StaticResource WindowChromeButton}" 
+                                                    Grid.Column="1" 
+                                                    Height="{Binding Path=TitleHeight,FallbackValue=40}" 
+                                                    Command="{Binding OpenSettingWindowCommand}"
+                                                    Width="50">
+                                                    <TextBlock FontFamily="{StaticResource FontAwesome}" 
+                                                               Foreground="{StaticResource ForegroundDarkBrush}" 
+                                                               Text="{StaticResource FontAwesomeSettingIcon}"
+                                                               FontSize="{StaticResource FontSizeLarge}"/>
+                                                </Button>
+
+                                                <!-- Close Button -->
+                                                <Button Style="{StaticResource WindowChromeButton}" 
+                                                    Grid.Column="1" 
+                                                    Height="{Binding Path=TitleHeight,FallbackValue=40}"
+                                                    Command="{Binding CloseCommand}"
+                                                    Width="55">
+                                                    <TextBlock FontFamily="{StaticResource FontAwesome}" 
+                                                               Foreground="{StaticResource ForegroundDarkBrush}" 
+                                                               Text="{StaticResource FontAwesomeMinusIcon}"
+                                                               FontSize="{StaticResource FontSizeLarge}"/>
+                                                </Button>
+                                            </StackPanel>
+                                        </Grid>
+
+                                        <!-- Content -->
+                                        <Border Grid.Row="1" Padding="{Binding InnerContentPaddingThickness,FallbackValue=5}">
+                                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                                        </Border>
                                     </Grid>
-                                    
                                 </Grid>
                             </Grid>
                         </Border>
@@ -56,8 +105,8 @@
             </Setter>
         </Style>
     </Window.Resources>
-    
+
     <Grid>
-        
+        <local:BeatmapsetListControl DataContext="{Binding BeatmapsetListViewModel}"/>
     </Grid>
 </Window>
