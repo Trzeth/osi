@@ -7,7 +7,7 @@ using System.Net;
 using System.Collections;
 using System.Text.RegularExpressions;
 
-namespace osi.Desktop
+namespace osi.Core
 {
     public class WebClient:System.Net.WebClient
     {

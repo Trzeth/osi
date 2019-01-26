@@ -85,9 +85,8 @@ namespace osi.Desktop.ViewModel
 			OpenSettingWindowCommnad = new RelayCommand(() => { });
 
 
-			BeatmapsetDownloadListItemViewModel item = new BeatmapsetDownloadListItemViewModel();
-			item.BeatmapsetId = LinkHelper.ToBeatmapsetId(new Uri("https://osu.ppy.sh/beatmapsets/372271#osu/1023420"));
-
+			BeatmapsetDownloadListItemViewModel item = new BeatmapsetDownloadListItemViewModel(LinkHelper.ToBeatmapsetId(new Uri("https://osu.ppy.sh/beatmapsets/751755")));
+			item.Download();
 			BeatmapsetDownloadListViewModel list = new BeatmapsetDownloadListViewModel();
 			list.Items = new List<BeatmapsetDownloadListItemViewModel>();
 			list.Items.Add(item);
