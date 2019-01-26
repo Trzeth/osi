@@ -65,6 +65,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BeatmapsetHelper\DownloaderHelper.cs" />
+    <Compile Include="BeatmapsetHelper\LinkHelper.cs" />
+    <Compile Include="BeatmapsetHelper\WebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\BeatmapsetDownloadList\BeatmapsetDownloadListControl.xaml.cs">
+      <DependentUpon>BeatmapsetDownloadListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BeatmapsetDownloadList\BeatmapsetDownloadListItemControl.xaml.cs">
+      <DependentUpon>BeatmapsetDownloadListItemControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\BeatmapsetList\BeatmapsetListControl.xaml.cs">
       <DependentUpon>BeatmapsetListControl.xaml</DependentUpon>
     </Compile>
@@ -73,11 +84,15 @@
     </Compile>
     <Compile Include="Converters\BaseValueConverter.cs" />
     <Compile Include="Converters\BeatmapIdToImageConverter.cs" />
-    <Compile Include="ViewModel\Base\BaseViewModel.cs" />
-    <Compile Include="ViewModel\Base\RelayCommand.cs" />
-    <Compile Include="ViewModel\BeatmapsetList\BeatmapsetListItemViewModel.cs" />
-    <Compile Include="ViewModel\BeatmapsetList\BeatmapsetListViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Page Include="Controls\BeatmapsetDownloadList\BeatmapsetDownloadListControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\BeatmapsetDownloadList\BeatmapsetDownloadListItemControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\BeatmapsetList\BeatmapsetListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -150,7 +165,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\osi.Core\osi.Core.csproj">
+      <Project>{8e36312e-cbf8-4232-aabd-303615febd1b}</Project>
+      <Name>osi.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\File.png" />
   </ItemGroup>

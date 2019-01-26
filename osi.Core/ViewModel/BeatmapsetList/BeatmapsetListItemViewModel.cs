@@ -5,16 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace osi.Desktop
+namespace osi.Core
 {
-	public class BeatmapsetListItemViewModel
+	public class BeatmapsetListItemViewModel:BaseViewModel
 	{
-
-		public int OuterBorderPadding { get; set; } = 5;
-
-		public Thickness OuterBorderPaddingThickness { get { return new Thickness(OuterBorderPadding); }}
-
-		public int BeatmapsetId { get; set; } = 372271;
+		public int BeatmapsetId { get; set; }
 
 		public float BPM { get; set; }
 

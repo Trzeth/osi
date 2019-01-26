@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace osi.Desktop
+namespace osi.Core
 {
 	public class BeatmapsetListViewModel:BaseViewModel
 	{

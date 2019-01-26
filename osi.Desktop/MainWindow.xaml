@@ -93,7 +93,7 @@
                                         </Grid>
 
                                         <!-- Content -->
-                                        <Border Grid.Row="1" Padding="{Binding InnerContentPaddingThickness,FallbackValue=5}">
+                                        <Border Grid.Row="1">
                                             <ContentPresenter Content="{TemplateBinding Content}"/>
                                         </Border>
                                     </Grid>
@@ -107,6 +107,6 @@
     </Window.Resources>
 
     <Grid>
-        <local:BeatmapsetListControl DataContext="{Binding BeatmapsetListViewModel}"/>
+        <local:BeatmapsetDownloadListControl x:Name="List"/>
     </Grid>
 </Window>

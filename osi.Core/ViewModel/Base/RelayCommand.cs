@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace osi.Desktop.ViewModel
+namespace osi.Core
 {
 	public class RelayCommand : ICommand
 	{

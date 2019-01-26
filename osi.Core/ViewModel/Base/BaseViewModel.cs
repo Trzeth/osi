@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 
-namespace osi.Desktop
+namespace osi.Core
 {
     /// <summary>
     /// the base view model that fires property as need

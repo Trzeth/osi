@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
+using System.Net;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
@@ -12,15 +15,23 @@ namespace osi.Desktop
 		{
 			int BeatmapsetId = int.Parse(value.ToString());
 			BitmapImage bitmapImage;
-			try
-			{
-				bitmapImage = new BitmapImage(new Uri($"https://cdn.sayobot.cn:25225/thumb/{BeatmapsetId}l.jpg"));
-			}
-			catch(Exception e)
-			{
-				//BUGGGY
-				bitmapImage = new BitmapImage(new Uri("pack://Application;,,,/Image/File.png"));
-			}
+			bitmapImage = new BitmapImage(new Uri($"https://cdn.sayobot.cn:25225/thumb/{BeatmapsetId}l.jpg"));
+			//WebClient webClient = new WebClient();
+
+			//try
+			//{
+			//	byte[] image = webClient.DownloadData($"https://cdn.sayobot.cn:25225/thumb/{BeatmapsetId}l.jpg");
+			//	bitmapImage = new BitmapImage();
+			//	bitmapImage.BeginInit();
+			//	bitmapImage.StreamSource = new MemoryStream(image);
+			//	bitmapImage.EndInit();
+			//}
+			//catch(Exception e)
+			//{
+			//	Debugger.Log(0,"Expectoin",e.Message);
+			//	bitmapImage = new BitmapImage(new Uri("pack://application:,,,/Image/File.png", UriKind.Absolute));
+			//}
+
 			return bitmapImage;
 		}
 

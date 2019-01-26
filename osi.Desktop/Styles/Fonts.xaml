@@ -3,10 +3,10 @@
                     xmlns:local="clr-namespace:osi.Desktop.Style"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
     
-    <FontFamily x:Key="LatoRegular">pack://application;,,,/Fonts/#Lato Regular</FontFamily>
-    <FontFamily x:Key="LatoLight">pack://application;,,,/Fonts/#Lato Light</FontFamily>
-    <FontFamily x:Key="LatoBold">pack://application;,,,/Fonts/#Lato Bold</FontFamily>
-    <FontFamily x:Key="FontAwesome">pack://Application;,,,/Fonts/#Font Awesome 5 Pro</FontFamily>
+    <FontFamily x:Key="LatoRegular">pack://application:,,,/Fonts/#Lato Regular</FontFamily>
+    <FontFamily x:Key="LatoLight">pack://application:,,,/Fonts/#Lato Light</FontFamily>
+    <FontFamily x:Key="LatoBold">pack://application:,,,/Fonts/#Lato Bold</FontFamily>
+    <FontFamily x:Key="FontAwesome">pack://Application:,,,/Fonts/#Font Awesome 5 Pro</FontFamily>
     
     <Style TargetType="{x:Type Control}" x:Key="BaseStyle">
         <Setter Property="FontFamily" Value="{StaticResource LatoRegular}"></Setter>

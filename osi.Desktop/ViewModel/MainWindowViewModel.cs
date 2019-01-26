@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Newtonsoft.Json;
+using osi.Core;
 using Newtonsoft.Json.Linq;
 
 namespace osi.Desktop.ViewModel
@@ -32,36 +33,33 @@ namespace osi.Desktop.ViewModel
 		/// </summary>
 		public int TitleHeight { get; set; } = 40;
 
-		public int InnerContentPadding { set; get; } = 5;
+		//public BeatmapsetListViewModel BeatmapsetList
+		//{
+		//	get
+		//	{
+		//		string json = @"{'status':0,'endid':914241,'data':[{'sid':915817,'modes':1,'approved':-1,'lastupdate':1548297103,'title':'Kawaki o Ameku (TV Size)','artist':'Minami','titleU':'','artistU':'','creator':'Alphabet','favourite_count':1,'order':0},{'sid':914973,'modes':0,'approved':-1,'lastupdate':1548218278,'title':'Stella-rium','artist':'Kano','titleU':'','artistU':'','creator':'Shallow','favourite_count':0,'order':0},{'sid':914907,'modes':0,'approved':-1,'lastupdate':1548114086,'title':'Kawaki wo Ameku','artist':'Minami','titleU':'','artistU':'','creator':'agosinter','favourite_count':0,'order':0},{'sid':914786,'modes':1,'approved':-1,'lastupdate':1548309167,'title':'Gotoubun no Kimochi (TV Size)','artist':'Nakanoke no Itsuzugo','titleU':'','artistU':'','creator':'Ianos','favourite_count':0,'order':0},{'sid':914766,'modes':0,'approved':-1,'lastupdate':1548253910,'title':'M flat','artist':'Kato Megumi (CV.Yasuno Kiyono)','titleU':'','artistU':'','creator':'realy0_','favourite_count':0,'order':0},{'sid':914523,'modes':0,'approved':-1,'lastupdate':1548050271,'title':'Domestic na Kanojo Opening','artist':'','titleU':'','artistU':'','creator':'kamisinha','favourite_count':0,'order':0},{'sid':914492,'modes':0,'approved':-1,'lastupdate':1548056346,'title':'Kawaki wo Ameku','artist':'Minami','titleU':'','artistU':'','creator':'Hvgin','favourite_count':0,'order':0},{'sid':914346,'modes':0,'approved':-1,'lastupdate':1548014825,'title':'Yuudachi no Ribbon','artist':'Kano','titleU':'','artistU':'','creator':'Failure444','favourite_count':1,'order':0},{'sid':914335,'modes':0,'approved':-1,'lastupdate':1548012533,'title':'Happiness Magical Kanon','artist':'DJ Michelle','titleU':'','artistU':'','creator':'LawyerKirby','favourite_count':0,'order':0},{'sid':914242,'modes':0,'approved':-1,'lastupdate':1547999106,'title':'Walk This Way!','artist':'Kano','titleU':'','artistU':'','creator':'Sotarks','favourite_count':4,'order':0}]}";
 
-		public Thickness InnerContentPaddingThcikness { get { return new Thickness(InnerContentPadding); } }
+		//		BeatmapsetListViewModel beatmapsetListViewModel = new BeatmapsetListViewModel();
+		//		List<BeatmapsetListItemViewModel> beatmapsetLists = new List<BeatmapsetListItemViewModel>();
 
-		public BeatmapsetListViewModel BeatmapsetListViewModel
-		{
-			get
-			{
-				string json = @"{'status':0,'endid':914241,'data':[{'sid':915817,'modes':1,'approved':-1,'lastupdate':1548297103,'title':'Kawaki o Ameku (TV Size)','artist':'Minami','titleU':'','artistU':'','creator':'Alphabet','favourite_count':1,'order':0},{'sid':914973,'modes':0,'approved':-1,'lastupdate':1548218278,'title':'Stella-rium','artist':'Kano','titleU':'','artistU':'','creator':'Shallow','favourite_count':0,'order':0},{'sid':914907,'modes':0,'approved':-1,'lastupdate':1548114086,'title':'Kawaki wo Ameku','artist':'Minami','titleU':'','artistU':'','creator':'agosinter','favourite_count':0,'order':0},{'sid':914786,'modes':1,'approved':-1,'lastupdate':1548309167,'title':'Gotoubun no Kimochi (TV Size)','artist':'Nakanoke no Itsuzugo','titleU':'','artistU':'','creator':'Ianos','favourite_count':0,'order':0},{'sid':914766,'modes':0,'approved':-1,'lastupdate':1548253910,'title':'M flat','artist':'Kato Megumi (CV.Yasuno Kiyono)','titleU':'','artistU':'','creator':'realy0_','favourite_count':0,'order':0},{'sid':914523,'modes':0,'approved':-1,'lastupdate':1548050271,'title':'Domestic na Kanojo Opening','artist':'','titleU':'','artistU':'','creator':'kamisinha','favourite_count':0,'order':0},{'sid':914492,'modes':0,'approved':-1,'lastupdate':1548056346,'title':'Kawaki wo Ameku','artist':'Minami','titleU':'','artistU':'','creator':'Hvgin','favourite_count':0,'order':0},{'sid':914346,'modes':0,'approved':-1,'lastupdate':1548014825,'title':'Yuudachi no Ribbon','artist':'Kano','titleU':'','artistU':'','creator':'Failure444','favourite_count':1,'order':0},{'sid':914335,'modes':0,'approved':-1,'lastupdate':1548012533,'title':'Happiness Magical Kanon','artist':'DJ Michelle','titleU':'','artistU':'','creator':'LawyerKirby','favourite_count':0,'order':0},{'sid':914242,'modes':0,'approved':-1,'lastupdate':1547999106,'title':'Walk This Way!','artist':'Kano','titleU':'','artistU':'','creator':'Sotarks','favourite_count':4,'order':0}]}";
+		//		JObject data = JObject.Parse(json);
+		//		IList<JToken> beatmaps = data["data"].Children().ToList();
+		//		foreach (JToken j in beatmaps)
+		//		{
+		//			BeatmapsetListItemViewModel item = new BeatmapsetListItemViewModel();
+		//			item.Artist = (string)j["artist"];
+		//			item.BeatmapsetId = int.Parse(j["sid"].ToString());
+		//			item.Title = (string)j["title"];
+		//			item.Creator = (string)j["creator"];
 
-				BeatmapsetListViewModel beatmapsetListViewModel = new BeatmapsetListViewModel();
-				List<BeatmapsetListItemViewModel> beatmapsetLists = new List<BeatmapsetListItemViewModel>();
+		//			beatmapsetLists.Add(item);
+		//		}
+		//		beatmapsetListViewModel.Items = beatmapsetLists;
 
-				JObject data = JObject.Parse(json);
-				IList<JToken> beatmaps = data["data"].Children().ToList();
-				foreach (JToken j in beatmaps)
-				{
-					BeatmapsetListItemViewModel item = new BeatmapsetListItemViewModel();
-					item.Artist = (string)j["artist"];
-					item.BeatmapsetId = int.Parse(j["sid"].ToString());
-					item.Title = (string)j["title"];
-					item.Creator = (string)j["creator"];
+		//		return beatmapsetListViewModel;
+		//	}
+		//}
 
-					beatmapsetLists.Add(item);
-				}
-				beatmapsetListViewModel.Items = beatmapsetLists;
-
-				return beatmapsetListViewModel;
-			}
-		}
 		#endregion
 
 		#region Command
@@ -76,19 +74,24 @@ namespace osi.Desktop.ViewModel
 		public MainWindowViewModel(MainWindow window)
 		{
 			mWindow = window;
-			mWindow.Loaded += (sender,e) => MainWindow_Loaded(sender,e);
+			mWindow.Loaded += (sender,e) => {           
+				//Located window postion
+				mWindow.Top = SystemParameters.WorkArea.Height + SystemParameters.FixedFrameHorizontalBorderHeight + SystemParameters.ResizeFrameHorizontalBorderHeight - mWindow.ActualHeight - 10;
+				mWindow.Left = SystemParameters.WorkArea.Width + SystemParameters.FixedFrameVerticalBorderWidth + SystemParameters.ResizeFrameVerticalBorderWidth - mWindow.ActualWidth - 10;
+			};
 
 			//Create command
 			CloseCommand = new RelayCommand(() => mWindow.Hide());
 			OpenSettingWindowCommnad = new RelayCommand(() => { });
-		}
 
-		private void MainWindow_Loaded(object sender,RoutedEventArgs e)
-		{			
-			//Located window postion
-			mWindow.Top = SystemParameters.WorkArea.Height + SystemParameters.FixedFrameHorizontalBorderHeight + SystemParameters.ResizeFrameHorizontalBorderHeight - mWindow.ActualHeight - 10;
-			mWindow.Left = SystemParameters.WorkArea.Width + SystemParameters.FixedFrameVerticalBorderWidth + SystemParameters.ResizeFrameVerticalBorderWidth - mWindow.ActualWidth - 10;
 
+			BeatmapsetDownloadListItemViewModel item = new BeatmapsetDownloadListItemViewModel();
+			item.BeatmapsetId = LinkHelper.ToBeatmapsetId(new Uri("https://osu.ppy.sh/beatmapsets/372271#osu/1023420"));
+
+			BeatmapsetDownloadListViewModel list = new BeatmapsetDownloadListViewModel();
+			list.Items = new List<BeatmapsetDownloadListItemViewModel>();
+			list.Items.Add(item);
+			mWindow.List.DataContext = list;
 		}
 		#endregion
 	}
