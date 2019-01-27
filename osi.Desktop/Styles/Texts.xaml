@@ -6,4 +6,7 @@
         <ResourceDictionary Source="Colors.xaml"></ResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
 
+    <Style x:Key="IconTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontFamily" Value="{StaticResource FontAwesome}"/>
+    </Style>
 </ResourceDictionary>

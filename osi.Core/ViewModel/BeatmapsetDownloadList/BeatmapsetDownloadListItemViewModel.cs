@@ -10,6 +10,11 @@ using System.Windows;
 
 namespace osi.Core
 {
+	public enum Status
+	{
+		Downloading,
+		Finished
+	}
 	public class BeatmapsetDownloadListItemViewModel:BeatmapsetListItemViewModel
 	{
 		#region Private Members
@@ -22,6 +27,8 @@ namespace osi.Core
 		#endregion
 
 		public float Progress { get; set; }
+
+		public Status DownloadStatus { get; set; }
 
 		#region  Constructor
 		public BeatmapsetDownloadListItemViewModel() : base() { }
@@ -86,11 +93,18 @@ namespace osi.Core
 		/// </summary>
 		public async Task DownloadBeatmapsetAsync()
 		{
+			DownloadStatus = Status.Downloading;
+
 			DownloaderHelper.Downloader downloader = new DownloaderHelper.Downloader(this);
 
 			downloader.DownloadProgressChanged += (sender, e) =>
 			{
 				Progress =  ((float)e.ProgressPercentage)/100;
+			};
+
+			downloader.DownloadFileCompleted += (sender, e) =>
+			{
+				DownloadStatus = Status.Finished;
 			};
 
 			await downloader.DownloadBeatmapset();

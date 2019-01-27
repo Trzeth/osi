@@ -71,11 +71,17 @@
     <Compile Include="Controls\BeatmapsetDownloadList\BeatmapsetDownloadListItemControl.xaml.cs">
       <DependentUpon>BeatmapsetDownloadListItemControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\BeatmapsetDownloadList\SpinnerControl.xaml.cs">
+      <DependentUpon>SpinnerControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\BeatmapsetList\BeatmapsetListControl.xaml.cs">
       <DependentUpon>BeatmapsetListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\BeatmapsetList\BeatmapsetListItemControl.xaml.cs">
       <DependentUpon>BeatmapsetListItemControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SideBarControl.xaml.cs">
+      <DependentUpon>SideBarControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BaseValueConverter.cs" />
     <Compile Include="Converters\BeatmapIdToImageConverter.cs" />
@@ -88,6 +94,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\BeatmapsetDownloadList\SpinnerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\BeatmapsetList\BeatmapsetListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -95,6 +105,10 @@
     <Page Include="Controls\BeatmapsetList\BeatmapsetListItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
+    <Page Include="Controls\SideBarControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -168,6 +182,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\File.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\osu-logo-white.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

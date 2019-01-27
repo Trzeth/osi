@@ -9,8 +9,9 @@
         ResizeMode="NoResize"
         AllowsTransparency="True"
         Title="MainWindow" 
-        Width="400"
-        Height="300">
+        Width="450"
+        Height="400"
+        Topmost="True">
     <Window.Resources>
         <Style TargetType="{x:Type local:MainWindow}">
             <Setter Property="Template">
@@ -29,21 +30,10 @@
                                 </Border>
 
                                 <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
+                                    <local:SideBarControl Width="10" CollapsedWidth="20" ExpandedWidth="150" Panel.ZIndex="1"/>
 
-                                    <Rectangle Grid.Column="0" Width="10">
-                                        <Rectangle.Fill>
-                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                                <GradientStop Offset="0.95" Color="{StaticResource PrimaryVeryDark}"></GradientStop>
-                                                <GradientStop Offset="1" Color="{StaticResource BackgroundVeryLight}"/>
-                                            </LinearGradientBrush>
-                                        </Rectangle.Fill>
-                                    </Rectangle>
                                     <!-- MainWindow Content -->
-                                    <Grid Grid.Column="1">
+                                    <Grid Margin="10,0,0,0">
                                         <Grid.RowDefinitions>
                                             <!--Titlbe Bar -->
                                             <RowDefinition Height="{Binding Path=TitleHeight,FallbackValue=40}"/>
@@ -72,7 +62,7 @@
                                                     Height="{Binding Path=TitleHeight,FallbackValue=40}" 
                                                     Command="{Binding OpenSettingWindowCommand}"
                                                     Width="50">
-                                                    <TextBlock FontFamily="{StaticResource FontAwesome}" 
+                                                    <TextBlock Style="{StaticResource IconTextBlock}"
                                                                Foreground="{StaticResource ForegroundDarkBrush}" 
                                                                Text="{StaticResource FontAwesomeSettingIcon}"
                                                                FontSize="{StaticResource FontSizeLarge}"/>
@@ -84,7 +74,7 @@
                                                     Height="{Binding Path=TitleHeight,FallbackValue=40}"
                                                     Command="{Binding CloseCommand}"
                                                     Width="55">
-                                                    <TextBlock FontFamily="{StaticResource FontAwesome}" 
+                                                    <TextBlock Style="{StaticResource IconTextBlock}"
                                                                Foreground="{StaticResource ForegroundDarkBrush}" 
                                                                Text="{StaticResource FontAwesomeMinusIcon}"
                                                                FontSize="{StaticResource FontSizeLarge}"/>

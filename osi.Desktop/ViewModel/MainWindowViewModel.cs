@@ -86,7 +86,7 @@ namespace osi.Desktop.ViewModel
 
 
 			BeatmapsetDownloadListItemViewModel item = new BeatmapsetDownloadListItemViewModel(LinkHelper.ToBeatmapsetId(new Uri("https://osu.ppy.sh/beatmapsets/751755")));
-			item.Download();
+			//item.Download();
 			BeatmapsetDownloadListViewModel list = new BeatmapsetDownloadListViewModel();
 			list.Items = new List<BeatmapsetDownloadListItemViewModel>();
 			list.Items.Add(item);

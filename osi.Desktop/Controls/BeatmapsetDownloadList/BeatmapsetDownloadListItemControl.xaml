@@ -33,66 +33,78 @@
     </UserControl.Resources>
     
     <Border>
-            <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <!-- Thumb -->
-            <Viewbox Grid.Column="0">
-                <Image x:Name="Image" 
-                           Height="120"
-                           Width="160"
-                           Source="{Binding Path=BeatmapsetId,
-                           Converter={local:BeatmapsetIdToImageConverter}}" 
-                           Stretch="Uniform"/>
-            </Viewbox>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <!-- Information -->
-            <Grid Grid.Column="1" Margin="5" Panel.ZIndex="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="12"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+                <!-- Thumb -->
+                <Viewbox Grid.Column="0">
+                    <Image x:Name="Image" 
+                               Height="120"
+                               Width="160"
+                               Source="{Binding Path=BeatmapsetId,
+                               Converter={local:BeatmapsetIdToImageConverter}}" 
+                               Stretch="Uniform"/>
+                </Viewbox>
 
-                <!-- Title -->
-                <TextBlock Grid.Row="0" Text="{Binding Path=Title,FallbackValue='The General s Salute'}"/>
+                <!-- Information -->
+                <Grid Grid.Column="1" Margin="5" Panel.ZIndex="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="12"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                <!--Artist -->
-                <TextBlock Grid.Row="1" Text="{Binding Path=Artist,FallbackValue='The General Insurance Company'}"
-                               FontSize="{StaticResource FontSizeSmaller}"
-                               Foreground="{StaticResource ForegroundVeryDarkBrush}"/>
+                    <!-- Title -->
+                    <TextBlock Grid.Row="0" Text="{Binding Path=Title,FallbackValue='The General s Salute'}"/>
 
-                <!-- Creator BPM Mode -->
-                <StackPanel Grid.Row="3" Margin="0,0,0,0" Orientation="Horizontal">
-                    <TextBlock Text="{Binding Path=Creator,FallbackValue=Hpocks}"/>
-                    <TextBlock Margin="10,0,0,0" Text="{Binding Path=BPM,FallbackValue='127.0'}"/>
-                </StackPanel>
+                    <!--Artist -->
+                    <TextBlock Grid.Row="1" Text="{Binding Path=Artist,FallbackValue='The General Insurance Company'}"
+                                   FontSize="{StaticResource FontSizeSmaller}"
+                                   Foreground="{StaticResource ForegroundVeryDarkBrush}"/>
+
+                    <!-- Creator BPM Mode -->
+                    <Grid Grid.Row="3" Margin="0,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- Creator -->
+                        <TextBlock Grid.Column="0" Text="{Binding Path=Creator,FallbackValue=Hpocks}"/>
+                        
+                        <!-- BPM -->
+                        <!--<TextBlock Margin="10,0,0,0" Text="{Binding Path=BPM,FallbackValue='127.0'}"/>-->
+                        
+                        <!-- Spinner -->
+                        <local:SpinnerControl Grid.Column="2" Margin="0,0,10,0" DownloadStatus="Downloading"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+            
+            <!-- Progress Bar -->
+            <Grid Grid.Row="1">
+                <Rectangle Height="3">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush>
+                            <GradientStop Offset="0" Color="#5eb95e"/>
+                            <GradientStop x:Name="Green" Offset="{Binding Path=Progress}" Color="{StaticResource ForegroundGreen}"/>
+                            <GradientStop x:Name="White" Offset="{Binding Path=Progress}" Color="{StaticResource BackgroundVeryLight}"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
             </Grid>
         </Grid>
-
-        <Grid Grid.Row="1">
-            <Rectangle Height="3">
-                <Rectangle.Fill>
-                    <LinearGradientBrush>
-                        <GradientStop Offset="0" Color="#5eb95e"/>
-                            <GradientStop x:Name="Green" Offset="{Binding Path=Progress}" Color="#5eb95e"/>
-                            <GradientStop x:Name="White" Offset="{Binding Path=Progress}" Color="{StaticResource BackgroundVeryLight}"/>
-                    </LinearGradientBrush>
-                </Rectangle.Fill>
-            </Rectangle>
-        </Grid>
-    </Grid>
-
     </Border>
     
 </UserControl>
