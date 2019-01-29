@@ -63,6 +63,11 @@ namespace osi.Desktop
 			control.SpinnerIcon.BeginAnimation(OpacityProperty, dA);
 		}
 
+		/// <summary>
+		/// Begin Spinner Rotating
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void Control_Loaded(object sender, RoutedEventArgs e)
 		{
 			DoubleAnimation dA = new DoubleAnimation();

@@ -30,10 +30,10 @@
                                 </Border>
 
                                 <Grid>
-                                    <local:SideBarControl Width="10" CollapsedWidth="20" ExpandedWidth="150" Panel.ZIndex="1"/>
+                                    <local:SideBarControl Width="20" CollapsedWidth="20" ExpandedWidth="150" Panel.ZIndex="1"/>
 
                                     <!-- MainWindow Content -->
-                                    <Grid Margin="10,0,0,0">
+                                    <Grid Margin="20,0,0,0">
                                         <Grid.RowDefinitions>
                                             <!--Titlbe Bar -->
                                             <RowDefinition Height="{Binding Path=TitleHeight,FallbackValue=40}"/>

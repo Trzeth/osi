@@ -27,16 +27,28 @@
     <Grid x:Name="Content" 
           HorizontalAlignment="Left">
         <!-- Background and Dropshadow -->
-        <Border>
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                    <GradientStop Offset="0.98" Color="{StaticResource PrimaryVeryDark}"></GradientStop>
-                    <GradientStop Offset="1" Color="Transparent"/>
-                </LinearGradientBrush>
-            </Border.Background>
-        </Border>
-        
-        
+        <Grid>
+            <!-- Running Background -->
+            <Border x:Name="RunningBackground" Panel.ZIndex="0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Offset="0.98" Color="#ff66aa"></GradientStop>
+                        <GradientStop Offset="1" Color="Transparent"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+            
+            <!-- Ideal Background -->
+            <Border x:Name="IdealngBackground" Panel.ZIndex="2">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Offset="0.98" Color="{StaticResource PrimaryVeryDark}"></GradientStop>
+                        <GradientStop Offset="1" Color="Transparent"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+        </Grid>
+
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
@@ -44,6 +56,15 @@
             </Grid.RowDefinitions>
 
             <Image Margin="20" Source="/osi.Desktop;component/Image/osu-logo-white.png" ></Image>
+
+            <Button Grid.Row="1" 
+                    Width="80" 
+                    Height="40" 
+                    Style="{StaticResource BaseButtonStyle}"
+                    Background="Transparent"
+                    Foreground="White"
+                    BorderThickness="1"
+                    Click="Button_Click">Start osu!</Button>
         </Grid>
     </Grid>
 </UserControl>
