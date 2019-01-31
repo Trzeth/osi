@@ -24,7 +24,7 @@ namespace LinkMonitor.Functions
                         client.Connect(1000);
                         break;
                     }
-                    catch (IOException e)
+                    catch (IOException)
                     {
                         Thread.Sleep(500);
                     }

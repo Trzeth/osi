@@ -54,7 +54,15 @@ namespace osi.Desktop
 			set { SetValue(IsOsuRunningProperty, value); }
 		}
 
-		public static readonly DependencyProperty IsOsuRunningProperty = DependencyProperty.Register(nameof(IsOsuRunning), typeof(bool), typeof(SideBarControl), new UIPropertyMetadata(new bool(), IsOsuRunningChanged));
+		public static readonly DependencyProperty IsOsuRunningProperty = DependencyProperty.Register(nameof(IsOsuRunning), typeof(bool), typeof(SideBarControl), new UIPropertyMetadata(new bool(), IsOsuRunningPropertyChanged));
+
+		public bool IsExpanded
+		{
+			get { return (bool)GetValue(IsExpandedProperty); }
+			set { SetValue(IsExpandedProperty, value); }
+		}
+
+		public static readonly DependencyProperty IsExpandedProperty = DependencyProperty.Register(nameof(IsExpanded), typeof(bool), typeof(SideBarControl), new UIPropertyMetadata(new bool(), IsExpandedPropertyChanged));
 
 		#endregion
 
@@ -65,39 +73,15 @@ namespace osi.Desktop
 
 		private void UserControl_MouseEnter(object sender, MouseEventArgs e)
 		{
-			CircleEase cE = new CircleEase();
-			cE.EasingMode = EasingMode.EaseOut;
-
-			DoubleAnimation dA = new DoubleAnimation();
-			dA.FillBehavior = FillBehavior.HoldEnd;
-			if(double.IsNaN(Content.Width))
-			{
-				dA.From = CollapsedWidth;
-			}
-			dA.To = ExpandedWidth;
-			dA.Duration = TimeSpan.FromMilliseconds(500);
-			dA.EasingFunction = cE;
-
-			Control.BeginAnimation(WidthProperty,dA);
-
+			IsExpanded = true;
 		}
 
 		private void UserControl_MouseLeave(object sender, MouseEventArgs e)
 		{
-			Storyboard sB = new Storyboard();
-			CircleEase cE = new CircleEase();
-			cE.EasingMode = EasingMode.EaseOut;
-
-			DoubleAnimation dA = new DoubleAnimation();
-			dA.FillBehavior = FillBehavior.HoldEnd;
-			dA.To = CollapsedWidth;
-			dA.Duration = TimeSpan.FromMilliseconds(500);
-			dA.EasingFunction = cE;
-
-			Control.BeginAnimation(WidthProperty, dA);
+			IsExpanded = false;
 		}
 
-		private static void IsOsuRunningChanged(DependencyObject d,DependencyPropertyChangedEventArgs e)
+		private static void IsOsuRunningPropertyChanged(DependencyObject d,DependencyPropertyChangedEventArgs e)
 		{
 			double value;
 
@@ -126,6 +110,37 @@ namespace osi.Desktop
 				sideBar.IdealngBackground.Opacity = value;
 			};
 			sideBar.IdealngBackground.BeginAnimation(OpacityProperty, dA,HandoffBehavior.Compose);
+
+		}
+
+		private static void IsExpandedPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			SideBarControl sideBar = (SideBarControl)d;
+
+			CircleEase dE = new CircleEase();
+			dE.EasingMode = EasingMode.EaseOut;
+
+			DoubleAnimation dA = new DoubleAnimation();
+			dA.FillBehavior = FillBehavior.HoldEnd;
+			dA.Duration = TimeSpan.FromMilliseconds(500);
+			dA.EasingFunction = dE;
+
+			ThicknessAnimation tA = new ThicknessAnimation();
+			tA.Duration = TimeSpan.FromMilliseconds(500);
+
+			if ((bool)e.NewValue)
+			{
+				dA.To = sideBar.ExpandedWidth;
+				tA.To = new Thickness(0);
+			}
+			else
+			{
+				dA.To = sideBar.CollapsedWidth;
+				tA.To = new Thickness(sideBar.CollapsedWidth,0,0,0);
+			}
+
+			sideBar.Control.BeginAnimation(WidthProperty, dA,HandoffBehavior.Compose);
+			sideBar.Content.BeginAnimation(MarginProperty, tA);
 
 		}
 

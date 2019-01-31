@@ -24,8 +24,7 @@
     </UserControl.Resources>
 
 
-    <Grid x:Name="Content" 
-          HorizontalAlignment="Left">
+    <Grid HorizontalAlignment="Left">
         <!-- Background and Dropshadow -->
         <Grid>
             <!-- Running Background -->
@@ -49,7 +48,7 @@
             </Border>
         </Grid>
 
-        <Grid>
+        <Grid x:Name="Content" Margin="10,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
                 <RowDefinition/>
@@ -57,7 +56,7 @@
 
             <Image Margin="20" Source="/osi.Desktop;component/Image/osu-logo-white.png" ></Image>
 
-            <Button Grid.Row="1" 
+            <Button Grid.Row="1"
                     Width="80" 
                     Height="40" 
                     Style="{StaticResource BaseButtonStyle}"

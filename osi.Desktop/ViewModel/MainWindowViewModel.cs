@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using osi.Core;
 using Newtonsoft.Json.Linq;
 
-namespace osi.Desktop.ViewModel
+namespace osi.Desktop
 {
     public class MainWindowViewModel:BaseViewModel
     {
