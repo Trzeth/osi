@@ -23,12 +23,6 @@ namespace LinkMonitor
         }
         internal const string Ngen = "--Ngen";
         internal const string Link = "--Link";
-        internal const string RegisterAsDefaultBrowser = "--RegisterAsDefaultBrowser";
-        internal static class RegisterAsDefaultBrowserArgument
-        {
-            internal const string Hash = "Hash";
-            internal const string FirstRun = "FirstRun";
-        }
 
         internal static int exitCode;
         static void Main(string[] args)
@@ -58,32 +52,7 @@ namespace LinkMonitor
                                 break;
                             case Ngen:
                                 break;
-                            case RegisterAsDefaultBrowser:
-                                if (hasSecondArgument)
-                                {
-                                    switch (args[1])
-                                    {
-                                        case RegisterAsDefaultBrowserArgument.FirstRun:
-                                            RegisterAsDefaultBrowserFunction.Register();
-                                            break;
-                                        case RegisterAsDefaultBrowserArgument.Hash:
-                                            if (args.Count() == 4)
-                                            {
-                                                RegisterAsDefaultBrowserFunction.RegisterAsDefaultBrowser(args[2], args[3]);
-                                            }
-                                            else
-                                            {
-                                                throw new Exception("Argument is wrong.");
-                                            }
-                                            break;
-                                    }
-                                }
-                                else
-                                {
-                                    RegisterAsDefaultBrowserFunction.RegisterAsDefaultBrowser();
-                                }
-                                break;
-                        }
+						}
                     }
                 }
                 else

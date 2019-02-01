@@ -67,7 +67,6 @@
     <Compile Include="ExitCode.cs" />
     <Compile Include="Functions\Link.cs" />
     <Compile Include="Functions\Ngen.cs" />
-    <Compile Include="Functions\RegisterAsDefaultBrowser.cs" />
     <Compile Include="Functions\Update.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

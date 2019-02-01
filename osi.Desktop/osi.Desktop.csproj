@@ -108,7 +108,7 @@
     </Compile>
     <Compile Include="Converters\BaseValueConverter.cs" />
     <Compile Include="Converters\BeatmapIdToImageConverter.cs" />
-    <Compile Include="Helper\RegisterAsDefaultBrowser.cs" />
+    <Compile Include="Helper\RegistryHelper.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Page Include="Controls\BeatmapsetDownloadList\BeatmapsetDownloadListControl.xaml">
       <Generator>MSBuild:Compile</Generator>
