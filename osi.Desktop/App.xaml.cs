@@ -45,5 +45,11 @@ namespace osi.Desktop
 			Current.MainWindow = new MainWindow();
 			Current.MainWindow.Show();
 		}
+
+		protected override void OnExit(ExitEventArgs e)
+		{
+			
+			base.OnExit(e);
+		}
 	}
 }
