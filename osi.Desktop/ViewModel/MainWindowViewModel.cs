@@ -9,6 +9,10 @@ using System.Windows.Input;
 using Newtonsoft.Json;
 using osi.Core;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel;
+using System.IO.Pipes;
+using System.IO;
+using System.Windows.Forms;
 
 namespace osi.Desktop
 {
@@ -17,6 +21,7 @@ namespace osi.Desktop
         #region Private Member
 
         private MainWindow mWindow;
+		private NotifyIcon mNotifyIcon;
 
 		#endregion
 
@@ -32,6 +37,8 @@ namespace osi.Desktop
 		/// Window title height
 		/// </summary>
 		public int TitleHeight { get; set; } = 40;
+
+		public BeatmapsetDownloadListViewModel BeatmapsetDownloadList { get; set; } = new BeatmapsetDownloadListViewModel();
 
 		//public BeatmapsetListViewModel BeatmapsetList
 		//{
@@ -84,14 +91,97 @@ namespace osi.Desktop
 			CloseCommand = new RelayCommand(() => mWindow.Hide());
 			OpenSettingWindowCommnad = new RelayCommand(() => { });
 
+			BackgroundWorker mLinkMonitor = new BackgroundWorker();
+			mLinkMonitor.DoWork += LinkMonitor_DoWork;
+			mLinkMonitor.RunWorkerAsync();
 
-			BeatmapsetDownloadListItemViewModel item = new BeatmapsetDownloadListItemViewModel(LinkHelper.ToBeatmapsetId(new Uri("https://osu.ppy.sh/beatmapsets/751755")));
-			//item.Download();
-			BeatmapsetDownloadListViewModel list = new BeatmapsetDownloadListViewModel();
-			list.Items = new List<BeatmapsetDownloadListItemViewModel>();
-			list.Items.Add(item);
-			mWindow.List.DataContext = list;
+			SetIcon();
 		}
+		#endregion
+
+		#region Methods
+		private void LinkMonitor_DoWork(object sender, DoWorkEventArgs e)
+		{
+			NamedPipeServerStream server = new NamedPipeServerStream("osi", PipeDirection.In);
+			string link = null;
+			while (link != "Stop")
+			{
+				server.WaitForConnection();
+
+				StreamReader sr = new StreamReader(server);
+				link = sr.ReadToEnd();
+				server.Disconnect();
+				try
+				{
+					int beatmapsetId = LinkHelper.ToBeatmapsetId(new Uri(link));
+					mWindow.Dispatcher.BeginInvoke((Action)(()=> 
+					{
+						var item = new BeatmapsetDownloadListItemViewModel(beatmapsetId);
+						BeatmapsetDownloadList.Items.Add(item);
+						item.Download();
+					}));
+				}
+				catch (LinkHelper.NotValidUri)
+				{
+					System.Diagnostics.Process.Start(link);
+				}
+				catch (UriFormatException) { }
+			}
+		}
+
+		private void StopLinkMonitor()
+		{
+			NamedPipeClientStream client = new NamedPipeClientStream(".", "osi", PipeDirection.Out);
+			client.Connect();
+			StreamWriter sw = new StreamWriter(client);
+			sw.Write("Stop");
+			sw.Flush();
+			sw.Close();
+			client.Close();
+			mNotifyIcon.Dispose();
+		}
+
+		private void SetIcon()
+		{
+			mNotifyIcon = new NotifyIcon();
+
+			mNotifyIcon.Icon = Properties.Resources.osi;
+			mNotifyIcon.ContextMenu = new ContextMenu();
+
+			MenuItem exitItem = new MenuItem();
+			MenuItem updateConfigItem = new MenuItem();
+
+			updateConfigItem.Index = 0;
+			updateConfigItem.Text = "更新浏览器设置";
+			exitItem.Index = 1;
+			exitItem.Text = "退出";
+			mNotifyIcon.ContextMenu.MenuItems.Add(updateConfigItem);
+			mNotifyIcon.ContextMenu.MenuItems.Add(exitItem);
+
+			exitItem.Click += delegate
+			{
+				StopLinkMonitor();
+				mWindow.Close();
+			};
+			mNotifyIcon.MouseClick += delegate (object sender, System.Windows.Forms.MouseEventArgs e)
+			{
+				if (e.Button == MouseButtons.Left)
+				{
+					mWindow.Show();
+
+					//setBrower();
+					//Windows.statusPanel statusPanel = new Windows.statusPanel();
+					//statusPanel.showMessage("osu!in", "已更新默认浏览器设置", 3000, false);
+				}
+				else if (e.Button == MouseButtons.Right)
+				{
+
+				}
+			};
+			mNotifyIcon.Text = "osi";
+			mNotifyIcon.Visible = true;
+		}
+
 		#endregion
 	}
 }

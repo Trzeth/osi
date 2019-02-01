@@ -87,7 +87,7 @@
                         <!--<TextBlock Margin="10,0,0,0" Text="{Binding Path=BPM,FallbackValue='127.0'}"/>-->
                         
                         <!-- Spinner -->
-                        <local:SpinnerControl Grid.Column="2" Margin="0,0,10,0" DownloadStatus="Downloading"/>
+                        <local:SpinnerControl Grid.Column="2" Margin="0,0,10,0" DownloadStatus="{Binding DownloadStatus}"/>
                     </Grid>
                 </Grid>
             </Grid>

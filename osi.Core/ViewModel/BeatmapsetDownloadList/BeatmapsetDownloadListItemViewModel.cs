@@ -12,6 +12,7 @@ namespace osi.Core
 {
 	public enum Status
 	{
+		Error,
 		Downloading,
 		Finished
 	}
@@ -19,16 +20,18 @@ namespace osi.Core
 	{
 		#region Private Members
 
+		private int mRetryCount = 0;
+
+
 		#endregion
 
 		#region Pulic Member
-
-
-		#endregion
-
 		public float Progress { get; set; }
 
 		public Status DownloadStatus { get; set; }
+
+		public int MaxRetryCount { get; set; } = 3;
+		#endregion
 
 		#region  Constructor
 		public BeatmapsetDownloadListItemViewModel() : base() { }
@@ -104,9 +107,23 @@ namespace osi.Core
 
 			downloader.DownloadFileCompleted += (sender, e) =>
 			{
-				DownloadStatus = Status.Finished;
+				if(e.Error!=null)
+				{
+					mRetryCount++;
+					if (mRetryCount <= MaxRetryCount)
+					{
+						Task.Run(DownloadBeatmapsetAsync);
+					}
+					else
+					{
+						DownloadStatus = Status.Error;
+					}
+				}
+				else
+				{
+					DownloadStatus = Status.Finished;
+				}
 			};
-
 			await downloader.DownloadBeatmapset();
 		}
 

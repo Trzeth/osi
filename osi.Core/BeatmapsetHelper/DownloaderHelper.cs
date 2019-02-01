@@ -23,7 +23,11 @@ namespace osi.Core
 
 			#region Constructor
 
-			public Downloader() : base() { }
+			public Downloader() : base()
+			{
+				WebProxy webProxy = new WebProxy("127.0.0.1", 8888);
+				Proxy = webProxy;
+			}
 
 			public Downloader(BeatmapsetDownloadListItemViewModel item) : base()
 			{
@@ -41,12 +45,10 @@ namespace osi.Core
 			public async Task DownloadBeatmapset()
 			{
 				if (BeatmapsetDownloadListItemViewModel == null) return;
-
 				BeatmapsetDownloadListItemViewModel item = BeatmapsetDownloadListItemViewModel;
 
 				string fileName = $"{item.BeatmapsetId} {item.Artist}-{item.Title}.osz";
 				string path = $"{Environment.CurrentDirectory}/download/{fileName}";
-				
 				this.DownloadFileAsync(new Uri($"https://osu.sayobot.cn/osu.php?s={item.BeatmapsetId}"), path);
 			}
 		}

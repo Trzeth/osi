@@ -8,6 +8,6 @@ namespace osi.Core
 {
 	public class BeatmapsetListViewModel:BaseViewModel
 	{
-		public List<BeatmapsetListItemViewModel> Items { get; set; }
+		public List<BeatmapsetListItemViewModel> Items { get; set; } = new List<BeatmapsetListItemViewModel>();
 	}
 }

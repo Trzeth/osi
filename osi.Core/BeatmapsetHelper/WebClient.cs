@@ -21,7 +21,6 @@ namespace osi.Core
 
         internal WebClient():base()
         {
-            Proxy = null;
             Headers.Add(HttpRequestHeader.UserAgent, UserAgent);
         }
         internal void AddCookie(Cookie cookie)

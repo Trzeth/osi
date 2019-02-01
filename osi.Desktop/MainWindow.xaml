@@ -97,6 +97,6 @@
     </Window.Resources>
 
     <Grid>
-        <local:BeatmapsetDownloadListControl x:Name="List"/>
+        <local:BeatmapsetDownloadListControl x:Name="List" DataContext="{Binding BeatmapsetDownloadList}"/>
     </Grid>
 </Window>

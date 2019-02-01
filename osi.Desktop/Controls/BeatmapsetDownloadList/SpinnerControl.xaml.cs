@@ -43,24 +43,35 @@ namespace osi.Desktop
 
 		private static void DownloadStatusChanged(DependencyObject d,DependencyPropertyChangedEventArgs e)
 		{
-			if ((Status)e.NewValue == Status.Downloading)
-				return;
+			switch ((Status)e.NewValue)
+			{
+				case Status.Downloading:
+					break;
+				case Status.Finished:
 
-			SpinnerControl control = (SpinnerControl)d;
-			DoubleAnimation dA = new DoubleAnimation();
-			dA.Duration = TimeSpan.FromMilliseconds(200);
-			dA.To = 0;
-			dA.FillBehavior = FillBehavior.HoldEnd;
-			dA.Completed += (sender, a) => {
-				control.SpinnerIcon.Visibility = Visibility.Hidden;
-				control.SpinnerIcon.BeginAnimation(OpacityProperty,null);
-				control.SpinnerIcon.BeginAnimation(RotateTransform.AngleProperty, null);
+					SpinnerControl control = (SpinnerControl)d;
+					DoubleAnimation dA = new DoubleAnimation();
+					dA.Duration = TimeSpan.FromMilliseconds(200);
+					dA.To = 0;
+					dA.FillBehavior = FillBehavior.HoldEnd;
 
-				dA.To = 1;
-				control.CheckIcons.Visibility = Visibility.Visible;
-				control.CheckIcons.BeginAnimation(OpacityProperty, dA);
-			};
-			control.SpinnerIcon.BeginAnimation(OpacityProperty, dA);
+					dA.Completed += (sender, a) => {
+						control.SpinnerIcon.Visibility = Visibility.Hidden;
+						control.SpinnerIcon.BeginAnimation(OpacityProperty, null);
+						control.SpinnerIcon.BeginAnimation(RotateTransform.AngleProperty, null);
+
+						dA.To = 1;
+						control.CheckIcons.Visibility = Visibility.Visible;
+						control.CheckIcons.BeginAnimation(OpacityProperty, dA);
+					};
+
+					control.SpinnerIcon.BeginAnimation(OpacityProperty, dA);
+
+					break;
+				case Status.Error:
+
+					break;
+			}
 		}
 
 		/// <summary>
