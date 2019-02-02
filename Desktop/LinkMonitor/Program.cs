@@ -15,7 +15,6 @@ namespace LinkMonitor
 {
     class Program
     {
-
         internal const string Update = "--Update";
         internal static class UpdateArgument
         {

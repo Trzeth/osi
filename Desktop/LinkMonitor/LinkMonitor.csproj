@@ -65,8 +65,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExitCode.cs" />
+    <Compile Include="Helper\ConfigHelper\ConfigHelper.cs" />
+    <Compile Include="Helper\ConfigHelper\ConfigModel.cs" />
     <Compile Include="Functions\Link.cs" />
     <Compile Include="Functions\Ngen.cs" />
+    <Compile Include="Helper\RegistryHelper\RegistryHelper.cs" />
+    <Compile Include="Helper\RegistryHelper\RegistryModel.cs" />
     <Compile Include="Functions\Update.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

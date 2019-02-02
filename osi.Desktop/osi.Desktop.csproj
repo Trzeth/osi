@@ -66,7 +66,6 @@
       <HintPath>..\packages\PropertyChanged.Fody.2.6.0\lib\net452\PropertyChanged.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -108,7 +107,10 @@
     </Compile>
     <Compile Include="Converters\BaseValueConverter.cs" />
     <Compile Include="Converters\BeatmapIdToImageConverter.cs" />
-    <Compile Include="Helper\RegistryHelper.cs" />
+    <Compile Include="Helper\ConfigHelper\ConfigHelper.cs" />
+    <Compile Include="Helper\ConfigHelper\ConfigModel.cs" />
+    <Compile Include="Helper\RegistryHelper\RegistryModel.cs" />
+    <Compile Include="Helper\RegistryHelper\RegistryHelper.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Page Include="Controls\BeatmapsetDownloadList\BeatmapsetDownloadListControl.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -197,11 +199,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\osi.Core\osi.Core.csproj">
       <Project>{8e36312e-cbf8-4232-aabd-303615febd1b}</Project>
       <Name>osi.Core</Name>
@@ -227,6 +224,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="osi.Desktop.config.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

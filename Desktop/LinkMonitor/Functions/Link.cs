@@ -14,6 +14,7 @@ namespace LinkMonitor.Functions
     {
         internal static void SendLink(string link)
         {
+
             NamedPipeClientStream client = new NamedPipeClientStream(".", "osi", PipeDirection.Out);
             try
             {
@@ -38,10 +39,10 @@ namespace LinkMonitor.Functions
             }
             catch (TimeoutException e)
             {
-                osiNotRun();
+                NotRun();
             }
         }
-        private static void osiNotRun()
+        private static void NotRun()
         {
             if (MessageBox.Show("我们检测到一个问题，这可能是由 osi 运行时出错导致的。"
                                + Environment.NewLine + Environment.NewLine +
