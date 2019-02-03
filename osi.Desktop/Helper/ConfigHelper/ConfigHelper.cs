@@ -10,38 +10,54 @@ namespace osi.Desktop.Helper
 {
 	public class ConfigHelper
 	{
-		private ConfigModel mCondigModel = new ConfigModel();
+		private ConfigModel mCondigModel;
 
-		public ConfigModel ConfigModel { get { return mCondigModel; } }
+		public ConfigModel ConfigModel
+		{
+			get { return mCondigModel; }
+			set { mCondigModel = value; }
+		}
 		public const string ConfigFileName = "osi.Desktop.config.xml";
+		public string ConfigFilePath = Environment.CurrentDirectory + @"\" + ConfigFileName;
 
 		public ConfigHelper() { }
-		public bool IsConfigFileExist()
+		public bool ReadConfigFromFile()
 		{
-			return File.Exists(ConfigFileName);
+			if (!File.Exists(ConfigFilePath)) return false;
+
+			try
+			{
+				TextReader reader = new StreamReader(ConfigFilePath);
+				XmlSerializer s = new XmlSerializer(typeof(ConfigModel));
+				var configModel = (ConfigModel)s.Deserialize(reader);
+				reader.Close();
+				mCondigModel = configModel;
+			}
+			catch(InvalidOperationException)
+			{
+				return false;
+			}
+			return true;
 		}
-		public ConfigModel GetConfigFromFile()
+		public void SaveConfig(ConfigModel configModel =  null)
 		{
-			TextReader reader = new StreamReader(ConfigFileName);
-			XmlSerializer s = new XmlSerializer(typeof(ConfigModel));
-			var configModel = (ConfigModel)s.Deserialize(reader);
-			reader.Close();
-			return configModel;
-		}
-		public void SaveConfig(ConfigModel configModel)
-		{
-			TextWriter writer = new StreamWriter(ConfigFileName);
+			if (configModel == null) configModel = this.ConfigModel;
+			TextWriter writer = new StreamWriter(ConfigFilePath);
 			XmlSerializer s = new XmlSerializer(typeof(ConfigModel));
 			s.Serialize(writer, configModel);
 			writer.Close();
 		}
+		/// <summary>
+		/// 如果改变后为 running 返回 true
+		/// 否则为 false 
+		/// </summary>
+		/// <returns></returns>
 		public void ChangeRunningStatus(bool IsRunning)
 		{
-			ConfigModel configModel = GetConfigFromFile();
+			if (mCondigModel == null) ReadConfigFromFile();
+			ConfigModel configModel = mCondigModel;
 
 			configModel.IsRunning = IsRunning;
-			SaveConfig(configModel);
 		}
-
 	}
 }

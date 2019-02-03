@@ -7,6 +7,18 @@ using System.Xml.Serialization;
 
 namespace osi.Desktop.Helper
 {
+	public enum OSVersion
+	{
+		//https://docs.microsoft.com/zh-cn/windows/desktop/SysInfo/operating-system-version
+		Windows_10_Above_And_Include_Build10122,
+		Windows_10_Below_Build10122,
+		Windows_8_And_Above,
+		Windows_7_And_Vista,
+		Windows_2000_And_Xp,
+		Unknow,
+		Unset
+	}
+
 	public class osiBrowserRegistry : BrowserRegistry
 	{
 		public osiBrowserRegistry(string http_Hash, string https_Hash) : base()

@@ -25,8 +25,7 @@ namespace osi.Core
 
 			public Downloader() : base()
 			{
-				WebProxy webProxy = new WebProxy("127.0.0.1", 8888);
-				Proxy = webProxy;
+
 			}
 
 			public Downloader(BeatmapsetDownloadListItemViewModel item) : base()

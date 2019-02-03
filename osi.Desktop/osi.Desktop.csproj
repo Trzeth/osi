@@ -59,6 +59,12 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GoogleAnalyticsTracker.Core, Version=4.6.8.0, Culture=neutral, PublicKeyToken=04ab204e84b117c0, processorArchitecture=MSIL">
+      <HintPath>..\packages\GoogleAnalyticsTracker.Core.4.6.8\lib\portable45-net45+win8+wpa81\GoogleAnalyticsTracker.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="GoogleAnalyticsTracker.Simple, Version=4.6.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GoogleAnalyticsTracker.Simple.4.6.8\lib\portable45-net45+win8+wpa81\GoogleAnalyticsTracker.Simple.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -107,11 +113,18 @@
     </Compile>
     <Compile Include="Converters\BaseValueConverter.cs" />
     <Compile Include="Converters\BeatmapIdToImageConverter.cs" />
+    <Compile Include="Helper\AnalyticsHelper\AnalyticsModel.cs" />
+    <Compile Include="Helper\AnalyticsHelper\AnalyticsHelper.cs" />
     <Compile Include="Helper\ConfigHelper\ConfigHelper.cs" />
     <Compile Include="Helper\ConfigHelper\ConfigModel.cs" />
     <Compile Include="Helper\RegistryHelper\RegistryModel.cs" />
     <Compile Include="Helper\RegistryHelper\RegistryHelper.cs" />
+    <Compile Include="Helper\UpdateHelper\UpdateHelper.cs" />
+    <Compile Include="Helper\UpdateHelper\UpdateModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="Windows\WelcomeWindow.xaml.cs">
+      <DependentUpon>WelcomeWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controls\BeatmapsetDownloadList\BeatmapsetDownloadListControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -165,6 +178,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\Windows.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\WelcomeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

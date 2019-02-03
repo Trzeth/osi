@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace osi.Desktop.Helper
+namespace LinkMonitor.Helper
 {
 	public class ConfigHelper
 	{
@@ -14,15 +14,16 @@ namespace osi.Desktop.Helper
 
 		public ConfigModel ConfigModel { get { return mCondigModel; } }
 		public const string ConfigFileName = "osi.Desktop.config.xml";
+		public string ConfigFilePath = AppDomain.CurrentDomain.BaseDirectory + @"\" + ConfigFileName;
 
 		public ConfigHelper() { }
 		public bool IsConfigFileExist()
 		{
 			return File.Exists(ConfigFileName);
 		}
-		public ConfigModel GetConfigFromFile()
+		public ConfigModel ReadConfigFromFile()
 		{
-			TextReader reader = new StreamReader(ConfigFileName);
+			TextReader reader = new StreamReader(ConfigFilePath);
 			XmlSerializer s = new XmlSerializer(typeof(ConfigModel));
 			var configModel = (ConfigModel)s.Deserialize(reader);
 			reader.Close();
@@ -30,7 +31,7 @@ namespace osi.Desktop.Helper
 		}
 		public void SaveConfig(ConfigModel configModel)
 		{
-			TextWriter writer = new StreamWriter(ConfigFileName);
+			TextWriter writer = new StreamWriter(ConfigFilePath);
 			XmlSerializer s = new XmlSerializer(typeof(ConfigModel));
 			s.Serialize(writer, configModel);
 			writer.Close();
@@ -43,7 +44,7 @@ namespace osi.Desktop.Helper
 		public bool ChangeRunningStatus()
 		{
 			bool IsRunning = new bool();
-			ConfigModel configModel = GetConfigFromFile();
+			ConfigModel configModel = ReadConfigFromFile();
 
 			IsRunning = configModel.IsRunning = !configModel.IsRunning;
 			SaveConfig(configModel);

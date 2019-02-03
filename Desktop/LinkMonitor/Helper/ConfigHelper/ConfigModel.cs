@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace osi.Desktop.Helper
+namespace LinkMonitor.Helper
 {
 	[XmlRootAttribute("Config", Namespace = "https://osi.nyao.kim",IsNullable = true)]
 	public class ConfigModel

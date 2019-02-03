@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Newtonsoft.Json.Serialization;
 using System.Windows.Forms;
+using System.Windows.Media.Animation;
 
 namespace osi.Desktop
 {
@@ -46,24 +47,53 @@ namespace osi.Desktop
 		#region Methods
 
 
+
 		#endregion
 
 		public new void Hide()
 		{
+			DoubleAnimation da = new DoubleAnimation();
+			da.To = 0;
+			da.Duration = TimeSpan.FromMilliseconds(200);
+			da.Completed += delegate
+			{
+				base.Hide();
+			};
 
-			base.Hide();
+			BeginAnimation(OpacityProperty, da);
 		}
 		public new void Close()
 		{
 			if (Visibility == Visibility.Visible)
 			{
-				Hide();
+				DoubleAnimation da = new DoubleAnimation();
+				da.To = 0;
+				da.Duration = TimeSpan.FromMilliseconds(200);
+				da.Completed += delegate
+				{
+					base.Close();
+				};
+
+				BeginAnimation(OpacityProperty, da);
+
 			}
-			base.Close();
+			else
+			{
+				base.Close();
+			}
 		}
 		public new void Show()
 		{
-			base.Show();
+			this.Visibility = Visibility.Visible;
+			DoubleAnimation da = new DoubleAnimation();
+			da.To = 1;
+			da.Duration = TimeSpan.FromMilliseconds(200);
+			da.Completed += delegate
+			{
+				base.Show();
+			};
+			BeginAnimation(OpacityProperty, da);
+
 		}
 	}
 }

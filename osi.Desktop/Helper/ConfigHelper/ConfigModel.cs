@@ -15,9 +15,18 @@ namespace osi.Desktop.Helper
 		public OSVersion OSVersion { get; set; }
 
 		public bool IsRunning { get; set; }
+
+		public string Version { get; set; }
+
+		public Guid Guid { get; set; }
+
+
+		public string ClientId { get; set; }
 	}
 	public class RegistryKeyPair
 	{
+		public string osuPath { get; set; }
+
 		public osiBrowserRegistry osiBrowserRegistry { get; set; }
 
 		public BrowserRegistry UserBrowserRegistry { get; set; }
