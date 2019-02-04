@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using Newtonsoft.Json.Serialization;
 using System.Windows.Forms;
 using System.Windows.Media.Animation;
+using osi.Desktop.Helper;
 
 namespace osi.Desktop
 {
@@ -29,16 +30,19 @@ namespace osi.Desktop
 	{
 		#region Private Member
 
+		public ConfigHelper ConfigHelper;
+
 		private List<BeatmapsetDownloadListItemViewModel> items;
 
 		#endregion
 
 		#region  Constructor
 
-		public MainWindow()
+		public MainWindow(ConfigHelper configHelper)
 		{
 			InitializeComponent();
 
+			ConfigHelper = configHelper;
 			this.DataContext = new MainWindowViewModel(this);
 		}
 

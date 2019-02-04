@@ -16,7 +16,8 @@ namespace LinkMonitor.Functions
         internal static void SendLink(string link)
         {
 			ConfigHelper configHelper = new ConfigHelper();
-			ConfigModel configModel = configHelper.ReadConfigFromFile();
+			configHelper.ReadConfigFromFile();
+			ConfigModel configModel = configHelper.ConfigModel;
 
 			if (configModel.IsRunning)
 			{
@@ -44,7 +45,12 @@ namespace LinkMonitor.Functions
 				}
 				catch (TimeoutException e)
 				{
-					NotRunDailog(link);
+					if (NotRunDailog(link))
+					{
+						configModel.Registry.UserBrowserRegistry.OpenUrl(new Uri(link));
+					}
+					configHelper.ChangeRunningStatus(false);
+					configHelper.SaveConfig();
 				}
 			}
 			else

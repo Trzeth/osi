@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -69,6 +72,30 @@ namespace osi.Desktop
 		public SideBarControl()
 		{
 			InitializeComponent();
+
+			BackgroundWorker backgroundWorker = new BackgroundWorker();
+			backgroundWorker.WorkerSupportsCancellation = true;
+			backgroundWorker.DoWork += (sender,e) =>
+			{
+				while (e.Cancel != true)
+				{
+					bool OsuRunningStatus = (Process.GetProcessesByName("osu!").Count() > 0);
+					Dispatcher.Invoke(() =>
+					{
+						if (OsuRunningStatus != IsOsuRunning)
+						{
+							IsOsuRunning = !IsOsuRunning;
+						}
+					}, System.Windows.Threading.DispatcherPriority.DataBind);
+
+					Thread.Sleep(5000);
+				}
+			};
+			backgroundWorker.RunWorkerAsync();
+			this.Unloaded += delegate
+			{
+				backgroundWorker.CancelAsync();
+			};
 		}
 
 		private void UserControl_MouseEnter(object sender, MouseEventArgs e)
@@ -88,7 +115,7 @@ namespace osi.Desktop
 			SideBarControl sideBar = (SideBarControl)d;
 
 			DoubleAnimation dA = new DoubleAnimation();
-			dA.Duration = TimeSpan.FromMilliseconds(100);
+			dA.Duration = TimeSpan.FromMilliseconds(200);
 			dA.FillBehavior = FillBehavior.Stop;
 
 			if ((bool)e.NewValue == true)
@@ -147,7 +174,11 @@ namespace osi.Desktop
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
 			IsOsuRunning = true;
-			Task.Run(()=> { });
+			Task.Run(()=> 
+			{
+				Process.Start(App.ConfigHelper.ConfigModel.Registry.osuPath);
+			});
+
 		}
 	}
 }

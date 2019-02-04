@@ -8,13 +8,136 @@
         Title="WelcomeWindow" 
         Height="450" 
         Width="800"
-        WindowStyle="None"
         ResizeMode="NoResize"
-        AllowsTransparency="True"
-        Topmost="True">
+        Background="{StaticResource BackgroundVeryLightBrush}" 
+        WindowStartupLocation="CenterScreen">
     <Grid>
-        <StackPanel>
+        <!-- Welcome Page -->
+        <Grid Panel.ZIndex="3" 
+              Background="{StaticResource BackgroundVeryLightBrush}"
+              x:Name="WelcomePage">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       FontSize="100" 
+                       Margin="20"
+                       FontFamily="{StaticResource LatoRegular}" 
+                       VerticalAlignment="Center">Welcome</TextBlock>
             
-        </StackPanel>
+            <StackPanel VerticalAlignment="Center"
+                        Grid.Column="1">
+                <TextBlock FontSize="40" 
+                           FontFamily="{StaticResource LatoRegular}"
+                           HorizontalAlignment="Center">OSI</TextBlock>
+                <TextBlock FontSize="25" 
+                           Margin="0,20,0,0"
+                           FontFamily="{StaticResource LatoRegular}" 
+                           HorizontalAlignment="Center">由 Sayobot 提供下载资源</TextBlock>
+            </StackPanel>
+        </Grid>
+        
+        <!-- Analytics Page -->
+        <Grid Panel.ZIndex="2"
+              Background="{StaticResource BackgroundVeryLightBrush}"
+              x:Name="AnalyticsPage">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       FontSize="100"
+                       Margin="50"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource IconTextBlock}"
+                       Text="{StaticResource FontAwesomeAnalyticsIcon}"/>
+            
+            <StackPanel Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Margin="10">
+                <TextBlock FontSize="25" 
+                           Margin="0"
+                           FontFamily="{StaticResource LatoRegular}"
+                           TextWrapping="WrapWithOverflow">您同意让开发者收集您的软件使用情况吗？这将对开发者的后续开发与优化有很大帮助。</TextBlock>
+                <TextBlock FontSize="25" 
+                           Margin="0,20,0,0"
+                           FontFamily="{StaticResource LatoRegular}" 
+                           TextWrapping="WrapWithOverflow">被记录的信息会由 Google Analytics 进行分析，分析报表仅可被本应用开发者 与 Sayobot 镜像站开发者访问。</TextBlock>
+                <TextBlock FontSize="15" 
+                           Margin="0,20,0,0"
+                           FontFamily="{StaticResource LatoRegular}" 
+                           TextWrapping="WrapWithOverflow">数据统计服务由 Google Analytics 提供，其隐私政策可在 <Hyperlink>https://www.google.com/policiey/privacy/</Hyperlink>查看。</TextBlock>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,30,30,0">
+                        <Button Style="{StaticResource BaseButtonStyle}" 
+                                Background="Transparent" 
+                                Foreground="Red"
+                                Click="RejectButton_Click">
+                            <StackPanel Orientation="Horizontal" Margin="8,5,8,5">
+                                <TextBlock Style="{StaticResource IconTextBlock}" Text="{StaticResource FontAwesomeTimesIcon}" FontSize="20" Margin="0,0,10,0"/>
+                                <TextBlock FontSize="20">拒绝</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource BaseButtonStyle}" 
+                            Background="{StaticResource ForegroundGreenBrush}" 
+                            Foreground="{StaticResource ForegroundLightBrush}"
+                            Margin="15,0,0,0"
+                            Click="AccpetButton_Click">
+                            <StackPanel Orientation="Horizontal" Margin="8,5,8,5">
+                                <TextBlock Style="{StaticResource IconTextBlock}" Text="{StaticResource FontAwesomeCheckIcon}" FontSize="20" Margin="0,0,10,0"/>
+                                <TextBlock FontSize="20">接受</TextBlock>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <TextBlock x:Name="RejectMessage"
+                               Visibility="Hidden"
+                               FontSize="25" 
+                               FontFamily="{StaticResource LatoRegular}"
+                               TextWrapping="WrapWithOverflow">拒绝的逻辑很难写呀 所以你就~~~接受好啦（或者右上角（（其实也没写好（捂脸</TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!-- Setting Page -->
+        <Grid Panel.ZIndex="1"
+              Background="{StaticResource BackgroundVeryLightBrush}"
+              x:Name="SettingPage">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       FontSize="100"
+                       Margin="50"
+                       VerticalAlignment="Center"
+                       Style="{StaticResource IconTextBlock}"
+                       Text="{StaticResource FontAwesomeSettingIcon}"/>
+            <StackPanel Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Margin="10">
+                <TextBlock FontSize="25" 
+                           FontFamily="{StaticResource LatoRegular}"
+                           TextWrapping="WrapWithOverflow">OSI 需要一些设置才能正常运行。</TextBlock>
+                <TextBlock x:Name="Steps"
+                           Margin="0,25,0,0"
+                           FontSize="25" 
+                           FontFamily="{StaticResource LatoRegular}"
+                           TextWrapping="WrapWithOverflow"/>
+                
+                <Button Style="{StaticResource BaseButtonStyle}" 
+                            Background="{StaticResource ForegroundGreenBrush}" 
+                            Foreground="{StaticResource ForegroundLightBrush}"
+                            Margin="0,15,15,0"
+                            HorizontalAlignment="Right"
+                            Click="StartSetting">
+                    <StackPanel Orientation="Horizontal" Margin="8,5,8,5">
+                        <TextBlock Style="{StaticResource IconTextBlock}" Text="{StaticResource FontAwesomeCheckIcon}" FontSize="20" Margin="0,0,10,0"/>
+                        <TextBlock FontSize="20">开始设置</TextBlock>
+                    </StackPanel>
+                </Button>
+
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

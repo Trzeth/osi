@@ -23,10 +23,10 @@ namespace osi.Desktop
 
 		private AnalyticsHelper mAnalyticsHelper;
 
-		private ConfigHelper mConfigHelper = new ConfigHelper();
+		private static ConfigHelper mConfigHelper = new ConfigHelper();
 
 		private string ProductVersion = System.Windows.Forms.Application.ProductVersion;
-		public ConfigHelper ConfigHelper
+		public static ConfigHelper ConfigHelper
 		{
 			get { return mConfigHelper; }
 		}
@@ -51,8 +51,9 @@ namespace osi.Desktop
 				ApplyConfig();
 
 				mAnalyticsHelper.TrackEventAsync(AnalyticsModel.Category.Application, AnalyticsModel.Action.Startup, null, null);
-
-				Current.MainWindow = new MainWindow();
+				
+				Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+				Current.MainWindow = new MainWindow(mConfigHelper);
 				Current.MainWindow.Show();
 			}
 		}
@@ -60,6 +61,8 @@ namespace osi.Desktop
 		protected override void OnExit(ExitEventArgs e)
 		{
 			mConfigHelper.ChangeRunningStatus(false);
+			mConfigHelper.SaveConfig();
+
 			mRegistryHelper.UnRegister(mRegistryHelper.UserBrowserRegistry);
 			mAnalyticsHelper.TrackEventAsync(AnalyticsModel.Category.Application, AnalyticsModel.Action.Exit, null, null);
 
@@ -75,8 +78,12 @@ namespace osi.Desktop
 			//First Run
 			if (IsInstall)
 			{
+				Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
+				Current.MainWindow = new Windows.WelcomeWindow(mRegistryHelper, RegistryHelper.osVersion);
+				MainWindow.ShowDialog();
+
 				configModel = new ConfigModel();
-				mRegistryHelper.Register();
 				configModel.Registry.osiBrowserRegistry = mRegistryHelper.osiBrowserRegistry;
 				configModel.Registry.UserBrowserRegistry = mRegistryHelper.UserBrowserRegistry;
 				configModel.OSVersion = RegistryHelper.osVersion;
@@ -88,6 +95,7 @@ namespace osi.Desktop
 
 				mConfigHelper.ConfigModel = configModel;
 				mConfigHelper.SaveConfig();
+
 			}
 			else
 			{
@@ -103,6 +111,7 @@ namespace osi.Desktop
 				mRegistryHelper.Register(configModel.Registry.osiBrowserRegistry);
 			}
 
+			if (!Directory.Exists(Environment.CurrentDirectory + @"\download\")) Directory.CreateDirectory(Environment.CurrentDirectory + @"\download\");
 			mAnalyticsHelper = new AnalyticsHelper(configModel.Guid,configModel.ClientId,configModel.Version);
 			if (IsUpdated) mAnalyticsHelper.TrackEventAsync(AnalyticsModel.Category.Application,AnalyticsModel.Action.Update,null,null);
 			if (IsInstall) mAnalyticsHelper.TrackEventAsync(AnalyticsModel.Category.Application, AnalyticsModel.Action.Install, null, null);

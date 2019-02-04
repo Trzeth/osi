@@ -22,7 +22,7 @@ namespace osi.Desktop
 
         private MainWindow mWindow;
 		private NotifyIcon mNotifyIcon;
-
+		private string mPreviousLink;
 		#endregion
 
 		#region Public Member
@@ -111,19 +111,31 @@ namespace osi.Desktop
 				StreamReader sr = new StreamReader(server);
 				link = sr.ReadToEnd();
 				server.Disconnect();
+
+				Uri uri = null;
+
 				try
 				{
-					int beatmapsetId = LinkHelper.ToBeatmapsetId(new Uri(link));
-					mWindow.Dispatcher.BeginInvoke((Action)(()=> 
+					uri = new Uri(link);
+					int beatmapsetId = LinkHelper.ToBeatmapsetId(uri);
+					if (link == mPreviousLink)
 					{
-						var item = new BeatmapsetDownloadListItemViewModel(beatmapsetId);
-						BeatmapsetDownloadList.Items.Add(item);
-						item.Download();
-					}));
+						mWindow.ConfigHelper.ConfigModel.Registry.UserBrowserRegistry.OpenUrl(uri);
+					}
+					else
+					{
+						mWindow.Dispatcher.BeginInvoke((Action)(() =>
+						{
+							var item = new BeatmapsetDownloadListItemViewModel(beatmapsetId);
+							BeatmapsetDownloadList.Items.Add(item);
+							item.Download();
+						}));
+						mPreviousLink = link;
+					}
 				}
 				catch (LinkHelper.NotValidUri)
 				{
-					System.Diagnostics.Process.Start(link);
+					mWindow.ConfigHelper.ConfigModel.Registry.UserBrowserRegistry.OpenUrl(uri);
 				}
 				catch (UriFormatException) { }
 			}

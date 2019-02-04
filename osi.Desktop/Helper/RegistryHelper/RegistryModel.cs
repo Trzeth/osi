@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -63,6 +64,28 @@ namespace osi.Desktop.Helper
 
 		public void OpenUrl(Uri uri)
 		{
+			string[] args = new string[3];
+			switch (uri.Scheme)
+			{
+				case "http":
+					args = GetCommnad(http_Command);
+					break;
+				case "https":
+					args = GetCommnad(https_Command);
+					break;
+			}
+			Process.Start(args[0], $"{args[1]}{uri.ToString()}{args[2]}");
+		}
+		private string[] GetCommnad(string command)
+		{
+			string[] args = new string[3];
+			args[0] = command.Substring(command.IndexOf('"') + 1, command.Remove(command.IndexOf('"'), 1).IndexOf('"') - command.IndexOf('"'));
+
+			string arg = command.Remove(command.IndexOf('"'), command.Remove(command.IndexOf('"'), 1).IndexOf('"') - command.IndexOf('"') + 2);
+			args[1] = arg.Substring(0, arg.IndexOf("%1"));
+			args[2] = arg.Substring(arg.IndexOf("%1") + 2, arg.Length - arg.IndexOf("%1") - 2);
+
+			return args;
 
 		}
 	}

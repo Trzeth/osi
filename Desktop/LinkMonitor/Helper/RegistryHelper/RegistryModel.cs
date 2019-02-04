@@ -64,6 +64,7 @@ namespace LinkMonitor.Helper
 
 		public void OpenUrl(Uri uri)
 		{
+			if (http_Progid == "osiURL" || https_Progid == "osiURL") throw new Exception();
 			string[] args = new string[3];
 			switch(uri.Scheme)
 			{

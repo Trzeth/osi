@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace LinkMonitor.Functions
 {
@@ -13,7 +14,8 @@ namespace LinkMonitor.Functions
     {
         internal static void Update(bool restart)
         {
-            UpdateFile();
+			MessageBox.Show(AppDomain.CurrentDomain.BaseDirectory + @"osi.Desktop.exe");
+			UpdateFile();
             if (restart)
             {
                 while (true)
@@ -24,7 +26,7 @@ namespace LinkMonitor.Functions
                     }
                     else
                     {
-                        Process.Start(Environment.CurrentDirectory + @"\osi.exe");
+                        Process.Start(AppDomain.CurrentDomain.BaseDirectory + @"osi.Desktop.exe");
                         break;
                     }
                 }

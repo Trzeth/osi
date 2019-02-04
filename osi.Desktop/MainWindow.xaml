@@ -59,6 +59,7 @@
                                                 <!-- Setting Button -->
                                                 <Button Style="{StaticResource WindowChromeButton}" 
                                                     Grid.Column="1" 
+                                                    Visibility="Hidden"
                                                     Height="{Binding Path=TitleHeight,FallbackValue=40}" 
                                                     Command="{Binding OpenSettingWindowCommand}"
                                                     Width="50">

@@ -47,7 +47,7 @@ namespace osi.Desktop.Helper
 		{
 			foreach(KeyValuePair<string,string> pair in UpdateModel.Files)
 			{
-				WebClient.DownloadFile(pair.Key,$"{Environment.CurrentDirectory}/{pair.Value}.new");
+				WebClient.DownloadFile(pair.Value,$"{Environment.CurrentDirectory}\\{pair.Key}.new");
 			}
 		}
 	}

@@ -2,6 +2,7 @@
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -122,6 +123,8 @@ namespace osi.Core
 				else
 				{
 					DownloadStatus = Status.Finished;
+
+					Process.Start(((DownloaderHelper.Downloader)sender).FilePath);
 				}
 			};
 			await downloader.DownloadBeatmapset();
@@ -134,6 +137,8 @@ namespace osi.Core
 				Task.Run(GetBeatmapsetInformationAsync).Wait();
 				
 				Task.Run(DownloadBeatmapsetAsync);
+
+
 			});
 		}
 		#endregion

@@ -14,23 +14,30 @@ namespace LinkMonitor.Helper
 
 		public ConfigModel ConfigModel { get { return mCondigModel; } }
 		public const string ConfigFileName = "osi.Desktop.config.xml";
-		public string ConfigFilePath = AppDomain.CurrentDomain.BaseDirectory + @"\" + ConfigFileName;
+		public string ConfigFilePath = AppDomain.CurrentDomain.BaseDirectory + ConfigFileName;
 
 		public ConfigHelper() { }
-		public bool IsConfigFileExist()
+		public bool ReadConfigFromFile()
 		{
-			return File.Exists(ConfigFileName);
+			if (!File.Exists(ConfigFilePath)) return false;
+
+			try
+			{
+				TextReader reader = new StreamReader(ConfigFilePath);
+				XmlSerializer s = new XmlSerializer(typeof(ConfigModel));
+				var configModel = (ConfigModel)s.Deserialize(reader);
+				reader.Close();
+				mCondigModel = configModel;
+			}
+			catch (InvalidOperationException)
+			{
+				return false;
+			}
+			return true;
 		}
-		public ConfigModel ReadConfigFromFile()
+		public void SaveConfig(ConfigModel configModel =  null)
 		{
-			TextReader reader = new StreamReader(ConfigFilePath);
-			XmlSerializer s = new XmlSerializer(typeof(ConfigModel));
-			var configModel = (ConfigModel)s.Deserialize(reader);
-			reader.Close();
-			return configModel;
-		}
-		public void SaveConfig(ConfigModel configModel)
-		{
+			if (configModel == null) configModel = this.ConfigModel;
 			TextWriter writer = new StreamWriter(ConfigFilePath);
 			XmlSerializer s = new XmlSerializer(typeof(ConfigModel));
 			s.Serialize(writer, configModel);
@@ -41,15 +48,12 @@ namespace LinkMonitor.Helper
 		/// 否则为 false 
 		/// </summary>
 		/// <returns></returns>
-		public bool ChangeRunningStatus()
+		public void ChangeRunningStatus(bool IsRunning)
 		{
-			bool IsRunning = new bool();
-			ConfigModel configModel = ReadConfigFromFile();
+			if (mCondigModel == null) ReadConfigFromFile();
+			ConfigModel configModel = mCondigModel;
 
-			IsRunning = configModel.IsRunning = !configModel.IsRunning;
-			SaveConfig(configModel);
-
-			return IsRunning;
+			configModel.IsRunning = IsRunning;
 		}
 	}
 }

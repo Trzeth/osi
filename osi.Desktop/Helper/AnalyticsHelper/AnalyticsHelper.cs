@@ -39,11 +39,13 @@ namespace osi.Desktop.Helper
 
 		protected override void AmendParameters(IGeneralParameters parameters)
 		{
+			parameters.ApplicationName = "osi";
 			parameters.ApplicationId = "osi.Desktop";
 			parameters.ApplicationVersion = Version;
 			parameters.IpOverride = Ip;
 
-			parameters.ClientId = ClientId;
+			//parameters.ClientId = ClientId;
+
 			parameters.UserId = Guid.ToString();
 		}
 	}

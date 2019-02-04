@@ -16,6 +16,8 @@ namespace osi.Core
 		{
 			#region Public Members
 
+			public string FilePath;
+
 			public BeatmapsetDownloadListItemViewModel BeatmapsetDownloadListItemViewModel { get; set; }
 
 			public EventHandler DownloadBeatmapsetCompleted;
@@ -47,8 +49,8 @@ namespace osi.Core
 				BeatmapsetDownloadListItemViewModel item = BeatmapsetDownloadListItemViewModel;
 
 				string fileName = $"{item.BeatmapsetId} {item.Artist}-{item.Title}.osz";
-				string path = $"{Environment.CurrentDirectory}/download/{fileName}";
-				this.DownloadFileAsync(new Uri($"https://osu.sayobot.cn/osu.php?s={item.BeatmapsetId}"), path);
+				FilePath = $"{Environment.CurrentDirectory}/download/{fileName}";
+				this.DownloadFileAsync(new Uri($"https://osu.sayobot.cn/osu.php?s={item.BeatmapsetId}"), FilePath);
 			}
 		}
 	}

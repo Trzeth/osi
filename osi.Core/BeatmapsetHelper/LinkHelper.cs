@@ -62,6 +62,10 @@ namespace osi.Core
 						id = int.Parse(value.Groups["bid"].Value);
 					}
 				}
+				else
+				{
+					throw new NotValidUri(uri);
+				}
 			}
 			else
 			{
