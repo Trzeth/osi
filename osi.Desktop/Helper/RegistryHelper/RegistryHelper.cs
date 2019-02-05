@@ -104,7 +104,11 @@ namespace osi.Desktop.Helper
 			Application.Close();
 			osiURL_CU.Close();
 
-			RegistryKey osi_CU = Registry.CurrentUser.OpenSubKey(@"Software\Clients\StartMenuInternet", true).CreateSubKey("osi");
+			RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Clients", true) != null? Registry.CurrentUser.OpenSubKey(@"Software\Clients", true): Registry.CurrentUser.CreateSubKey(@"Software\Clients", true);
+
+			key = key.OpenSubKey("StartMenuInternet", true) != null ? key.OpenSubKey("StartMenuInternet", true) : key.CreateSubKey("StartMenuInternet", true);
+
+			RegistryKey osi_CU = key.CreateSubKey("osi");
 			osi_CU.CreateSubKey(@"shell\open\command").SetValue("", lmPathWithArg);
 			osi_CU.CreateSubKey(@"Capabilities\URLAssociations");
 			RegistryKey Capabilities_CU = osi_CU.OpenSubKey("Capabilities", true);
@@ -200,16 +204,20 @@ namespace osi.Desktop.Helper
 				RegistryKey httpUserChoice = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice", true);
 				RegistryKey httpsUserChoice = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\Shell\Associations\UrlAssociations\https\UserChoice", true);
 
-				mUserBrowserRegistry.http_Progid = httpUserChoice.GetValue("Progid").ToString();
-				mUserBrowserRegistry.https_Progid = httpsUserChoice.GetValue("Progid").ToString();
+				mUserBrowserRegistry.http_Progid = httpUserChoice?.GetValue("Progid")?.ToString();
+				mUserBrowserRegistry.https_Progid = httpsUserChoice?.GetValue("Progid")?.ToString();
 
-				mUserBrowserRegistry.http_Hash = httpUserChoice.GetValue("Hash").ToString();
-				mUserBrowserRegistry.https_Hash = httpsUserChoice.GetValue("Hash").ToString();
+				mUserBrowserRegistry.http_Hash = httpUserChoice?.GetValue("Hash")?.ToString();
+				mUserBrowserRegistry.https_Hash = httpsUserChoice?.GetValue("Hash")?.ToString();
 
 				RegistryKey http = Registry.CurrentUser.OpenSubKey(@"Software\Classes\" + mUserBrowserRegistry.http_Progid + @"\Shell\open\command");
 				RegistryKey https = Registry.CurrentUser.OpenSubKey(@"Software\Classes\" + mUserBrowserRegistry.https_Progid + @"\Shell\open\command");
-				mUserBrowserRegistry.http_Command = http.GetValue("").ToString();
-				mUserBrowserRegistry.https_Command = http.GetValue("").ToString();
+
+				if (http == null) http = Registry.ClassesRoot.OpenSubKey(mUserBrowserRegistry.http_Progid + @"\Shell\open\command");
+				if (https == null) https = Registry.ClassesRoot.OpenSubKey(mUserBrowserRegistry.https_Progid + @"\Shell\open\command");
+
+				mUserBrowserRegistry.http_Command = http?.GetValue("").ToString();
+				mUserBrowserRegistry.https_Command = https?.GetValue("").ToString();
 
 				RegistryKey httpUserBrowser = Registry.CurrentUser.OpenSubKey(Registry.GetValue(@"HKEY_CURRENT_USER\Software\RegisteredApplications", mUserBrowserRegistry.http_Progid, null)?.ToString() + @"\Capabilities");
 				RegistryKey httpsUserBrowser = Registry.CurrentUser.OpenSubKey(Registry.GetValue(@"HKEY_CURRENT_USER\Software\RegisteredApplications", mUserBrowserRegistry.https_Progid, null)?.ToString() + @"\Capabilities");
@@ -321,9 +329,9 @@ namespace osi.Desktop.Helper
 
 		public string GetOsuPath()
 		{
-			string path = Registry.GetValue(@"HKEY_CLASSES_ROOT\osu!\shell\open\command", "", null).ToString();
+			string path = Registry.GetValue(@"HKEY_CLASSES_ROOT\osu!\shell\open\command", "", null)?.ToString();
 			
-			return path.Substring(1, path.Length - 7);
+			return path?.Substring(1, path.Length - 7);
 		}
 
 		public static OSVersion GetOSVersion(Version osVersion)

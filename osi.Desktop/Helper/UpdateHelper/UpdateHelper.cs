@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace osi.Desktop.Helper
 {
-	class UpdateHelper
+	public class UpdateHelper
 	{
 		private UpdateModel UpdateModel;
 		private WebClient WebClient = new WebClient();

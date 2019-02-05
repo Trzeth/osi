@@ -15,9 +15,17 @@ namespace LinkMonitor.Functions
     {
         internal static void SendLink(string link)
         {
+			ConfigModel configModel;
 			ConfigHelper configHelper = new ConfigHelper();
-			configHelper.ReadConfigFromFile();
-			ConfigModel configModel = configHelper.ConfigModel;
+			if (configHelper.ReadConfigFromFile())
+			{
+				configModel = configHelper.ConfigModel;
+			}
+			else
+			{
+				configModel = new ConfigModel();
+				configModel.IsRunning = false;
+			}
 
 			if (configModel.IsRunning)
 			{

@@ -1,0 +1,98 @@
+﻿<Window x:Class="osi.Desktop.Windows.UpdateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:osi.Desktop.Windows"
+        mc:Ignorable="d"
+        Title="UpdateWindow" 
+        Width="450"
+        Height="300"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style TargetType="{x:Type local:UpdateWindow}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Window">
+                        <!-- Outer Border that for dropshadow -->
+                        <Border Padding="{Binding Path=OuterBorderPaddingThickness,FallbackValue=10}">
+                            <!-- MainWindow -->
+                            <Grid>
+
+                                <!-- Dropshadow And Side Decoration -->
+                                <Border Background="{StaticResource BackgroundVeryLightBrush}">
+                                    <Border.Effect>
+                                        <DropShadowEffect ShadowDepth="0" Opacity="0.2"/>
+                                    </Border.Effect>
+                                </Border>
+
+                                <Grid>
+                                    <!-- MainWindow Content -->
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <!--Titlbe Bar -->
+                                            <RowDefinition Height="{Binding Path=TitleHeight,FallbackValue=40}"/>
+                                            <!-- Content -->
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Title Bar -->
+                                        <Grid Grid.Row="0">
+                                            <!-- Title -->
+                                            <Viewbox Grid.Column="0" Margin="0,8">
+                                                <TextBlock Style="{StaticResource BaseTextBlockStyle}">OSI</TextBlock>
+                                            </Viewbox>
+                                        </Grid>
+
+                                        <!-- Content -->
+                                        <Border Grid.Row="1">
+                                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <StackPanel VerticalAlignment="Center">
+            <TextBlock FontSize="40" 
+                       HorizontalAlignment="Center">Updating</TextBlock>
+            <TextBlock FontSize="20" 
+                       HorizontalAlignment="Center" 
+                       Margin="0,10,0,0">更新中</TextBlock>
+            <TextBlock x:Name="Spinner"
+                       Style="{StaticResource IconTextBlock}" 
+                       HorizontalAlignment="Center" 
+                       Foreground="{StaticResource PrimaryVeryDarkBrush}"
+                       Text="{StaticResource FontAwesomeSpinnerIcon}" 
+                       Margin="0,50,0,0"
+                       FontSize="30"
+                       RenderTransformOrigin="0.5,0.5">
+                <TextBlock.RenderTransform>
+                    <RotateTransform Angle="360"></RotateTransform>
+                </TextBlock.RenderTransform>
+                <TextBlock.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="Spinner" Storyboard.TargetProperty="(RenderTransform).(RotateTransform.Angle)"
+                                                 From="0" To="360" Duration="0:0:1"
+                                                 RepeatBehavior="Forever"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </TextBlock.Triggers>
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</Window>

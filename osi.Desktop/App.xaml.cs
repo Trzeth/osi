@@ -36,28 +36,34 @@ namespace osi.Desktop
 			base.OnStartup(e);
 
 			bool HasUpdate = mUpdateHelper.HasUpdate(ProductVersion);
+
 #if DEBUG
 			HasUpdate = false;
+#else
+			Dispatcher.UnhandledException += Dispatcher_UnhandledException;
+			TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 #endif
+
 			if (HasUpdate)
 			{
-				mUpdateHelper.DownloadUpdateFile();
-				Process.Start($"{Environment.CurrentDirectory}/LinkMonitor.exe","--Update Restart");
+				new Windows.UpdateWindow(mUpdateHelper).ShowDialog();
+				Process.Start($"{Environment.CurrentDirectory}/LinkMonitor.exe", "--Update Restart");
 
-				Application.Current.Shutdown();
+				Environment.Exit(0);
 			}
 			else
 			{
 				ApplyConfig();
 
 				mAnalyticsHelper.TrackEventAsync(AnalyticsModel.Category.Application, AnalyticsModel.Action.Startup, null, null);
-				
+
 				Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
 				Current.MainWindow = new MainWindow(mConfigHelper);
 				Current.MainWindow.Show();
 			}
-		}
 
+		}
 		protected override void OnExit(ExitEventArgs e)
 		{
 			mConfigHelper.ChangeRunningStatus(false);
@@ -68,7 +74,7 @@ namespace osi.Desktop
 
 			base.OnExit(e);
 		}
-		
+
 		private void ApplyConfig()
 		{
 			ConfigModel configModel = null;
@@ -116,5 +122,28 @@ namespace osi.Desktop
 			if (IsUpdated) mAnalyticsHelper.TrackEventAsync(AnalyticsModel.Category.Application,AnalyticsModel.Action.Update,null,null);
 			if (IsInstall) mAnalyticsHelper.TrackEventAsync(AnalyticsModel.Category.Application, AnalyticsModel.Action.Install, null, null);
 		}
+
+		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		{
+			Windows.CrashHandleWindow crashHandleWindow = new Windows.CrashHandleWindow(e.ExceptionObject as Exception);
+			crashHandleWindow.Show();
+		}
+
+		private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+		{
+			e.SetObserved();
+
+			Windows.CrashHandleWindow crashHandleWindow = new Windows.CrashHandleWindow(e.Exception);
+			crashHandleWindow.Show();
+		}
+
+		private void Dispatcher_UnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+		{
+			e.Handled = true;
+
+			Windows.CrashHandleWindow crashHandleWindow = new Windows.CrashHandleWindow(e.Exception);
+			crashHandleWindow.Show();
+		}
+
 	}
 }

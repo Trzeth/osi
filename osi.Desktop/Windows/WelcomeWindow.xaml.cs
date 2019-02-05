@@ -87,7 +87,13 @@ namespace osi.Desktop.Windows
 			BackgroundWorker backgroundWorker = new BackgroundWorker();
 			backgroundWorker.DoWork += delegate
 			{
-				mRegistryHelper.Register();
+				try
+				{
+					mRegistryHelper.Register();
+				}catch(Exception ex)
+				{
+					MessageBox.Show(ex.Message + Environment.NewLine + ex.Source + Environment.NewLine + ex.TargetSite + Environment.NewLine + ex.ToString());
+				}
 			};
 			backgroundWorker.RunWorkerCompleted += delegate
 			{
