@@ -1,12 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:osi.Desktop.Style"
+                    xmlns:local="clr-namespace:osi.Desktop"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
     
     <FontFamily x:Key="LatoRegular">pack://application:,,,/Fonts/#Lato Regular</FontFamily>
     <FontFamily x:Key="LatoLight">pack://application:,,,/Fonts/#Lato Light</FontFamily>
     <FontFamily x:Key="LatoBold">pack://application:,,,/Fonts/#Lato Bold</FontFamily>
-    <FontFamily x:Key="FontAwesome">pack://Application:,,,/Fonts/#Font Awesome 5 Pro</FontFamily>
+    <FontFamily x:Key="FontAwesome">pack://Application:,,,/Fonts/#Font Awesome 5 Pro Light</FontFamily>
     
     <Style TargetType="{x:Type Control}" x:Key="BaseStyle">
         <Setter Property="FontFamily" Value="{StaticResource LatoRegular}"></Setter>
@@ -30,9 +30,16 @@
     <system:Double x:Key="FontSizeLarge">20</system:Double>
     <system:Double x:Key="FontSizeXLarge">24</system:Double>
     <system:Double x:Key="FontSizeXXLarge">30</system:Double>
-    
+
+    <system:String x:Key="FontAwesomeStarIcon">&#xf005;</system:String>
+    <system:String x:Key="FontAwesomeCircleIcon">&#xf111;</system:String>
+    <system:String x:Key="FontAwesomeCopyIcon">&#xf0c5;</system:String>
+    <system:String x:Key="FontAwesomeDownloadIcon">&#xf33d;</system:String>
+
     <system:String x:Key="FontAwesomeSettingIcon">&#xf013;</system:String>
     <system:String x:Key="FontAwesomeMinusIcon">&#xf068;</system:String>
+    <system:String x:Key="FontAwesomeBracketIcon">&#xf7e9;</system:String>
+
     <system:String x:Key="FontAwesomeSpinnerIcon">&#xf3f4;</system:String>
     <system:String x:Key="FontAwesomeCheckIcon">&#xf00c;</system:String>
     <system:String x:Key="FontAwesomeTimesIcon">&#xf00d;</system:String>

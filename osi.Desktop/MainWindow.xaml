@@ -9,9 +9,9 @@
         ResizeMode="NoResize"
         AllowsTransparency="True"
         Title="MainWindow" 
-        Width="450"
-        Height="400"
-        Topmost="True">
+        Width="820"
+        Height="580"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="{x:Type local:MainWindow}">
             <Setter Property="Template">
@@ -25,15 +25,104 @@
                                 <!-- Dropshadow And Side Decoration -->
                                 <Border Background="{StaticResource BackgroundVeryLightBrush}">
                                     <Border.Effect>
-                                        <DropShadowEffect ShadowDepth="0" Opacity="0.2"/>
+                                        <DropShadowEffect ShadowDepth="0" Opacity="0.25"/>
                                     </Border.Effect>
                                 </Border>
 
                                 <Grid>
-                                    <local:SideBarControl Width="20" CollapsedWidth="20" ExpandedWidth="150" Panel.ZIndex="1"/>
+                                    <!-- Side Bar -->
+                                    <Grid  Width="130" 
+                                           HorizontalAlignment="Left" 
+                                           Background="{StaticResource PrimaryBrush}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <!-- Title -->
+                                        <Viewbox Margin="45,10" Grid.Row="0">
+                                            <TextBlock Style="{StaticResource BaseTextBlockStyle}"
+                                                       Foreground="{StaticResource ForegroundVeryLightBrush}">osi</TextBlock>
+                                        </Viewbox>
+
+                                        <StackPanel Grid.Row="2" VerticalAlignment="Bottom" Margin="0,0,0,50">
+                                            <Button Style="{StaticResource BaseButtonStyle}" 
+                                                    Background="Transparent">
+                                                <StackPanel Margin="10,17" Orientation="Horizontal">
+                                                    <TextBlock Foreground="{StaticResource ForegroundVeryLightBrush}"
+                                                                   Text="{StaticResource FontAwesomeCircleIcon}"
+                                                                   Style="{StaticResource IconTextBlock}"
+                                                                   FontSize="17"/>
+                                                    <TextBlock Foreground="{StaticResource ForegroundVeryLightBrush}"
+                                                                   FontSize="17"
+                                                                   Margin="20,0,0,0">
+                                                        图谱
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button Style="{StaticResource BaseButtonStyle}" 
+                                                    Background="Transparent">
+                                                <StackPanel Margin="10,17" Orientation="Horizontal">
+                                                    <TextBlock Foreground="{StaticResource ForegroundVeryLightBrush}"
+                                                                   Text="{StaticResource FontAwesomeStarIcon}"
+                                                                   Style="{StaticResource IconTextBlock}"
+                                                                   FontSize="17"/>
+                                                    <TextBlock Foreground="{StaticResource ForegroundVeryLightBrush}"
+                                                                   FontSize="17"
+                                                                   Margin="20,0,0,0">
+                                                        收藏夹
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button Style="{StaticResource BaseButtonStyle}" 
+                                                    Background="Transparent">
+                                                <StackPanel Margin="10,17" Orientation="Horizontal">
+                                                    <TextBlock Foreground="{StaticResource ForegroundVeryLightBrush}"
+                                                                   Text="{StaticResource FontAwesomeCopyIcon}"
+                                                                   Style="{StaticResource IconTextBlock}"
+                                                                   FontSize="17"/>
+                                                    <TextBlock Foreground="{StaticResource ForegroundVeryLightBrush}"
+                                                                   FontSize="17"
+                                                                   Margin="20,0,0,0">
+                                                        备份
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button Style="{StaticResource BaseButtonStyle}" 
+                                                    Background="Transparent">
+                                                <StackPanel Margin="10,17" Orientation="Horizontal">
+                                                    <TextBlock Foreground="{StaticResource ForegroundVeryLightBrush}"
+                                                                   Text="{StaticResource FontAwesomeDownloadIcon}"
+                                                                   Style="{StaticResource IconTextBlock}"
+                                                                   FontSize="17"/>
+                                                    <TextBlock Foreground="{StaticResource ForegroundVeryLightBrush}"
+                                                                   FontSize="17"
+                                                                   Margin="20,0,0,0">
+                                                        下载
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button Style="{StaticResource BaseButtonStyle}" 
+                                                    Background="Transparent">
+                                                <StackPanel Margin="10,17" Orientation="Horizontal">
+                                                    <TextBlock Foreground="{StaticResource ForegroundVeryLightBrush}"
+                                                                   Text="{StaticResource FontAwesomeSettingIcon}"
+                                                                   Style="{StaticResource IconTextBlock}"
+                                                                   FontSize="17"/>
+                                                    <TextBlock Foreground="{StaticResource ForegroundVeryLightBrush}"
+                                                                   FontSize="17"
+                                                                   Margin="20,0,0,0">
+                                                        设置
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+
+
 
                                     <!-- MainWindow Content -->
-                                    <Grid Margin="20,0,0,0">
+                                    <Grid Margin="130,0,0,0">
                                         <Grid.RowDefinitions>
                                             <!--Titlbe Bar -->
                                             <RowDefinition Height="{Binding Path=TitleHeight,FallbackValue=40}"/>
@@ -43,29 +132,30 @@
 
                                         <!-- Title Bar -->
                                         <Grid Grid.Row="0">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <!-- Title -->
-                                            <Viewbox Grid.Column="0" Margin="0,8">
-                                                <TextBlock Style="{StaticResource BaseTextBlockStyle}">OSI</TextBlock>
-                                            </Viewbox>
-
                                             <!-- Buttons -->
-                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
 
-                                                <!-- Setting Button -->
+                                                <!-- Minmum Button -->
                                                 <Button Style="{StaticResource WindowChromeButton}" 
                                                     Grid.Column="1" 
-                                                    Visibility="Hidden"
                                                     Height="{Binding Path=TitleHeight,FallbackValue=40}" 
                                                     Command="{Binding OpenSettingWindowCommand}"
                                                     Width="50">
                                                     <TextBlock Style="{StaticResource IconTextBlock}"
                                                                Foreground="{StaticResource ForegroundDarkBrush}" 
-                                                               Text="{StaticResource FontAwesomeSettingIcon}"
+                                                               Text="{StaticResource FontAwesomeMinusIcon}"
+                                                               FontSize="{StaticResource FontSizeLarge}"/>
+                                                </Button>
+
+                                                <!-- Maxmiunm Button -->
+                                                <Button Style="{StaticResource WindowChromeButton}" 
+                                                    Grid.Column="1" 
+                                                    Height="{Binding Path=TitleHeight,FallbackValue=40}" 
+                                                    Command="{Binding OpenSettingWindowCommand}"
+                                                    Width="50">
+                                                    <TextBlock Style="{StaticResource IconTextBlock}"
+                                                               Foreground="{StaticResource ForegroundDarkBrush}" 
+                                                               Text="{StaticResource FontAwesomeBracketIcon}"
                                                                FontSize="{StaticResource FontSizeLarge}"/>
                                                 </Button>
 
@@ -77,7 +167,7 @@
                                                     Width="55">
                                                     <TextBlock Style="{StaticResource IconTextBlock}"
                                                                Foreground="{StaticResource ForegroundDarkBrush}" 
-                                                               Text="{StaticResource FontAwesomeMinusIcon}"
+                                                               Text="{StaticResource FontAwesomeTimesIcon}"
                                                                FontSize="{StaticResource FontSizeLarge}"/>
                                                 </Button>
                                             </StackPanel>
@@ -98,6 +188,11 @@
     </Window.Resources>
 
     <Grid>
-        <local:BeatmapsetDownloadListControl x:Name="List" DataContext="{Binding BeatmapsetDownloadList}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="Input" Grid.Row="0"></TextBox>
+        <!--<local:BeatmapsetDownloadListControl x:Name="List" DataContext="{Binding BeatmapsetDownloadList}"/>-->
     </Grid>
 </Window>

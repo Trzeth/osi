@@ -63,10 +63,18 @@ namespace LinkMonitor
             }
             catch (Exception e)
             {
+				StringBuilder sB = new StringBuilder();
+				sB.AppendLine(e.Source);
+				sB.AppendLine(e.ToString());
+				sB.AppendLine(e.Message);
+				foreach (KeyValuePair<string, string> pair in e.Data)
+				{
+					sB.AppendLine($"Key:{pair.Key}\nValue{pair.Value}");
+				}
+				sB.AppendLine(e.StackTrace);
+
 #if DEBUG
-                MessageBox.Show(e.Message + "   " + e.Source
-                                + Environment.NewLine+
-                                e.StackTrace);
+				MessageBox.Show(sB.ToString());
 #endif
                 exitCode = ExitCode.Error;
             }

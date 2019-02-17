@@ -48,7 +48,8 @@ namespace osi.Core
 				if (BeatmapsetDownloadListItemViewModel == null) return;
 				BeatmapsetDownloadListItemViewModel item = BeatmapsetDownloadListItemViewModel;
 
-				string fileName = $"{item.BeatmapsetId} {item.Artist}-{item.Title}.osz";
+				string fileName = null;
+				//string fileName = $"{item.BeatmapsetId} {item.Artist}-{item.Title}.osz";
 				FilePath = $"{Environment.CurrentDirectory}/download/{fileName}";
 				this.DownloadFileAsync(new Uri($"https://osu.sayobot.cn/osu.php?s={item.BeatmapsetId}"), FilePath);
 			}

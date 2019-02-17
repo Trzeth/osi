@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 
 namespace LinkMonitor.Helper
 {
-	[XmlRootAttribute("Config", Namespace = "https://osi.nyao.kim",IsNullable = true)]
+	[XmlRootAttribute("Config", IsNullable = true)]
 	public class ConfigModel
 	{
 		public RegistryKeyPair Registry = new RegistryKeyPair();

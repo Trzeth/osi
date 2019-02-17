@@ -45,6 +45,18 @@
                                             <Viewbox Grid.Column="0" Margin="0,8">
                                                 <TextBlock Style="{StaticResource BaseTextBlockStyle}">OSI</TextBlock>
                                             </Viewbox>
+
+                                            <Button Style="{StaticResource WindowChromeButton}" 
+                                                    Grid.Column="1" 
+                                                    Height="{Binding Path=TitleHeight,FallbackValue=40}"
+                                                    Click="Button_Click"
+                                                    Width="55"
+                                                    HorizontalAlignment="Right">
+                                                <TextBlock Style="{StaticResource IconTextBlock}"
+                                                               Foreground="{StaticResource ForegroundDarkBrush}" 
+                                                               Text="{StaticResource FontAwesomeMinusIcon}"
+                                                               FontSize="{StaticResource FontSizeLarge}"/>
+                                            </Button>
                                         </Grid>
 
                                         <!-- Content -->
@@ -75,20 +87,37 @@
                        Text="{StaticResource FontAwesomeSpinnerIcon}" 
                        Margin="0,50,0,0"
                        FontSize="30"
-                       RenderTransformOrigin="0.5,0.5">
+                       RenderTransformOrigin="0.5,0.5"
+                       Background="Transparent">
                 <TextBlock.RenderTransform>
-                    <RotateTransform Angle="360"></RotateTransform>
+                    <RotateTransform Angle="-60"></RotateTransform>
                 </TextBlock.RenderTransform>
+                <TextBlock.Resources>
+                    <Storyboard x:Key="SpinningAnimation">
+                        <DoubleAnimation Storyboard.TargetName="Spinner" 
+                                                     Storyboard.TargetProperty="(RenderTransform).(RotateTransform.Angle)"
+                                                     To="300" Duration="0:0:1"
+                                                     FillBehavior="Stop">
+                            <DoubleAnimation.EasingFunction>
+                                <CircleEase EasingMode="EaseInOut"/>
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                    </Storyboard>
+                </TextBlock.Resources>
                 <TextBlock.Triggers>
                     <EventTrigger RoutedEvent="Loaded">
                         <EventTrigger.Actions>
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="Spinner" Storyboard.TargetProperty="(RenderTransform).(RotateTransform.Angle)"
-                                                 From="0" To="360" Duration="0:0:1"
-                                                 RepeatBehavior="Forever"/>
-                                </Storyboard>
-                            </BeginStoryboard>
+                            <BeginStoryboard Storyboard="{StaticResource SpinningAnimation}" /> 
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard Storyboard="{StaticResource SpinningAnimation}" />
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseDown">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard Storyboard="{StaticResource SpinningAnimation}" />
                         </EventTrigger.Actions>
                     </EventTrigger>
                 </TextBlock.Triggers>

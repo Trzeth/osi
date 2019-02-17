@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:osi.Desktop.Style">
 
-    <Color x:Key="Primary">#2196F3</Color>
+    <Color x:Key="Primary">#00a0e9</Color>
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
 
     <Color x:Key="PrimaryVeryDark">#0c79b1</Color>

@@ -11,13 +11,13 @@ using System.Windows;
 
 namespace osi.Core
 {
-	public enum Status
+	public enum DownloadStatus
 	{
 		Error,
 		Downloading,
 		Finished
 	}
-	public class BeatmapsetDownloadListItemViewModel:BeatmapsetListItemViewModel
+	public class DownloadMessage : BeatmapsetListItemViewModel
 	{
 		#region Private Members
 

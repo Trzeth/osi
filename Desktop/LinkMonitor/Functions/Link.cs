@@ -17,6 +17,7 @@ namespace LinkMonitor.Functions
         {
 			ConfigModel configModel;
 			ConfigHelper configHelper = new ConfigHelper();
+
 			if (configHelper.ReadConfigFromFile())
 			{
 				configModel = configHelper.ConfigModel;

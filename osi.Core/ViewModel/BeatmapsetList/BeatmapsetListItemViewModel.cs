@@ -35,6 +35,8 @@ namespace osi.Core
 
 		public string Source { get; set; }
 
+		public string ThumbSource { get; set; }
+
 		//public BitmapImage Image {
 		//	get
 		//	{

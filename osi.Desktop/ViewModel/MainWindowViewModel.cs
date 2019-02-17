@@ -13,6 +13,8 @@ using System.ComponentModel;
 using System.IO.Pipes;
 using System.IO;
 using System.Windows.Forms;
+using osi.Desktop.Helper;
+using GoogleAnalyticsTracker.Simple;
 
 namespace osi.Desktop
 {
@@ -81,12 +83,12 @@ namespace osi.Desktop
 		public MainWindowViewModel(MainWindow window)
 		{
 			mWindow = window;
-			mWindow.Loaded += (sender,e) => {           
+			/*mWindow.Loaded += (sender,e) => {           
 				//Located window postion
 				mWindow.Top = SystemParameters.WorkArea.Height + SystemParameters.FixedFrameHorizontalBorderHeight + SystemParameters.ResizeFrameHorizontalBorderHeight - mWindow.ActualHeight - 10;
 				mWindow.Left = SystemParameters.WorkArea.Width + SystemParameters.FixedFrameVerticalBorderWidth + SystemParameters.ResizeFrameVerticalBorderWidth - mWindow.ActualWidth - 10;
 			};
-
+			*/
 			//Create command
 			CloseCommand = new RelayCommand(() => mWindow.Hide());
 			OpenSettingWindowCommnad = new RelayCommand(() => { });
@@ -120,7 +122,7 @@ namespace osi.Desktop
 					int beatmapsetId = LinkHelper.ToBeatmapsetId(uri);
 					if (link == mPreviousLink)
 					{
-						mWindow.ConfigHelper.ConfigModel.Registry.UserBrowserRegistry.OpenUrl(uri);
+						Config.Current.Registry.UserBrowserRegistry.OpenUrl(uri);
 					}
 					else
 					{
@@ -129,13 +131,16 @@ namespace osi.Desktop
 							var item = new BeatmapsetDownloadListItemViewModel(beatmapsetId);
 							BeatmapsetDownloadList.Items.Add(item);
 							item.Download();
+							
 						}));
+
+						AnalyticsHelper.Current.TrackEventAsync(AnalyticsModel.Category.User, AnalyticsModel.Action.DownloadBeatmapset, beatmapsetId.ToString(), null);
 						mPreviousLink = link;
 					}
 				}
 				catch (LinkHelper.NotValidUri)
 				{
-					mWindow.ConfigHelper.ConfigModel.Registry.UserBrowserRegistry.OpenUrl(uri);
+					Config.Current.Registry.UserBrowserRegistry.OpenUrl(uri);
 				}
 				catch (UriFormatException) { }
 			}

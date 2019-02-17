@@ -21,19 +21,17 @@ namespace osi.Desktop
 
 		private RegistryHelper mRegistryHelper = new RegistryHelper();
 
-		private AnalyticsHelper mAnalyticsHelper;
-
-		private static ConfigHelper mConfigHelper = new ConfigHelper();
-
 		private string ProductVersion = System.Windows.Forms.Application.ProductVersion;
-		public static ConfigHelper ConfigHelper
-		{
-			get { return mConfigHelper; }
-		}
 
 		protected override void OnStartup(StartupEventArgs e)
 		{
 			base.OnStartup(e);
+
+			Current.MainWindow = new MainWindow();
+			Current.MainWindow.ShowDialog();
+
+
+			ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
 			bool HasUpdate = mUpdateHelper.HasUpdate(ProductVersion);
 
@@ -45,82 +43,81 @@ namespace osi.Desktop
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 #endif
 
+			Config.Current = Config.Load();
+
 			if (HasUpdate)
 			{
 				new Windows.UpdateWindow(mUpdateHelper).ShowDialog();
 				Process.Start($"{Environment.CurrentDirectory}/LinkMonitor.exe", "--Update Restart");
-
-				Environment.Exit(0);
+				Application.Current.Shutdown();
 			}
 			else
 			{
 				ApplyConfig();
 
-				mAnalyticsHelper.TrackEventAsync(AnalyticsModel.Category.Application, AnalyticsModel.Action.Startup, null, null);
+				AnalyticsHelper.Current.TrackEventAsync(AnalyticsModel.Category.Application, AnalyticsModel.Action.Startup, null, null);
 
-				Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
-				Current.MainWindow = new MainWindow(mConfigHelper);
+				Current.MainWindow = new MainWindow();
+				Current.MainWindow.Closed += delegate
+				{
+					Current.Shutdown();
+				};
+
 				Current.MainWindow.Show();
 			}
 
 		}
 		protected override void OnExit(ExitEventArgs e)
 		{
-			mConfigHelper.ChangeRunningStatus(false);
-			mConfigHelper.SaveConfig();
+			Config.Current.IsRunning = false;
+			Config.Current.Save();
 
 			mRegistryHelper.UnRegister(mRegistryHelper.UserBrowserRegistry);
-			mAnalyticsHelper.TrackEventAsync(AnalyticsModel.Category.Application, AnalyticsModel.Action.Exit, null, null);
+			AnalyticsHelper.Current.TrackEventAsync(AnalyticsModel.Category.Application, AnalyticsModel.Action.Exit, null, null);
 
 			base.OnExit(e);
 		}
 
 		private void ApplyConfig()
 		{
-			ConfigModel configModel = null;
+			Config config = Config.Current = Config.Load();
+
 			bool IsUpdated = false;
-			bool IsInstall = !mConfigHelper.ReadConfigFromFile();
+			bool IsInstall = Config.IsInstall;
 
 			//First Run
 			if (IsInstall)
 			{
-				Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
-
 				Current.MainWindow = new Windows.WelcomeWindow(mRegistryHelper, RegistryHelper.osVersion);
 				MainWindow.ShowDialog();
 
-				configModel = new ConfigModel();
-				configModel.Registry.osiBrowserRegistry = mRegistryHelper.osiBrowserRegistry;
-				configModel.Registry.UserBrowserRegistry = mRegistryHelper.UserBrowserRegistry;
-				configModel.OSVersion = RegistryHelper.osVersion;
-				configModel.IsRunning = true;
+				config.Registry.osiBrowserRegistry = mRegistryHelper.osiBrowserRegistry;
+				config.Registry.UserBrowserRegistry = mRegistryHelper.UserBrowserRegistry;
+				config.OSVersion = RegistryHelper.osVersion;
+				config.IsRunning = true;
 
-				configModel.Registry.osuPath = mRegistryHelper.GetOsuPath();
-				configModel.Guid = Guid.NewGuid();
-				configModel.Version = ProductVersion;
-
-				mConfigHelper.ConfigModel = configModel;
-				mConfigHelper.SaveConfig();
-
+				config.Registry.osuPath = mRegistryHelper.GetOsuPath();
+				config.Guid = Guid.NewGuid();
+				config.Version = ProductVersion;
 			}
 			else
 			{
-				configModel = mConfigHelper.ConfigModel;
-				if (configModel.Version != ProductVersion)
+				if (config.Version != ProductVersion)
 				{
 					//Updated
 					IsUpdated = true;
 				}
-				mConfigHelper.ChangeRunningStatus(true);
-				mConfigHelper.SaveConfig();
-				configModel = mConfigHelper.ConfigModel;
-				mRegistryHelper.Register(configModel.Registry.osiBrowserRegistry);
+
+				config.IsRunning = true;
+				config.Save();
+				mRegistryHelper.Register(config.Registry.osiBrowserRegistry);
 			}
 
 			if (!Directory.Exists(Environment.CurrentDirectory + @"\download\")) Directory.CreateDirectory(Environment.CurrentDirectory + @"\download\");
-			mAnalyticsHelper = new AnalyticsHelper(configModel.Guid,configModel.ClientId,configModel.Version);
-			if (IsUpdated) mAnalyticsHelper.TrackEventAsync(AnalyticsModel.Category.Application,AnalyticsModel.Action.Update,null,null);
-			if (IsInstall) mAnalyticsHelper.TrackEventAsync(AnalyticsModel.Category.Application, AnalyticsModel.Action.Install, null, null);
+			AnalyticsHelper.Current = new AnalyticsHelper(config.Guid, config.ClientId, config.Version);
+
+			if (IsUpdated) AnalyticsHelper.Current.TrackEventAsync(AnalyticsModel.Category.Application,AnalyticsModel.Action.Update,null,null);
+			if (IsInstall) AnalyticsHelper.Current.TrackEventAsync(AnalyticsModel.Category.Application, AnalyticsModel.Action.Install, null, null);
 		}
 
 		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

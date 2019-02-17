@@ -24,7 +24,7 @@ namespace osi.Desktop.Windows
 			InitializeComponent();
 
 			StringBuilder sB = new StringBuilder();
-			sB.AppendLine("OSI"+ App.ConfigHelper.ConfigModel.Version);
+			sB.AppendLine("OSI"+ Config.Current.Version);
 			sB.AppendLine(e.Source);
 			sB.AppendLine(e.ToString());
 			sB.AppendLine(e.Message);

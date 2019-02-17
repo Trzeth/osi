@@ -176,7 +176,7 @@ namespace osi.Desktop
 			IsOsuRunning = true;
 			Task.Run(()=> 
 			{
-				Process.Start(App.ConfigHelper.ConfigModel.Registry.osuPath);
+				Process.Start(Config.Current.Registry.osuPath);
 			});
 
 		}

@@ -18,31 +18,14 @@ namespace osi.Desktop.Helper
 
 		public UpdateHelper()
 		{
-			UpdateModel = JsonConvert.DeserializeObject<UpdateModel>(WebClient.DownloadString(GetUri(Method.Api)));
+			UpdateModel = JsonConvert.DeserializeObject<UpdateModel>(WebClient.DownloadString($"{BaseUri}/api/"));
 		}
 
-		private enum Method
-		{
-			Api,
-			Release
-		}
-
-		private string GetUri(Method method)
-		{
-			switch (method)
-			{
-				case Method.Api:
-					return BaseUri + @"/api/";
-				case Method.Release:
-					return BaseUri + @"/release/";
-				default:
-					return BaseUri;
-			}
-		}
 		public bool HasUpdate(string version)
 		{
 			return (version != UpdateModel.Version.ToString());
 		}
+
 		public void DownloadUpdateFile()
 		{
 			foreach(KeyValuePair<string,string> pair in UpdateModel.Files)

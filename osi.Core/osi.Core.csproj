@@ -64,6 +64,7 @@
     <Compile Include="ViewModel\BeatmapsetDownloadList\BeatmapsetDownloadListViewModel.cs" />
     <Compile Include="ViewModel\BeatmapsetList\BeatmapsetListItemViewModel.cs" />
     <Compile Include="ViewModel\BeatmapsetList\BeatmapsetListViewModel.cs" />
+    <Compile Include="ViewModel\Message\DownloadMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

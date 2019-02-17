@@ -6,17 +6,11 @@
         <ResourceDictionary Source="Colors.xaml"></ResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
 
-    <Style x:Key="IconTextBlock" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlockStyle}">
-        <Setter Property="FontFamily" Value="{StaticResource FontAwesome}"/>
-    </Style>
-
-
     <!-- Skeleton For Further Doing -->
-
-    <Style x:Key="SkeletonLabel" TargetType="{x:Type Label}" BasedOn="{StaticResource BaseStyle}">
+    
+    <Style x:Key="SkeletonViewBox" TargetType="{x:Type ContentControl}" BasedOn="{StaticResource BaseStyle}">
         <Setter Property="Padding" Value="0"/>
         <Setter Property="MinWidth" Value="{Binding ActualWidth, RelativeSource={RelativeSource Mode=Self}}"/>
-        <Setter Property="Background" Value="#F2F2F2" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">

@@ -19,11 +19,11 @@ namespace osi.Core
         internal string Method;
         internal bool AllowAutoRedirect = true;
 
-        internal WebClient():base()
+        public WebClient():base()
         {
             Headers.Add(HttpRequestHeader.UserAgent, UserAgent);
         }
-        internal void AddCookie(Cookie cookie)
+        public void AddCookie(Cookie cookie)
         {
             if (m_Container == null)
             {
@@ -31,7 +31,7 @@ namespace osi.Core
             }
             m_Container.Add(cookie);
         }
-        internal void AddCookie(CookieCollection cookies)
+		public void AddCookie(CookieCollection cookies)
         {
             if (m_Container == null)
             {
@@ -176,9 +176,9 @@ namespace osi.Core
             }
             return cc;
         }
-        #endregion
+		#endregion
 
-        internal static string GetFileNameFromHeader(string head)
+		public static string GetFileNameFromHeader(string head)
         {
             string FileName;
             Regex FileNameRegex = new Regex(@"\" + '"' + @"(?<Filename>[^" + '"' + "]*)" + @"\" + '"');
