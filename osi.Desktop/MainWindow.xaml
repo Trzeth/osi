@@ -188,11 +188,7 @@
     </Window.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <TextBox x:Name="Input" Grid.Row="0"></TextBox>
+        <local:MessageHost VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
         <!--<local:BeatmapsetDownloadListControl x:Name="List" DataContext="{Binding BeatmapsetDownloadList}"/>-->
     </Grid>
 </Window>

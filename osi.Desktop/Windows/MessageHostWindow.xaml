@@ -9,7 +9,7 @@
         ResizeMode="NoResize"
         AllowsTransparency="True"
         Title="MainWindow" 
-        Width="450"
+        Width="400"
         Height="400"
         Topmost="True">
     <Window.Resources>
@@ -17,71 +17,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Window">
-                        <!-- Outer Border that for dropshadow -->
-                        <Border Padding="{Binding Path=OuterBorderPaddingThickness,FallbackValue=10}">
-                            <!-- MainWindow -->
-                            <Grid>
-
-                                <!-- Dropshadow And Side Decoration -->
-                                <Border Background="{StaticResource BackgroundVeryLightBrush}">
-                                    <Border.Effect>
-                                        <DropShadowEffect ShadowDepth="0" Opacity="0.2"/>
-                                    </Border.Effect>
-                                </Border>
-
-                                <Grid>
-                                    <!-- MainWindow Content -->
-                                        <Grid.RowDefinitions>
-                                            <!--Titlbe Bar -->
-                                            <RowDefinition Height="{Binding Path=TitleHeight,FallbackValue=40}"/>
-                                            <!-- Content -->
-                                            <RowDefinition Height="*"/>
-                                        </Grid.RowDefinitions>
-
-                                        <!-- Title Bar -->
-                                        <Grid Grid.Row="0">
-                                        <!-- Title -->
-                                        <Viewbox Margin="0,8">
-                                            <TextBlock Style="{StaticResource BaseTextBlockStyle}">OSI</TextBlock>
-                                        </Viewbox>
-
-                                        <!-- Buttons -->
-                                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-
-                                            <!-- Setting Button -->
-                                            <Button Style="{StaticResource WindowChromeButton}" 
-                                                Grid.Column="1" 
-                                                Visibility="Hidden"
-                                                Height="{Binding Path=TitleHeight,FallbackValue=40}" 
-                                                Command="{Binding OpenSettingWindowCommand}"
-                                                Width="50">
-                                                <TextBlock Style="{StaticResource IconTextBlock}"
-                                                           Foreground="{StaticResource ForegroundDarkBrush}" 
-                                                           Text="{StaticResource FontAwesomeSettingIcon}"
-                                                           FontSize="{StaticResource FontSizeLarge}"/>
-                                            </Button>
-
-                                            <!-- Close Button -->
-                                            <Button Style="{StaticResource WindowChromeButton}" 
-                                                Grid.Column="1" 
-                                                Height="{Binding Path=TitleHeight,FallbackValue=40}"
-                                                Command="{Binding CloseCommand}"
-                                                Width="55">
-                                                <TextBlock Style="{StaticResource IconTextBlock}"
-                                                           Foreground="{StaticResource ForegroundDarkBrush}" 
-                                                           Text="{StaticResource FontAwesomeMinusIcon}"
-                                                           FontSize="{StaticResource FontSizeLarge}"/>
-                                            </Button>
-                                        </StackPanel>
-                                    </Grid>
-                                    
-                                    <!-- Content -->
-                                    <Border Grid.Row="1">
-                                        <ContentPresenter Content="{TemplateBinding Content}"/>
-                                    </Border>
-                                </Grid>
-                            </Grid>
-                        </Border>
+                        <ContentPresenter Content="{TemplateBinding Content}"/>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

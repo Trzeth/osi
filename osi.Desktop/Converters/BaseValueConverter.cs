@@ -12,6 +12,7 @@ namespace osi.Desktop
 	public abstract class BaseValueConverter<T> : MarkupExtension, IValueConverter
 		where T : class, new()
 	{
+
 		#region Private Members
 
 		/// <summary>

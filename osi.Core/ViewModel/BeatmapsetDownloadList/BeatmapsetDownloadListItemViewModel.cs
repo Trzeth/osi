@@ -11,25 +11,19 @@ using System.Windows;
 
 namespace osi.Core
 {
-	public enum Status
-	{
-		Error,
-		Downloading,
-		Finished
-	}
+
 	public class BeatmapsetDownloadListItemViewModel:BeatmapsetListItemViewModel
 	{
 		#region Private Members
 
 		private int mRetryCount = 0;
 
-
 		#endregion
 
 		#region Pulic Member
 		public float Progress { get; set; }
 
-		public Status DownloadStatus { get; set; }
+		public DownloadStatus DownloadStatus { get; set; }
 
 		public int MaxRetryCount { get; set; } = 3;
 

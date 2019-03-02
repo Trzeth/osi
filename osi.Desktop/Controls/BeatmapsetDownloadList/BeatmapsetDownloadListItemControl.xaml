@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:osi.Desktop"
              mc:Ignorable="d" 
              Height="80" d:DesignWidth="350"
+             
              >
     <UserControl.DataContext>
         <PriorityBinding>

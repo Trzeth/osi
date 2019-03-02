@@ -37,6 +37,7 @@ namespace osi.Desktop
 
 		#endregion
 
+
 		private async void BaseMessage_Loaded(object sender, System.Windows.RoutedEventArgs e)
 		{
 			await AnimateIn();

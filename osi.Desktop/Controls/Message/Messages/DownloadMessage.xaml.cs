@@ -1,4 +1,5 @@
-﻿using System;
+﻿using osi.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,40 @@ namespace osi.Desktop
 	/// </summary>
 	public partial class DownloadMessage : BaseMessage
 	{
+		#region Dependency Properties
+
+		public Status DownloadStatus
+		{
+			get { return (Status)GetValue(DownloadStatusProperty); }
+			set { SetValue(DownloadStatusProperty, value); }
+		}
+
+		public static readonly DependencyProperty DownloadStatusProperty = DependencyProperty.Register(nameof(DownloadStatus), typeof(Status), typeof(DownloadMessage), new UIPropertyMetadata(new Status(), DownloadStatusChanged));
+
+		#endregion
+
 		public DownloadMessage()
 		{
 			InitializeComponent();
+		}
+		private static void DownloadStatusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			DownloadMessage message = (DownloadMessage)d;
+			switch ((Status)e.NewValue)
+			{
+				case Status.Downloading:
+					break;
+				case Status.Finished:
+					break;
+				case Status.Error:
+
+					message.BackgroundPlaceHolder.Background = Brushes.Red;
+					message.ProgressText.Visibility = Visibility.Hidden;
+					message.ProgressPlaceHolder.Visibility = Visibility.Visible;
+					message.ProgressPlaceHolder.Text = "错误";
+					break;
+			}
+
 		}
 	}
 }

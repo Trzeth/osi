@@ -11,36 +11,31 @@ using System.Windows;
 
 namespace osi.Core
 {
-	public enum DownloadStatus
-	{
-		Error,
-		Downloading,
-		Finished
-	}
-	public class DownloadMessage : BeatmapsetListItemViewModel
+	public class DownloadMessageViewModel
 	{
 		#region Private Members
 
 		private int mRetryCount = 0;
 
-
 		#endregion
 
 		#region Pulic Member
+
+		public BeatmapsetInformation BeatmapsetInformation { get; set; }
+
 		public float Progress { get; set; }
 
-		public Status DownloadStatus { get; set; }
+		public DownloadStatus DownloadStatus { get; set; }
 
 		public int MaxRetryCount { get; set; } = 3;
 
-		public int BeatmapsetId { get; set; }
 		#endregion
 
 		#region  Constructor
-		public BeatmapsetDownloadListItemViewModel() : base() { }
-		public BeatmapsetDownloadListItemViewModel(int BeatmapsetId) : base()
+		public DownloadMessageViewModel() : base() { }
+		public DownloadMessageViewModel(int BeatmapsetId) : base()
 		{
-			this.BeatmapsetId = BeatmapsetId;
+			BeatmapsetInformation.BeatmapsetId = BeatmapsetId;
 			GetBeatmapsetInformation();
 		}
 
@@ -86,63 +81,63 @@ namespace osi.Core
 
 		}
 
-		/// <summary>
-		/// Download Beatmapset
-		/// </summary>
-		public void DownloadBeatmapset()
-		{
-			Task.Run(DownloadBeatmapsetAsync);
-		}
+		///// <summary>
+		///// Download Beatmapset
+		///// </summary>
+		//public void DownloadBeatmapset()
+		//{
+		//	Task.Run(DownloadBeatmapsetAsync);
+		//}
 
-		/// <summary>
-		/// Download Beatmapset Async
-		/// </summary>
-		public async Task DownloadBeatmapsetAsync()
-		{
-			DownloadStatus = Status.Downloading;
+		///// <summary>
+		///// Download Beatmapset Async
+		///// </summary>
+		//public async Task DownloadBeatmapsetAsync()
+		//{
+		//	DownloadStatus = Status.Downloading;
 
-			DownloaderHelper.Downloader downloader = new DownloaderHelper.Downloader(this);
+		//	DownloaderHelper.Downloader downloader = new DownloaderHelper.Downloader(this);
 
-			downloader.DownloadProgressChanged += (sender, e) =>
-			{
-				Progress =  ((float)e.ProgressPercentage)/100;
-			};
+		//	downloader.DownloadProgressChanged += (sender, e) =>
+		//	{
+		//		Progress =  ((float)e.ProgressPercentage)/100;
+		//	};
 
-			downloader.DownloadFileCompleted += (sender, e) =>
-			{
-				if(e.Error!=null)
-				{
-					mRetryCount++;
-					if (mRetryCount <= MaxRetryCount)
-					{
-						Task.Run(DownloadBeatmapsetAsync);
-					}
-					else
-					{
-						DownloadStatus = Status.Error;
-					}
-				}
-				else
-				{
-					DownloadStatus = Status.Finished;
+		//	downloader.DownloadFileCompleted += (sender, e) =>
+		//	{
+		//		if(e.Error!=null)
+		//		{
+		//			mRetryCount++;
+		//			if (mRetryCount <= MaxRetryCount)
+		//			{
+		//				Task.Run(DownloadBeatmapsetAsync);
+		//			}
+		//			else
+		//			{
+		//				DownloadStatus = Status.Error;
+		//			}
+		//		}
+		//		else
+		//		{
+		//			DownloadStatus = Status.Finished;
 
-					Process.Start(((DownloaderHelper.Downloader)sender).FilePath);
-				}
-			};
-			await downloader.DownloadBeatmapset();
-		}
+		//			Process.Start(((DownloaderHelper.Downloader)sender).FilePath);
+		//		}
+		//	};
+		//	await downloader.DownloadBeatmapset();
+		//}
 
-		public void Download()
-		{
-			Task.Run(() =>
-			{
-				Task.Run(GetBeatmapsetInformationAsync).Wait();
-				
-				Task.Run(DownloadBeatmapsetAsync);
+		//public void Download()
+		//{
+		//	Task.Run(() =>
+		//	{
+		//		Task.Run(GetBeatmapsetInformationAsync).Wait();
+
+		//		Task.Run(DownloadBeatmapsetAsync);
 
 
-			});
-		}
+		//	});
+		//}
 		#endregion
 
 

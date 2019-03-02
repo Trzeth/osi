@@ -17,7 +17,8 @@ namespace osi.Desktop
     /// </summary>
     public partial class App : Application
     {
-		private UpdateHelper mUpdateHelper = new UpdateHelper();
+		//private UpdateHelper mUpdateHelper = new UpdateHelper();
+		private UpdateHelper mUpdateHelper;
 
 		private RegistryHelper mRegistryHelper = new RegistryHelper();
 
@@ -27,17 +28,18 @@ namespace osi.Desktop
 		{
 			base.OnStartup(e);
 
-			Current.MainWindow = new MainWindow();
+			Current.MainWindow = new MessageHostWindow();
 			Current.MainWindow.ShowDialog();
 
 
 			ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
-			bool HasUpdate = mUpdateHelper.HasUpdate(ProductVersion);
+			bool HasUpdate = false;
 
 #if DEBUG
 			HasUpdate = false;
 #else
+			HasUpdate = mUpdateHelper.HasUpdate(ProductVersion);
 			Dispatcher.UnhandledException += Dispatcher_UnhandledException;
 			TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;

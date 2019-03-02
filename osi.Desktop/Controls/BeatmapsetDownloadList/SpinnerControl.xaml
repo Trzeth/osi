@@ -8,7 +8,13 @@
              x:Name="Control"
              d:DesignHeight="50" d:DesignWidth="50"
              Width="{Binding ElementName=Control,Path=ActualHeight}"
-             Loaded="Control_Loaded">
+             Loaded="Control_Loaded"
+             >
+    <UserControl.Resources>
+        <Style TargetType="{x:Type local:SpinnerControl}">
+            <Setter Property="DownloadStatus" Value="{Binding DownloadStatus}"/>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         
         <!-- Spinner -->

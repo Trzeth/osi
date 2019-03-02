@@ -17,24 +17,19 @@ namespace osi.Desktop
 {
 	/// <summary>
 	/// MessageHost.xaml 的交互逻辑
-	/// </summary>
+	/// </summary> 
 	public partial class MessageHost : UserControl
 	{
 		public MessageHost()
 		{
 			InitializeComponent();
-			var t = new TextBox();
-			t.Text = "PPPPPPPPPPPPPPPPPP";
-			var q = new TextBox();
-			q.Text = "QQQQQQQQQQQQ";
-			//List.Children.Add(t);
-			List.Children.Insert(0, q);
+			Show(new DownloadMessage() { DataContext = Core.DownloadMessageDesignModel.Instance});
 		}
 		public void Show(Control control)
 		{
 			control.Opacity = 0;
 			List.Children.Insert(0, control);
-			
 		}
+
 	}
 }

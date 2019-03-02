@@ -38,6 +38,12 @@ namespace osi.Desktop
 
 		public MessageHostWindow()
 		{
+			Loaded += (sender, e) =>
+			{
+				Top = SystemParameters.WorkArea.Height + SystemParameters.FixedFrameHorizontalBorderHeight + SystemParameters.ResizeFrameHorizontalBorderHeight - ActualHeight - 10;
+				Left = SystemParameters.WorkArea.Width + SystemParameters.FixedFrameVerticalBorderWidth + SystemParameters.ResizeFrameVerticalBorderWidth - ActualWidth - 10;
+			};
+
 			InitializeComponent();
 
 			//this.DataContext = new MainWindowViewModel();
