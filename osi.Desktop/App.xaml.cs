@@ -17,8 +17,10 @@ namespace osi.Desktop
     /// </summary>
     public partial class App : Application
     {
-		//private UpdateHelper mUpdateHelper = new UpdateHelper();
 		private UpdateHelper mUpdateHelper;
+#if RELEASE
+		mUpdateHelper = new UpdateHelper();
+#endif
 
 		private RegistryHelper mRegistryHelper = new RegistryHelper();
 

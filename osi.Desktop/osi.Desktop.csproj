@@ -101,33 +101,20 @@
     <Compile Include="Animation\StoryboradHelper.cs" />
     <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Controls\BeatmapsetDownloadList\BeatmapsetDownloadListControl.xaml.cs">
-      <DependentUpon>BeatmapsetDownloadListControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\BeatmapsetDownloadList\BeatmapsetDownloadListItemControl.xaml.cs">
-      <DependentUpon>BeatmapsetDownloadListItemControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\BeatmapsetDownloadList\SpinnerControl.xaml.cs">
-      <DependentUpon>SpinnerControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\BeatmapsetList\BeatmapsetListControl.xaml.cs">
-      <DependentUpon>BeatmapsetListControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\BeatmapsetList\BeatmapsetListItemControl.xaml.cs">
-      <DependentUpon>BeatmapsetListItemControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Message\MessageHost.xaml.cs">
       <DependentUpon>MessageHost.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Message\Messages\BaseMessage.cs" />
-    <Compile Include="Controls\Message\Messages\DownloadMessage.xaml.cs">
-      <DependentUpon>DownloadMessage.xaml</DependentUpon>
+    <Compile Include="Controls\Message\Messages\DownloadTask\DownloadTask.xaml.cs">
+      <DependentUpon>DownloadTask.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Message\Messages\DownloadTask\DownloadTaskList.xaml.cs">
+      <DependentUpon>DownloadTaskList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SideBarControl.xaml.cs">
       <DependentUpon>SideBarControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BaseValueConverter.cs" />
-    <Compile Include="Converters\BeatmapsetInformationConverter.cs" />
     <Compile Include="Converters\BeatmapIdToImageConverter.cs" />
     <Compile Include="Converters\SecondsToTimeSpanConverter.cs" />
     <Compile Include="Helper\AnalyticsHelper\AnalyticsModel.cs" />
@@ -149,33 +136,17 @@
     <Compile Include="Windows\WelcomeWindow.xaml.cs">
       <DependentUpon>WelcomeWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="Controls\BeatmapsetDownloadList\BeatmapsetDownloadListControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\BeatmapsetDownloadList\BeatmapsetDownloadListItemControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\BeatmapsetDownloadList\SpinnerControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\BeatmapsetList\BeatmapsetListControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\BeatmapsetList\BeatmapsetListItemControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>XamlIntelliSenseFileGenerator</Generator>
-    </Page>
     <Page Include="Controls\Message\MessageHost.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Message\Messages\DownloadMessage.xaml">
+    <Page Include="Controls\Message\Messages\DownloadTask\DownloadTask.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Message\Messages\DownloadTask\DownloadTaskList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\SideBarControl.xaml">
       <SubType>Designer</SubType>
@@ -193,6 +164,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Styles\Message.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\Image.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

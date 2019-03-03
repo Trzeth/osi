@@ -20,7 +20,7 @@ namespace osi.Core.DownloadManager.ApiModel.V1
 			return information;
 		}
 
-		public static BeatmapsetInformation ToBeatmapInformation(this BeatmapListItem item)
+		private static BeatmapsetInformation ToBeatmapInformation(this BeatmapListItem item)
 		{
 			BeatmapsetInformation i = new BeatmapsetInformation();
 			i.BeatmapsetId = item.sid;

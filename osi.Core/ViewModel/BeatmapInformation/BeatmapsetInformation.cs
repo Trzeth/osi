@@ -118,7 +118,7 @@ namespace osi.Core
 
 		public string ThumbSource { get; set; }
 
-		public int Length { get; set; }
+		public TimeSpan Length { get; set; }
 
 		public List<Mode> Modes { get; set; }
 

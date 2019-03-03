@@ -30,8 +30,6 @@ namespace osi.Desktop
 	{
 		#region Private Member
 
-		private List<BeatmapsetDownloadListItemViewModel> items;
-
 		#endregion
 
 		#region  Constructor

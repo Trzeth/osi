@@ -30,7 +30,6 @@ namespace osi.Desktop
 	{
 		#region Private Member
 
-		private List<BeatmapsetDownloadListItemViewModel> items;
 
 		#endregion
 
@@ -41,6 +40,7 @@ namespace osi.Desktop
 			InitializeComponent();
 
 			this.DataContext = new MainWindowViewModel(this);
+
 		}
 
 		#endregion

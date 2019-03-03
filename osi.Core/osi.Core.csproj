@@ -55,7 +55,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BeatmapsetHelper\DownloaderHelper.cs" />
     <Compile Include="BeatmapsetHelper\LinkHelper.cs" />
     <Compile Include="BeatmapsetHelper\WebClient.cs">
       <SubType>Component</SubType>
@@ -72,27 +71,27 @@
     <Compile Include="DownloadManager\ApiModel\V2\BeatmapInfo.cs" />
     <Compile Include="DownloadManager\ApiModel\V2\Beatmapset.cs" />
     <Compile Include="DownloadManager\ApiModel\V2\Converter.cs" />
+    <Compile Include="DownloadManager\ApiRoute\ApiRoutes.cs" />
+    <Compile Include="DownloadManager\ApiRoute\Router.cs" />
     <Compile Include="DownloadManager\BeatmapsetInformations.cs" />
     <Compile Include="DownloadManager\DownloadManager.cs" />
+    <Compile Include="DownloadManager\DownloadStatus.cs" />
+    <Compile Include="IoC\IoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\Base\BaseViewModel.cs" />
     <Compile Include="ViewModel\Base\RelayCommand.cs" />
     <Compile Include="ViewModel\BeatmapInformation\BeatmapInformation.cs" />
-    <Compile Include="ViewModel\BeatmapsetDownloadList\BeatmapsetDownloadListItemViewModel.cs" />
-    <Compile Include="ViewModel\BeatmapsetDownloadList\BeatmapsetDownloadListViewModel.cs" />
-    <Compile Include="ViewModel\BeatmapsetList\BeatmapsetListItemViewModel.cs" />
-    <Compile Include="ViewModel\BeatmapsetList\BeatmapsetListViewModel.cs" />
     <Compile Include="ViewModel\BeatmapInformation\BeatmapsetInformation.cs" />
-    <Compile Include="ViewModel\Message\Design\DownloadMessageDesignModel.cs" />
-    <Compile Include="ViewModel\Message\DownloadMessageViewModel.cs" />
-    <Compile Include="ViewModel\Message\DownloadStatus.cs" />
+    <Compile Include="ViewModel\DownloadTaskList\Design\DownloadTaskListDesignModel.cs" />
+    <Compile Include="ViewModel\DownloadTaskList\Design\DownloadTaskDesignModel.cs" />
+    <Compile Include="ViewModel\DownloadTaskList\DownloadStatusViewModel.cs" />
+    <Compile Include="ViewModel\DownloadTaskList\DownloadTaskListViewModel.cs" />
+    <Compile Include="ViewModel\DownloadTaskList\DownloadTaskViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DownloadManager\ApiRoute\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

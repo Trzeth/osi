@@ -40,35 +40,6 @@ namespace osi.Desktop
 		/// </summary>
 		public int TitleHeight { get; set; } = 40;
 
-		public BeatmapsetDownloadListViewModel BeatmapsetDownloadList { get; set; } = new BeatmapsetDownloadListViewModel();
-
-		//public BeatmapsetListViewModel BeatmapsetList
-		//{
-		//	get
-		//	{
-		//		string json = @"{'status':0,'endid':914241,'data':[{'sid':915817,'modes':1,'approved':-1,'lastupdate':1548297103,'title':'Kawaki o Ameku (TV Size)','artist':'Minami','titleU':'','artistU':'','creator':'Alphabet','favourite_count':1,'order':0},{'sid':914973,'modes':0,'approved':-1,'lastupdate':1548218278,'title':'Stella-rium','artist':'Kano','titleU':'','artistU':'','creator':'Shallow','favourite_count':0,'order':0},{'sid':914907,'modes':0,'approved':-1,'lastupdate':1548114086,'title':'Kawaki wo Ameku','artist':'Minami','titleU':'','artistU':'','creator':'agosinter','favourite_count':0,'order':0},{'sid':914786,'modes':1,'approved':-1,'lastupdate':1548309167,'title':'Gotoubun no Kimochi (TV Size)','artist':'Nakanoke no Itsuzugo','titleU':'','artistU':'','creator':'Ianos','favourite_count':0,'order':0},{'sid':914766,'modes':0,'approved':-1,'lastupdate':1548253910,'title':'M flat','artist':'Kato Megumi (CV.Yasuno Kiyono)','titleU':'','artistU':'','creator':'realy0_','favourite_count':0,'order':0},{'sid':914523,'modes':0,'approved':-1,'lastupdate':1548050271,'title':'Domestic na Kanojo Opening','artist':'','titleU':'','artistU':'','creator':'kamisinha','favourite_count':0,'order':0},{'sid':914492,'modes':0,'approved':-1,'lastupdate':1548056346,'title':'Kawaki wo Ameku','artist':'Minami','titleU':'','artistU':'','creator':'Hvgin','favourite_count':0,'order':0},{'sid':914346,'modes':0,'approved':-1,'lastupdate':1548014825,'title':'Yuudachi no Ribbon','artist':'Kano','titleU':'','artistU':'','creator':'Failure444','favourite_count':1,'order':0},{'sid':914335,'modes':0,'approved':-1,'lastupdate':1548012533,'title':'Happiness Magical Kanon','artist':'DJ Michelle','titleU':'','artistU':'','creator':'LawyerKirby','favourite_count':0,'order':0},{'sid':914242,'modes':0,'approved':-1,'lastupdate':1547999106,'title':'Walk This Way!','artist':'Kano','titleU':'','artistU':'','creator':'Sotarks','favourite_count':4,'order':0}]}";
-
-		//		BeatmapsetListViewModel beatmapsetListViewModel = new BeatmapsetListViewModel();
-		//		List<BeatmapsetListItemViewModel> beatmapsetLists = new List<BeatmapsetListItemViewModel>();
-
-		//		JObject data = JObject.Parse(json);
-		//		IList<JToken> beatmaps = data["data"].Children().ToList();
-		//		foreach (JToken j in beatmaps)
-		//		{
-		//			BeatmapsetListItemViewModel item = new BeatmapsetListItemViewModel();
-		//			item.Artist = (string)j["artist"];
-		//			item.BeatmapsetId = int.Parse(j["sid"].ToString());
-		//			item.Title = (string)j["title"];
-		//			item.Creator = (string)j["creator"];
-
-		//			beatmapsetLists.Add(item);
-		//		}
-		//		beatmapsetListViewModel.Items = beatmapsetLists;
-
-		//		return beatmapsetListViewModel;
-		//	}
-		//}
-
 		#endregion
 
 		#region Command
@@ -104,46 +75,46 @@ namespace osi.Desktop
 		#region Methods
 		private void LinkMonitor_DoWork(object sender, DoWorkEventArgs e)
 		{
-			NamedPipeServerStream server = new NamedPipeServerStream("osi", PipeDirection.In);
-			string link = null;
-			while (link != "Stop")
-			{
-				server.WaitForConnection();
+			//NamedPipeServerStream server = new NamedPipeServerStream("osi", PipeDirection.In);
+			//string link = null;
+			//while (link != "Stop")
+			//{
+			//	server.WaitForConnection();
 
-				StreamReader sr = new StreamReader(server);
-				link = sr.ReadToEnd();
-				server.Disconnect();
+			//	StreamReader sr = new StreamReader(server);
+			//	link = sr.ReadToEnd();
+			//	server.Disconnect();
 
-				Uri uri = null;
+			//	Uri uri = null;
 
-				try
-				{
-					uri = new Uri(link);
-					int beatmapsetId = LinkHelper.ToBeatmapsetId(uri);
-					if (link == mPreviousLink)
-					{
-						Config.Current.Registry.UserBrowserRegistry.OpenUrl(uri);
-					}
-					else
-					{
-						mWindow.Dispatcher.BeginInvoke((Action)(() =>
-						{
-							var item = new BeatmapsetDownloadListItemViewModel(beatmapsetId);
-							BeatmapsetDownloadList.Items.Add(item);
-							item.Download();
+			//	try
+			//	{
+			//		uri = new Uri(link);
+			//		int beatmapsetId = LinkHelper.ToBeatmapsetId(uri);
+			//		if (link == mPreviousLink)
+			//		{
+			//			Config.Current.Registry.UserBrowserRegistry.OpenUrl(uri);
+			//		}
+			//		else
+			//		{
+			//			mWindow.Dispatcher.BeginInvoke((Action)(() =>
+			//			{
+			//				var item = new BeatmapsetDownloadListItemViewModel(beatmapsetId);
+			//				BeatmapsetDownloadList.Items.Add(item);
+			//				item.Download();
 							
-						}));
+			//			}));
 
-						AnalyticsHelper.Current.TrackEventAsync(AnalyticsModel.Category.User, AnalyticsModel.Action.DownloadBeatmapset, beatmapsetId.ToString(), null);
-						mPreviousLink = link;
-					}
-				}
-				catch (LinkHelper.NotValidUri)
-				{
-					Config.Current.Registry.UserBrowserRegistry.OpenUrl(uri);
-				}
-				catch (UriFormatException) { }
-			}
+			//			AnalyticsHelper.Current.TrackEventAsync(AnalyticsModel.Category.User, AnalyticsModel.Action.DownloadBeatmapset, beatmapsetId.ToString(), null);
+			//			mPreviousLink = link;
+			//		}
+			//	}
+			//	catch (LinkHelper.NotValidUri)
+			//	{
+			//		Config.Current.Registry.UserBrowserRegistry.OpenUrl(uri);
+			//	}
+			//	catch (UriFormatException) { }
+			//}
 		}
 
 		private void StopLinkMonitor()

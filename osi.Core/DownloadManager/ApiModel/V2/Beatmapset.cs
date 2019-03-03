@@ -32,6 +32,14 @@ namespace osi.Core.DownloadManager.ApiModel.V2
 
 		public long last_update { get; set; }
 
+		/// <summary>
+		/// 从第一个 Beatmap 中取出的不准确的时间		
+		/// </summary>
+		public int length
+		{
+			get { return bid_data.First().length; }
+		}
+
 		public long approved_date { get; set; }
 
 		public int favourite_count { get; set; }
