@@ -12,6 +12,8 @@ namespace osi.Core.DownloadManager
 
 		#region Public Properties
 
+		public static DownloadManager Current = new DownloadManager();
+
 		public EventHandler<DownloadCompleteEventArgs> DownloadComplete;
 
 		public class DownloadCompleteEventArgs : EventArgs
@@ -21,7 +23,7 @@ namespace osi.Core.DownloadManager
 
 		public void OnDownloadComplete(DownloadCompleteEventArgs e)
 		{
-			DownloadComplete(this, e);
+			DownloadComplete?.Invoke(this, e);
 		}
 
 		public string Path { get; set; }
@@ -59,6 +61,14 @@ namespace osi.Core.DownloadManager
 			Task.Run(() => Download(downloadTaskViewModel.BeatmapsetId,downloadStatusViewModel));
 
 			return downloadStatusViewModel;
+		}
+
+		public void RetryDownloadBeatmapset(DownloadTaskViewModel downloadTaskViewModel)
+		{
+			downloadTaskViewModel.DownloadStatus.DownloadingStatus = DownloadingStatus.Downloading;
+
+			Task.Run(() => Download(downloadTaskViewModel.BeatmapsetId, downloadTaskViewModel.DownloadStatus));
+
 		}
 
 		private void Download(int beatmapsetId,DownloadStatusViewModel downloadStatusViewModel)

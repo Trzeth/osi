@@ -40,6 +40,7 @@
     <system:String x:Key="FontAwesomeMinusIcon">&#xf068;</system:String>
     <system:String x:Key="FontAwesomeBracketIcon">&#xf7e9;</system:String>
 
+    <system:String x:Key="FontAwesomeRedoIcon">&#xf2f9;</system:String>
     <system:String x:Key="FontAwesomeSpinnerIcon">&#xf3f4;</system:String>
     <system:String x:Key="FontAwesomeCheckIcon">&#xf00c;</system:String>
     <system:String x:Key="FontAwesomeTimesIcon">&#xf00d;</system:String>

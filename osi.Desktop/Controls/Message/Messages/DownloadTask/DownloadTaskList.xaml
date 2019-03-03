@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:osi.Desktop"
              xmlns:core="clr-namespace:osi.Core;assembly=osi.Core"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Width="{StaticResource MessageWidth}">
     <Grid DataContext="{x:Static core:DownloadTaskListDesignModel.Instance}">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Items}">

@@ -111,18 +111,21 @@
     <Compile Include="Controls\Message\Messages\DownloadTask\DownloadTaskList.xaml.cs">
       <DependentUpon>DownloadTaskList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Message\Messages\DownloadTask\DownloadTaskProgressBar.xaml.cs">
+      <DependentUpon>DownloadTaskProgressBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SideBarControl.xaml.cs">
       <DependentUpon>SideBarControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BaseValueConverter.cs" />
     <Compile Include="Converters\BeatmapIdToImageConverter.cs" />
-    <Compile Include="Converters\SecondsToTimeSpanConverter.cs" />
     <Compile Include="Helper\AnalyticsHelper\AnalyticsModel.cs" />
     <Compile Include="Helper\AnalyticsHelper\AnalyticsHelper.cs" />
     <Compile Include="Helper\RegistryHelper\RegistryModel.cs" />
     <Compile Include="Helper\RegistryHelper\RegistryHelper.cs" />
     <Compile Include="Helper\UpdateHelper\UpdateHelper.cs" />
     <Compile Include="Helper\UpdateHelper\UpdateModel.cs" />
+    <Compile Include="LinkMonitor\LinkMonitor.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="Windows\CrashHandleWindow.xaml.cs">
       <DependentUpon>CrashHandleWindow.xaml</DependentUpon>
@@ -147,6 +150,10 @@
     <Page Include="Controls\Message\Messages\DownloadTask\DownloadTaskList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Message\Messages\DownloadTask\DownloadTaskProgressBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SideBarControl.xaml">
       <SubType>Designer</SubType>
@@ -280,7 +287,7 @@
     <Error Condition="!Exists('..\packages\Fody.4.0.2\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.4.0.2\build\Fody.targets'))" />
   </Target>
   <PropertyGroup>
-    <PreBuildEvent>xcopy /s /e /y $(SolutionDir)Desktop\LinkMonitor\bin\Debug\LinkMonitor.exe $(TargetDir)</PreBuildEvent>
+    <PreBuildEvent>xcopy /s /e /y $(SolutionDir)LinkMonitor\bin\Debug\LinkMonitor.exe $(TargetDir)</PreBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Fody.4.0.2\build\Fody.targets" Condition="Exists('..\packages\Fody.4.0.2\build\Fody.targets')" />
 </Project>

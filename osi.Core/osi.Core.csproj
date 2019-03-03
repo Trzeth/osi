@@ -75,7 +75,7 @@
     <Compile Include="DownloadManager\ApiRoute\Router.cs" />
     <Compile Include="DownloadManager\BeatmapsetInformations.cs" />
     <Compile Include="DownloadManager\DownloadManager.cs" />
-    <Compile Include="DownloadManager\DownloadStatus.cs" />
+    <Compile Include="DownloadManager\DownloadingStatus.cs" />
     <Compile Include="IoC\IoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\Base\BaseViewModel.cs" />

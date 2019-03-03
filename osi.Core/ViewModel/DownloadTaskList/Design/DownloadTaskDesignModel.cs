@@ -26,7 +26,7 @@ namespace osi.Core
 			DownloadStatus = new DownloadStatusViewModel()
 			{
 				DownloadingStatus = DownloadManager.DownloadingStatus.Downloading,
-				Progress = 0.5f
+				Progress = 1f
 			};
 		}
 

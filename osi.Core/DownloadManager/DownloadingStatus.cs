@@ -8,9 +8,9 @@ namespace osi.Core.DownloadManager
 {
 	public enum DownloadingStatus
 	{
-		Error,
+		Unset,
 		Downloading,
+		Error,
 		Complete,
-		Unset
 	}
 }

@@ -1,0 +1,122 @@
+﻿<UserControl x:Name="Control"
+             x:Class="osi.Desktop.DownloadTaskProgressBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:osi.Desktop"
+             mc:Ignorable="d"
+             d:DesignHeight="80" d:DesignWidth="340">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="{Binding ElementName=Control, Path=ProgressBarHeight,FallbackValue=0.15*}"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding ElementName=Control, Path=SideBarWidth,FallbackValue=0.15*}"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Background -->
+        <Border Margin="0,0,-5,0" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Background="#32b16c"/>
+
+        <!-- Progress Bar -->
+        <Grid Grid.Row="1" Grid.Column="1" Margin="0,-5,0,0">
+            <Border CornerRadius="0" Background="{StaticResource BackgroundLightBrush}"/>
+            <Border CornerRadius="0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Offset="0" Color="#32b16c"/>
+                        <GradientStop x:Name="Green" Offset="{Binding ElementName=Control,Path=Progress}" Color="#32b16c"/>
+                        <GradientStop x:Name="White" Offset="{Binding ElementName=Control,Path=Progress}" Color="{StaticResource BackgroundVeryLight}"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+            </Border>
+        </Grid>
+
+        <Border x:Name="BackgroundPlaceHolder" 
+                Grid.RowSpan="2" 
+                Grid.ColumnSpan="2" 
+                Background="Red"
+                Visibility="Hidden"/>
+
+        <!-- Download Status -->
+        <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <Grid>
+                    <!-- Download Icon -->
+                    <TextBlock x:Name="DownloadIcon"
+                               Style="{StaticResource IconTextBlock}"
+                               Text="{StaticResource FontAwesomeDownloadIcon}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="{StaticResource FontSizeXLarge}"
+                               Foreground="{StaticResource BackgroundVeryLightBrush}"/>
+
+                    <!-- Spinner Icon -->
+                    <TextBlock x:Name="SpinnerIcon"
+                               Visibility="Hidden"
+                               RenderTransformOrigin="0.5 0.5"
+                               Style="{StaticResource IconTextBlock}"
+                               Text="{StaticResource FontAwesomeSpinnerIcon}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="{StaticResource FontSizeXLarge}"
+                               Foreground="{StaticResource BackgroundVeryLightBrush}"/>
+                    
+                    <!-- Check Icon -->
+                    <TextBlock x:Name="CheckIcon"
+                               Visibility="Hidden"
+                               Style="{StaticResource IconTextBlock}"
+                               Text="{StaticResource FontAwesomeCheckIcon}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="{StaticResource FontSizeXLarge}"
+                               Foreground="{StaticResource BackgroundVeryLightBrush}"/>
+
+                    <!-- Retry Button -->
+                    <Button x:Name="RetryButton"
+                            Visibility="Hidden"
+                            Style="{StaticResource IconButtonStyle}"
+                            Background="Transparent"
+                            Content="{StaticResource FontAwesomeRedoIcon}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Command="{Binding Path=RetryCommand}"
+                            FontSize="{StaticResource FontSizeXLarge}"
+                            Foreground="{StaticResource BackgroundVeryLightBrush}"
+                            />
+                </Grid>
+                
+                <Grid Margin="0,10,0,0">
+                    <TextBlock x:Name="ProgressText"
+                               FontFamily="{StaticResource LatoRegular}"
+                               FontSize="{StaticResource FontSizeRegular}"
+                               Foreground="{StaticResource BackgroundVeryLightBrush}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               >
+                        <TextBlock.Text>
+                            <Binding ElementName="Control"
+                                     Path="Progress" 
+                                     StringFormat="{}{0:P0}"
+                                     FallbackValue="10%"
+                                     />
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <TextBlock x:Name="ProgressPlaceHolder"
+                               FontFamily="{StaticResource LatoRegular}"
+                               FontSize="{StaticResource FontSizeRegular}"
+                               Foreground="{StaticResource BackgroundVeryLightBrush}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Visibility="Hidden"
+                               >
+                    </TextBlock>
+                </Grid>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

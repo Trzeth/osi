@@ -24,13 +24,13 @@ namespace osi.Desktop
 	{
 		#region Dependency Properties
 
-		public DownloadingStatus DownloadStatus
-		{
-			get { return (DownloadingStatus)GetValue(DownloadStatusProperty); }
-			set { SetValue(DownloadStatusProperty, value); }
-		}
+		//public DownloadingStatus DownloadStatus
+		//{
+		//	get { return (DownloadingStatus)GetValue(DownloadStatusProperty); }
+		//	set { SetValue(DownloadStatusProperty, value); }
+		//}
 
-		public static readonly DependencyProperty DownloadStatusProperty = DependencyProperty.Register(nameof(DownloadStatus), typeof(DownloadingStatus), typeof(DownloadTask), new UIPropertyMetadata(new DownloadingStatus(), DownloadStatusChanged));
+		//public static readonly DependencyProperty DownloadStatusProperty = DependencyProperty.Register(nameof(DownloadStatus), typeof(DownloadingStatus), typeof(DownloadTask), new UIPropertyMetadata(new DownloadingStatus(), DownloadStatusChanged));
 
 		#endregion
 
@@ -38,23 +38,24 @@ namespace osi.Desktop
 		{
 			InitializeComponent();
 		}
-		private static void DownloadStatusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-		{
-			DownloadTask message = (DownloadTask)d;
-			switch ((DownloadingStatus)e.NewValue)
-			{
-				case DownloadingStatus.Downloading:
-					break;
-				case DownloadingStatus.Complete:
-					break;
-				case DownloadingStatus.Error:
-					message.BackgroundPlaceHolder.Background = Brushes.Red;
-					message.ProgressText.Visibility = Visibility.Hidden;
-					message.ProgressPlaceHolder.Visibility = Visibility.Visible;
-					message.ProgressPlaceHolder.Text = "错误";
-					break;
-			}
 
-		}
+		//private static void DownloadStatusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		//{
+		//	DownloadTask message = (DownloadTask)d;
+		//	switch ((DownloadingStatus)e.NewValue)
+		//	{
+		//		case DownloadingStatus.Downloading:
+		//			break;
+		//		case DownloadingStatus.Complete:
+		//			break;
+		//		case DownloadingStatus.Error:
+		//			message.BackgroundPlaceHolder.Background = Brushes.Red;
+		//			message.ProgressText.Visibility = Visibility.Hidden;
+		//			message.ProgressPlaceHolder.Visibility = Visibility.Visible;
+		//			message.ProgressPlaceHolder.Text = "错误";
+		//			break;
+		//	}
+
+		//}
 	}
 }

@@ -75,46 +75,6 @@ namespace osi.Desktop
 		#region Methods
 		private void LinkMonitor_DoWork(object sender, DoWorkEventArgs e)
 		{
-			//NamedPipeServerStream server = new NamedPipeServerStream("osi", PipeDirection.In);
-			//string link = null;
-			//while (link != "Stop")
-			//{
-			//	server.WaitForConnection();
-
-			//	StreamReader sr = new StreamReader(server);
-			//	link = sr.ReadToEnd();
-			//	server.Disconnect();
-
-			//	Uri uri = null;
-
-			//	try
-			//	{
-			//		uri = new Uri(link);
-			//		int beatmapsetId = LinkHelper.ToBeatmapsetId(uri);
-			//		if (link == mPreviousLink)
-			//		{
-			//			Config.Current.Registry.UserBrowserRegistry.OpenUrl(uri);
-			//		}
-			//		else
-			//		{
-			//			mWindow.Dispatcher.BeginInvoke((Action)(() =>
-			//			{
-			//				var item = new BeatmapsetDownloadListItemViewModel(beatmapsetId);
-			//				BeatmapsetDownloadList.Items.Add(item);
-			//				item.Download();
-							
-			//			}));
-
-			//			AnalyticsHelper.Current.TrackEventAsync(AnalyticsModel.Category.User, AnalyticsModel.Action.DownloadBeatmapset, beatmapsetId.ToString(), null);
-			//			mPreviousLink = link;
-			//		}
-			//	}
-			//	catch (LinkHelper.NotValidUri)
-			//	{
-			//		Config.Current.Registry.UserBrowserRegistry.OpenUrl(uri);
-			//	}
-			//	catch (UriFormatException) { }
-			//}
 		}
 
 		private void StopLinkMonitor()

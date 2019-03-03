@@ -5,11 +5,12 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles/Colors.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="Styles/Fonts.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="Styles/Texts.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="Styles/Buttons.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="Styles/Windows.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Styles/Colors.xaml"/>
+                <ResourceDictionary Source="Styles/Fonts.xaml"/>
+                <ResourceDictionary Source="Styles/Texts.xaml"/>
+                <ResourceDictionary Source="Styles/Buttons.xaml"/>
+                <ResourceDictionary Source="Styles/Message.xaml"/>
+                <ResourceDictionary Source="Styles/Windows.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

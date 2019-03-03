@@ -35,31 +35,46 @@ namespace osi.Core
 				new DownloadTaskViewModel()
 				{
 					BeatmapsetId = 923990,
-					BPM = 218,
-					Title = "White parade",
-					Artist = "Umeboshi Chazuke",
-					Creator = "ATing",
-					Length = TimeSpan.FromSeconds(196),
+					BPM = 214,
+					Title = "Call of Abyss",
+					Artist = "Atusu",
+					Creator = "Cyberspace-",
+					Length = TimeSpan.FromSeconds(214),
 
 					DownloadStatus = new DownloadStatusViewModel()
 					{
-						DownloadingStatus = DownloadManager.DownloadingStatus.Downloading,
-						Progress = 0.5f
+						DownloadingStatus = DownloadManager.DownloadingStatus.Error,
+						Progress = 0f
 					},
 				},
 				new DownloadTaskViewModel()
 				{
 					BeatmapsetId = 923990,
-					BPM = 218,
-					Title = "White parade",
-					Artist = "Umeboshi Chazuke",
-					Creator = "ATing",
+					BPM = 200,
+					Title = "Sigmund",
+					Artist = "Gram",
+					Creator = "-[Apple]-",
 					Length = TimeSpan.FromSeconds(196),
 
 					DownloadStatus = new DownloadStatusViewModel()
 					{
-						DownloadingStatus = DownloadManager.DownloadingStatus.Downloading,
-						Progress = 0.5f
+						DownloadingStatus = DownloadManager.DownloadingStatus.Complete,
+						Progress = 1f
+					},
+				},
+				new DownloadTaskViewModel()
+				{
+					BeatmapsetId = 923990,
+					BPM = 200,
+					Title = "Sigmund",
+					Artist = "Gram",
+					Creator = "-[Apple]-",
+					Length = TimeSpan.FromSeconds(196),
+
+					DownloadStatus = new DownloadStatusViewModel()
+					{
+						DownloadingStatus = DownloadManager.DownloadingStatus.Complete,
+						Progress = 1f
 					},
 				}
 			};
