@@ -74,6 +74,27 @@ namespace osi.Desktop
 		public DownloadTaskProgressBar()
 		{
 			InitializeComponent();
+			SpinnerIcon.IsVisibleChanged += SpinnerIcon_IsVisibleChanged;
+		}
+
+		private void SpinnerIcon_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+		{
+			if ((bool)e.NewValue)
+			{
+				RotateTransform rT = new RotateTransform();
+				DoubleAnimation da = new DoubleAnimation();
+				da.From = 0;
+				da.To = 360;
+				da.Duration = TimeSpan.FromMilliseconds(500);
+				da.RepeatBehavior = RepeatBehavior.Forever;
+				SpinnerIcon.RenderTransform = rT;
+
+				rT.BeginAnimation(RotateTransform.AngleProperty, da);
+			}
+			else
+			{
+				SpinnerIcon.BeginAnimation(RotateTransform.AngleProperty, null);
+			}
 		}
 
 		private static void ProgressChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -84,54 +105,93 @@ namespace osi.Desktop
 
 		private static void DownloadingStatusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			switch ((DownloadingStatus)e.NewValue)
+			DownloadTaskProgressBar control = (DownloadTaskProgressBar)d;
+			DownloadingStatus newStatus = (DownloadingStatus)e.NewValue;
+			DownloadingStatus oldStatus = (DownloadingStatus)e.OldValue;
+
+			Storyboard storyboard = new Storyboard();
+
+			switch (newStatus)
 			{
 				case DownloadingStatus.Downloading:
+					if(oldStatus == DownloadingStatus.Unset)
+					{
+						storyboard.Children.Add(FadeOutAnimation(200, control.DownloadIcon, TimeSpan.FromMilliseconds(5000)));
+
+						storyboard.Children.Add(FadeInAnimation(200, control.SpinnerIcon,TimeSpan.FromMilliseconds(5200)));
+					}
+					else if (oldStatus == DownloadingStatus.Error)
+					{
+						storyboard.Children.Add(FadeOutAnimation(200, control.BackgroundPlaceHolder));
+						storyboard.Children.Add(FadeOutAnimation(200, control.ProgressPlaceHolder));
+						storyboard.Children.Add(FadeOutAnimation(200, control.RetryButton));
+
+						storyboard.Children.Add(FadeInAnimation(200, control.ProgressText));
+
+						storyboard.Children.Add(FadeInAnimation(200, control.SpinnerIcon, TimeSpan.FromMilliseconds(200)));
+
+					}
 					break;
+
 				case DownloadingStatus.Complete:
 
-					DownloadTaskProgressBar control = (DownloadTaskProgressBar)d;
-					DoubleAnimation dA = new DoubleAnimation();
-					dA.Duration = TimeSpan.FromMilliseconds(200);
-					dA.To = 0;
-					dA.FillBehavior = FillBehavior.HoldEnd;
+					control.DownloadIcon.Visibility = Visibility.Hidden;
 
-					dA.Completed += (sender, a) => {
-						control.SpinnerIcon.Visibility = Visibility.Hidden;
-						control.SpinnerIcon.BeginAnimation(OpacityProperty, null);
-						control.SpinnerIcon.BeginAnimation(RotateTransform.AngleProperty, null);
-
-						dA.To = 1;
-						control.CheckIcon.Visibility = Visibility.Visible;
-						control.CheckIcon.BeginAnimation(OpacityProperty, dA);
-					};
-
-					control.SpinnerIcon.BeginAnimation(OpacityProperty, dA);
+					storyboard.Children.Add(FadeOutAnimation(200,control.SpinnerIcon));
+					storyboard.Children.Add(FadeInAnimation(200, control.CheckIcon, TimeSpan.FromMilliseconds(200)));
 
 					break;
 				case DownloadingStatus.Error:
+					control.DownloadIcon.Visibility = Visibility.Hidden;
+
+					storyboard.Children.Add(FadeOutAnimation(200, control.ProgressText));
+					storyboard.Children.Add(FadeOutAnimation(200, control.SpinnerIcon));
+
+					storyboard.Children.Add(FadeInAnimation(200, control.BackgroundPlaceHolder));
+					storyboard.Children.Add(FadeInAnimation(200, control.ProgressPlaceHolder));
+					storyboard.Children.Add(FadeInAnimation(200, control.RetryButton));
+
+					control.ProgressPlaceHolder.Text = "重试";
+					storyboard.Children.Add(FadeInAnimation(200, control.ProgressPlaceHolder));
+					break;
+				case DownloadingStatus.Cancel:
 
 					break;
 			}
+
+			storyboard.Begin(control);
 		}
 
-		/// <summary>
-		/// Begin Spinner Rotating
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void Control_Loaded(object sender, RoutedEventArgs e)
+		#region Animation
+
+		public static DoubleAnimation FadeOutAnimation(float seconds,FrameworkElement frameworkElement,TimeSpan? beginTime = null)
 		{
 			DoubleAnimation dA = new DoubleAnimation();
-			RotateTransform rT = new RotateTransform();
+			dA.Duration = TimeSpan.FromMilliseconds(seconds);
+			dA.To = 0;
+			if (beginTime != null) dA.BeginTime = beginTime;
+			dA.DecelerationRatio = 0.9f;
+			Storyboard.SetTargetName(dA, frameworkElement.Name);
+			Storyboard.SetTargetProperty(dA, new PropertyPath("Opacity"));
 
-			dA.Duration = TimeSpan.FromMilliseconds(500);
-			dA.From = 0;
-			dA.To = 360;
-			dA.RepeatBehavior = RepeatBehavior.Forever;
-
-			SpinnerIcon.RenderTransform = rT;
-			rT.BeginAnimation(RotateTransform.AngleProperty, dA);
+			dA.Completed += (sender, e) => { frameworkElement.Visibility = Visibility.Hidden; };
+			return dA;
 		}
+
+		public static DoubleAnimation FadeInAnimation(float seconds, FrameworkElement frameworkElement, TimeSpan? beginTime = null)
+		{
+			frameworkElement.Opacity = 0;
+			frameworkElement.Visibility = Visibility.Visible;
+
+			DoubleAnimation dA = new DoubleAnimation();
+			dA.Duration = TimeSpan.FromMilliseconds(seconds);
+			dA.To = 1;
+			if (beginTime != null) dA.BeginTime = beginTime;
+			dA.DecelerationRatio = 0.9f;
+			Storyboard.SetTargetName(dA, frameworkElement.Name);
+			Storyboard.SetTargetProperty(dA, new PropertyPath("Opacity"));
+			return dA;
+		}
+		#endregion
 	}
 }

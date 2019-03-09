@@ -13,9 +13,9 @@ namespace osi.Core
 
 		#region  Constructor
 
-		public DownloadTaskListDesignModel():base()
+		public DownloadTaskListDesignModel()
 		{
-			Items = new System.Collections.ObjectModel.ObservableCollection<DownloadTaskViewModel>()
+			Items = new AsyncObservableCollection<DownloadTaskViewModel>()
 			{
 				new DownloadTaskViewModel()
 				{
@@ -26,58 +26,59 @@ namespace osi.Core
 					Creator = "ATing",
 					Length = TimeSpan.FromSeconds(196),
 
-					DownloadStatus = new DownloadStatusViewModel()
-					{
-						DownloadingStatus = DownloadManager.DownloadingStatus.Downloading,
-						Progress = 0.5f
-					},
+					DownloadingStatus = DownloadManager.DownloadingStatus.Downloading,
+					Progress = 0.5f
 				},
 				new DownloadTaskViewModel()
 				{
-					BeatmapsetId = 923990,
+					BeatmapsetId = 910644,
 					BPM = 214,
 					Title = "Call of Abyss",
 					Artist = "Atusu",
 					Creator = "Cyberspace-",
 					Length = TimeSpan.FromSeconds(214),
 
-					DownloadStatus = new DownloadStatusViewModel()
-					{
-						DownloadingStatus = DownloadManager.DownloadingStatus.Error,
-						Progress = 0f
-					},
+					DownloadingStatus = DownloadManager.DownloadingStatus.Error,
+					Progress = 0f
 				},
 				new DownloadTaskViewModel()
 				{
-					BeatmapsetId = 923990,
+					BeatmapsetId = 915444,
 					BPM = 200,
 					Title = "Sigmund",
 					Artist = "Gram",
 					Creator = "-[Apple]-",
 					Length = TimeSpan.FromSeconds(196),
 
-					DownloadStatus = new DownloadStatusViewModel()
-					{
-						DownloadingStatus = DownloadManager.DownloadingStatus.Complete,
-						Progress = 1f
-					},
+					DownloadingStatus = DownloadManager.DownloadingStatus.Complete,
+					Progress = 1f
 				},
 				new DownloadTaskViewModel()
 				{
-					BeatmapsetId = 923990,
-					BPM = 200,
-					Title = "Sigmund",
-					Artist = "Gram",
-					Creator = "-[Apple]-",
+					BeatmapsetId = 921696,
+					BPM = 190,
+					Title = "Vous etes fatigues",
+					Artist = "Billx & Strez",
+					Creator = "[JOS]losffa",
 					Length = TimeSpan.FromSeconds(196),
 
-					DownloadStatus = new DownloadStatusViewModel()
-					{
-						DownloadingStatus = DownloadManager.DownloadingStatus.Complete,
-						Progress = 1f
-					},
-				}
+					DownloadingStatus = DownloadManager.DownloadingStatus.Complete,
+					Progress = 1f
+				},
+				new DownloadTaskViewModel()
+				{
+					BeatmapsetId = 934371,
+					BPM = 190,
+					Title = "killy killy JOKER",
+					Artist = "Wakeshima Kanon",
+					Creator = "shuniki",
+					Length = TimeSpan.FromSeconds(196),
+
+					DownloadingStatus = DownloadManager.DownloadingStatus.Downloading,
+					Progress = 0.7f
+				},
 			};
+
 		}
 
 		#endregion

@@ -1,8 +1,12 @@
-﻿namespace osi.Core
+﻿using osi.Core.DownloadManager;
+
+namespace osi.Core
 {
 	public class DownloadTaskViewModel:BeatmapsetInformation
 	{
-		public DownloadStatusViewModel DownloadStatus { get; set; }
+		public DownloadingStatus DownloadingStatus { get; set; }
+
+		public float Progress { get; set; }
 
 		public RelayCommand RetryCommand { get;set; }
 

@@ -12,5 +12,6 @@ namespace osi.Core.DownloadManager
 		Downloading,
 		Error,
 		Complete,
+		Cancel
 	}
 }

@@ -101,6 +101,15 @@
     <Compile Include="Animation\StoryboradHelper.cs" />
     <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Controls\BeatmapList\BeatmapListItem.xaml.cs">
+      <DependentUpon>BeatmapListItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BeatmapList\BeatmapList.xaml.cs">
+      <DependentUpon>BeatmapList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BeatmapList\BeatmapInfoBar.xaml.cs">
+      <DependentUpon>BeatmapInfoBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Message\MessageHost.xaml.cs">
       <DependentUpon>MessageHost.xaml</DependentUpon>
     </Compile>
@@ -118,6 +127,7 @@
       <DependentUpon>SideBarControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BaseValueConverter.cs" />
+    <Compile Include="Converters\RectangleConverter.cs" />
     <Compile Include="Converters\BeatmapIdToImageConverter.cs" />
     <Compile Include="Helper\AnalyticsHelper\AnalyticsModel.cs" />
     <Compile Include="Helper\AnalyticsHelper\AnalyticsHelper.cs" />
@@ -126,6 +136,7 @@
     <Compile Include="Helper\UpdateHelper\UpdateHelper.cs" />
     <Compile Include="Helper\UpdateHelper\UpdateModel.cs" />
     <Compile Include="LinkMonitor\LinkMonitor.cs" />
+    <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="Windows\CrashHandleWindow.xaml.cs">
       <DependentUpon>CrashHandleWindow.xaml</DependentUpon>
@@ -139,6 +150,18 @@
     <Compile Include="Windows\WelcomeWindow.xaml.cs">
       <DependentUpon>WelcomeWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\BeatmapList\BeatmapListItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\BeatmapList\BeatmapList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\BeatmapList\BeatmapInfoBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\Message\MessageHost.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -277,6 +300,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\283595l.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\Modes\mode-fruits.png" />
+    <Resource Include="Image\Modes\mode-mania.png" />
+    <Resource Include="Image\Modes\mode-osu.png" />
+    <Resource Include="Image\Modes\mode-taiko.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

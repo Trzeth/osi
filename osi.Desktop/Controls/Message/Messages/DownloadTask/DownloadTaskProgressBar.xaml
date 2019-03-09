@@ -23,16 +23,16 @@
 
         <!-- Progress Bar -->
         <Grid Grid.Row="1" Grid.Column="1" Margin="0,-5,0,0">
-            <Border CornerRadius="0" Background="{StaticResource BackgroundLightBrush}"/>
-            <Border CornerRadius="0">
-                <Border.Background>
+            <Rectangle Fill="{StaticResource BackgroundLightBrush}"/>
+            <Rectangle Margin="-1,0,0,0">
+                <Rectangle.Fill>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                         <GradientStop Offset="0" Color="#32b16c"/>
-                        <GradientStop x:Name="Green" Offset="{Binding ElementName=Control,Path=Progress}" Color="#32b16c"/>
-                        <GradientStop x:Name="White" Offset="{Binding ElementName=Control,Path=Progress}" Color="{StaticResource BackgroundVeryLight}"/>
+                        <GradientStop x:Name="Green" Offset="{Binding ElementName=Control,Path=Progress,FallbackValue=0.1}" Color="#32b16c"/>
+                        <GradientStop x:Name="White" Offset="{Binding ElementName=Control,Path=Progress,FallbackValue=0.1}" Color="{StaticResource BackgroundVeryLight}"/>
                     </LinearGradientBrush>
-                </Border.Background>
-            </Border>
+                </Rectangle.Fill>
+            </Rectangle>
         </Grid>
 
         <Border x:Name="BackgroundPlaceHolder" 
@@ -52,20 +52,25 @@
                                Text="{StaticResource FontAwesomeDownloadIcon}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
+                               Visibility="Visible"
                                FontSize="{StaticResource FontSizeXLarge}"
                                Foreground="{StaticResource BackgroundVeryLightBrush}"/>
 
                     <!-- Spinner Icon -->
-                    <TextBlock x:Name="SpinnerIcon"
+                    <TextBlock Margin="5,0,0,0"
+                               x:Name="SpinnerIcon"
+                               RenderTransformOrigin="0.36,0.5"
                                Visibility="Hidden"
-                               RenderTransformOrigin="0.5 0.5"
                                Style="{StaticResource IconTextBlock}"
                                Text="{StaticResource FontAwesomeSpinnerIcon}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
-                               FontSize="{StaticResource FontSizeXLarge}"
+                               FontSize="{StaticResource FontSizeLarge}"
                                Foreground="{StaticResource BackgroundVeryLightBrush}"/>
-                    
+
+
+
+
                     <!-- Check Icon -->
                     <TextBlock x:Name="CheckIcon"
                                Visibility="Hidden"
@@ -74,20 +79,28 @@
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                FontSize="{StaticResource FontSizeXLarge}"
-                               Foreground="{StaticResource BackgroundVeryLightBrush}"/>
+                               Foreground="{StaticResource BackgroundVeryLightBrush}"
+                               />
 
                     <!-- Retry Button -->
                     <Button x:Name="RetryButton"
                             Visibility="Hidden"
                             Style="{StaticResource IconButtonStyle}"
                             Background="Transparent"
-                            Content="{StaticResource FontAwesomeRedoIcon}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Command="{Binding Path=RetryCommand}"
-                            FontSize="{StaticResource FontSizeXLarge}"
                             Foreground="{StaticResource BackgroundVeryLightBrush}"
-                            />
+                            >
+                        <TextBlock
+                               Style="{StaticResource IconTextBlock}"
+                               Text="{StaticResource FontAwesomeRedoIcon}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="{StaticResource FontSizeLarge}"
+                               Foreground="{StaticResource BackgroundVeryLightBrush}"/>
+                    </Button>
+                    
                 </Grid>
                 
                 <Grid Margin="0,10,0,0">

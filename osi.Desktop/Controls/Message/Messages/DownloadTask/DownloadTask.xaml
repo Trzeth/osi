@@ -7,13 +7,8 @@
                    mc:Ignorable="d" 
                    d:DesignHeight="90" d:DesignWidth="350"
                    Width="{StaticResource MessageWidth}"
-                   MinHeight="{StaticResource MessageSuggestHeight}"
-                   xmlns:core="clr-namespace:osi.Core;assembly=osi.Core"
-                   xmlns:downloadmgr="clr-namespace:osi.Core.DownloadManager;assembly=osi.Core"
-                   >
-    <!--<local:BaseMessage.DataContext>
-        <Binding Source="{x:Static core:DownloadTaskDesignModel.Instance}" Mode="OneTime"/>
-    </local:BaseMessage.DataContext>-->
+                   Height="{StaticResource MessageSuggestHeight}"
+                   xmlns:core="clr-namespace:osi.Core;assembly=osi.Core">
     <local:BaseMessage.Resources>
         <Style x:Key="ContentStyle" TargetType="{x:Type ContentControl}">
             <Setter Property="Template">
@@ -24,12 +19,11 @@
                                 <DropShadowEffect ShadowDepth="0" Opacity="0.15" />
                             </Grid.Effect>
 
-                            <Grid>
+                            <Grid x:Name="Grid">
                                 <Grid.Clip>
                                     <CombinedGeometry>
                                         <CombinedGeometry.Geometry1>
-                                            <RectangleGeometry RadiusX="3" RadiusY="3" Rect="0,0,340,80">
-                                            </RectangleGeometry>
+                                            <RectangleGeometry RadiusX="3" RadiusY="3" Rect="0,0,340,80"/>
                                         </CombinedGeometry.Geometry1>
                                     </CombinedGeometry>
                                 </Grid.Clip>
@@ -40,16 +34,16 @@
                                 </Grid.RowDefinitions>
 
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="0.15*"/>
-                                    <ColumnDefinition Name="SideBarWidth" Width="*"/>
+                                    <ColumnDefinition Name="SideBarWidth" Width="0.15*"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
                                 <local:DownloadTaskProgressBar Grid.ColumnSpan="2" 
                                                                Grid.RowSpan="2" 
                                                                ProgressBarHeight="{Binding ElementName=ProgressBarHeight,Path=Height}"
                                                                SideBarWidth="{Binding ElementName=SideBarWidth,Path=Width}"
-                                                               DownloadingStatus="{Binding Path=DownloadStatus+DownloadingStatus}"
-                                                               Progress="{Binding Path=DownloadStatus+Progres}"
+                                                               DownloadingStatus="{Binding Path=DownloadingStatus}"
+                                                               Progress="{Binding Path=Progress}"
                                                                />
 
                                 <!-- Beatmapset Information -->
@@ -105,34 +99,6 @@
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <!--<ControlTemplate.Triggers>
-                            <DataTrigger Binding="{Binding Path=DownloadStatus.DownloadingStatus}" Value="{x:Static downloadmgr:DownloadingStatus.Error}">
-                                <Setter TargetName="BackgroundPlaceHolder" Property="Visibility" Value="Visible"/>
-
-                                <Setter TargetName="ProgressText" Property="Visibility" Value="Hidden"/>
-
-                                <Setter TargetName="ProgressPlaceHolder" Property="Visibility" Value="Visible"/>
-                                <Setter TargetName="ProgressPlaceHolder" Property="TextBlock.Text" Value="错误"/>
-
-                                <Setter TargetName="RetryButton" Property="Visibility" Value="Visible"/>
-                                <Setter TargetName="DownloadIcon" Property="Visibility" Value="Hidden"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=DownloadStatus.DownloadingStatus}" Value="{x:Static downloadmgr:DownloadingStatus.Downloading}">
-                                <Setter TargetName="BackgroundPlaceHolder" Property="Visibility" Value="Hidden"/>
-
-                                <Setter TargetName="ProgressText" Property="Visibility" Value="Visible"/>
-
-                                <Setter TargetName="ProgressPlaceHolder" Property="Visibility" Value="Hidden"/>
-
-                                <Setter TargetName="RetryButton" Property="Visibility" Value="Hidden"/>
-                                <Setter TargetName="DownloadIcon" Property="Visibility" Value="Visible"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=DownloadStatus.DownloadingStatus}" Value="{x:Static downloadmgr:DownloadingStatus.Complete}">
-                                <Setter TargetName="ProgressText" Property="Visibility" Value="Hidden"/>
-                                <Setter TargetName="ProgressPlaceHolder" Property="Visibility" Value="Visible"/>
-                                <Setter TargetName="ProgressPlaceHolder" Property="TextBlock.Text" Value="完成"/>
-                            </DataTrigger>
-                        </ControlTemplate.Triggers>-->
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

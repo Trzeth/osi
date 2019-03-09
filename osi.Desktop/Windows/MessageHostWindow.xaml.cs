@@ -20,6 +20,7 @@ using Newtonsoft.Json.Serialization;
 using System.Windows.Forms;
 using System.Windows.Media.Animation;
 using osi.Desktop.Helper;
+using osi.Core.DownloadManager;
 
 namespace osi.Desktop
 {
@@ -43,8 +44,6 @@ namespace osi.Desktop
 			};
 
 			InitializeComponent();
-
-			//this.DataContext = new MainWindowViewModel();
 		}
 
 		#endregion
@@ -99,6 +98,22 @@ namespace osi.Desktop
 			};
 			BeginAnimation(OpacityProperty, da);
 
+		}
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			IoC.Get<DownloadTaskListViewModel>().Items.Add(new DownloadTaskViewModel()
+			{
+				BeatmapsetId = 923990,
+				BPM = 218,
+				Title = "White parade",
+				Artist = "Umeboshi Chazuke",
+				Creator = "ATing",
+				Length = TimeSpan.FromSeconds(196),
+
+				DownloadingStatus = DownloadingStatus.Downloading,
+				Progress = 0.5f
+			});
 		}
 	}
 }

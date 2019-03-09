@@ -14,17 +14,17 @@ namespace osi.Core.DownloadManager.ApiModel.V2
 
 		public int length { get; set; }
 
-		public int cs { get; set; }
+		public float cs { get; set; }
 
-		public int ar { get; set; }
+		public float ar { get; set; }
 
-		public int od { get; set; }
+		public float od { get; set; }
 
-		public int hp { get; set; }
+		public float hp { get; set; }
 
-		public int star { get; set; }
+		public float star { get; set; }
 
-		public int aim { get; set; }
+		public float aim { get; set; }
 
 		public int circles { get; set; }
 

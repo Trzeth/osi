@@ -78,6 +78,7 @@
     <Compile Include="DownloadManager\DownloadingStatus.cs" />
     <Compile Include="IoC\IoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\Base\AsyncObservableCollection.cs" />
     <Compile Include="ViewModel\Base\BaseViewModel.cs" />
     <Compile Include="ViewModel\Base\RelayCommand.cs" />
     <Compile Include="ViewModel\BeatmapInformation\BeatmapInformation.cs" />

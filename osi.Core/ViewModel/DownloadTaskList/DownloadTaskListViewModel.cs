@@ -9,6 +9,6 @@ namespace osi.Core
 {
 	public class DownloadTaskListViewModel:BaseViewModel
 	{
-		public ObservableCollection<DownloadTaskViewModel> Items { get; set; } = new ObservableCollection<DownloadTaskViewModel>();
+		public AsyncObservableCollection<DownloadTaskViewModel> Items { get; set; } = new AsyncObservableCollection<DownloadTaskViewModel>();
 	}
 }

@@ -18,7 +18,7 @@ namespace osi.Desktop
 		private Core.DownloadManager.DownloadManager DownloadManager = Core.DownloadManager.DownloadManager.Current;
 		private string mPreviousLink;
 
-		public void StartMointor()
+		public async Task StartMointorAsync()
 		{
 			NamedPipeServerStream server = new NamedPipeServerStream("osi", PipeDirection.In);
 			string link = null;
@@ -42,7 +42,7 @@ namespace osi.Desktop
 					}
 					else
 					{
-						DownloadManager.DownloadBeatmapset(beatmapsetId);
+						DownloadManager.DownloadBeatmapsetAsync(beatmapsetId);
 
 						AnalyticsHelper.Current.TrackEventAsync(AnalyticsModel.Category.User, AnalyticsModel.Action.DownloadBeatmapset, beatmapsetId.ToString(), null);
 						mPreviousLink = link;

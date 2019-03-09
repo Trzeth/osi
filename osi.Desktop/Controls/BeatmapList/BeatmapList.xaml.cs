@@ -18,11 +18,16 @@ namespace osi.Desktop
 	/// <summary>
 	/// MessageHost.xaml 的交互逻辑
 	/// </summary> 
-	public partial class DownloadTaskList : UserControl
+	public partial class BeatmapList : UserControl
 	{
-		public DownloadTaskList()
+		public BeatmapList()
 		{
 			InitializeComponent();
 		}
+		public void Show(Control control)
+		{
+			control.Opacity = 0;
+		}
+
 	}
 }

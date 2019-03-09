@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace osi.Core.DownloadManager
@@ -26,58 +27,56 @@ namespace osi.Core.DownloadManager
 			DownloadComplete?.Invoke(this, e);
 		}
 
-		public string Path { get; set; }
+		public string Path { get; set; } = @"E:\Coding\osi\osi.Desktop\bin\Debug\download\123.osz";
 
 
 		#endregion
 
 		#region Private Properties
 
-		private static DownloadTaskListViewModel mDownloadTaskListViewModel { get; set; }
+		private AsyncObservableCollection<DownloadTaskViewModel> mDownloadTaskList
+		{
+			get { return IoC.Get<DownloadTaskListViewModel>().Items; }
+		}
 
 		#endregion
 
 		#region Contructor
 
-		public DownloadManager()
-		{
-			mDownloadTaskListViewModel = IoC.Get<DownloadTaskListViewModel>();
-		} 
+		public DownloadManager(){ } 
 
 		#endregion
 
 
-		public DownloadStatusViewModel DownloadBeatmapset(int beatmapsetId)
+		public async Task DownloadBeatmapsetAsync(int beatmapsetId)
 		{
-			return DownloadBeatmapset(new DownloadTaskViewModel(beatmapsetId));
+			DownloadBeatmapsetAsync(new DownloadTaskViewModel(beatmapsetId));
 		}
 
-		public DownloadStatusViewModel DownloadBeatmapset(DownloadTaskViewModel downloadTaskViewModel)
+		public async Task DownloadBeatmapsetAsync(DownloadTaskViewModel downloadTaskViewModel)
 		{
-			DownloadStatusViewModel downloadStatusViewModel = new DownloadStatusViewModel();
-			downloadTaskViewModel.DownloadStatus = downloadStatusViewModel;
-			mDownloadTaskListViewModel.Items.Add(downloadTaskViewModel);
+			await downloadTaskViewModel.GetInformationAsync();
+			mDownloadTaskList.Add(downloadTaskViewModel);
 
-			Task.Run(() => Download(downloadTaskViewModel.BeatmapsetId,downloadStatusViewModel));
-
-			return downloadStatusViewModel;
+			Download(downloadTaskViewModel.BeatmapsetId, downloadTaskViewModel);
 		}
 
 		public void RetryDownloadBeatmapset(DownloadTaskViewModel downloadTaskViewModel)
 		{
-			downloadTaskViewModel.DownloadStatus.DownloadingStatus = DownloadingStatus.Downloading;
+			//downloadTaskViewModel.DownloadStatus.DownloadingStatus = DownloadingStatus.Downloading;
 
-			Task.Run(() => Download(downloadTaskViewModel.BeatmapsetId, downloadTaskViewModel.DownloadStatus));
+			//Task.Run(() => Download(downloadTaskViewModel.BeatmapsetId, downloadTaskViewModel.DownloadStatus));
 
 		}
 
-		private void Download(int beatmapsetId,DownloadStatusViewModel downloadStatusViewModel)
+		private void Download(int beatmapsetId, DownloadTaskViewModel downloadTaskViewModel)
 		{
 			WebClient webClient = new WebClient();
 
+			downloadTaskViewModel.DownloadingStatus = DownloadingStatus.Downloading;
 			webClient.DownloadProgressChanged += (sender, e) =>
 			{
-				downloadStatusViewModel.Progress = ((float)e.ProgressPercentage) / 100;
+				downloadTaskViewModel.Progress = ((float)e.ProgressPercentage) / 100;
 			};
 
 			webClient.DownloadFileCompleted += (sender, e) =>
@@ -88,13 +87,13 @@ namespace osi.Core.DownloadManager
 				}
 				else
 				{
-					downloadStatusViewModel.DownloadingStatus = DownloadingStatus.Complete;
+					downloadTaskViewModel.DownloadingStatus = DownloadingStatus.Complete;
 
 					OnDownloadComplete(new DownloadCompleteEventArgs() { Path = this.Path });
 				}
 			};
-
-			webClient.DownloadFileAsync(Router.Resource.Beatmapsets.GetBeatmapsetUri(beatmapsetId), Path);
+			Uri s = Router.Resource.Beatmapsets.GetBeatmapsetUri(beatmapsetId);
+			webClient.DownloadFileAsync(s, Path);
 		}
 	}
 }

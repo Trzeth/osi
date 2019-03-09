@@ -45,5 +45,6 @@
     <system:String x:Key="FontAwesomeCheckIcon">&#xf00c;</system:String>
     <system:String x:Key="FontAwesomeTimesIcon">&#xf00d;</system:String>
     <system:String x:Key="FontAwesomeAnalyticsIcon">&#xf643;</system:String>
+    <system:String x:Key="FontAwesomeHeartIcon">&#xf004;</system:String>
 
 </ResourceDictionary>

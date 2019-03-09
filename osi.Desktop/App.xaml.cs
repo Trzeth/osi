@@ -9,6 +9,7 @@ using System.Windows;
 using System.Xml.Serialization;
 using GoogleAnalyticsTracker.Simple;
 using System.Diagnostics;
+using osi.Core;
 
 namespace osi.Desktop
 {
@@ -18,6 +19,9 @@ namespace osi.Desktop
     public partial class App : Application
     {
 		private UpdateHelper mUpdateHelper;
+
+		private LinkMonitor mLinkMonitor = new LinkMonitor();
+
 #if RELEASE
 		mUpdateHelper = new UpdateHelper();
 #endif
@@ -29,6 +33,9 @@ namespace osi.Desktop
 		protected override void OnStartup(StartupEventArgs e)
 		{
 			base.OnStartup(e);
+
+			IoC.Setup();
+			Task.Run(()=> mLinkMonitor.StartMointorAsync());
 
 			Current.MainWindow = new MessageHostWindow();
 			Current.MainWindow.ShowDialog();

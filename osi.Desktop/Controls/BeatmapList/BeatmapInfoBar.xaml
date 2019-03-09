@@ -1,0 +1,55 @@
+﻿<UserControl x:Name="Control"
+             x:Class="osi.Desktop.BeatmapInfoBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:osi.Desktop"
+             mc:Ignorable="d"
+             d:DesignHeight="80" d:DesignWidth="340">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <Style x:Key="CardStyle" TargetType="Grid">
+                        <Setter Property="Clip" Value="{Binding ElementName=Control,Path=CardClip}"/>
+                        <Setter Property="Width" Value="{Binding ElementName=Control,Path=PanelWidth}"/>
+                    </Style>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid Style="{StaticResource CardStyle}" HorizontalAlignment="Left">
+            <Border Background="{StaticResource OsuPinkBrush}"/>
+            <Viewbox HorizontalAlignment="Right" Margin="15,10,15,10">
+                <Image Source="/osi.Desktop;component/Image/Modes/mode-osu.png"></Image>
+            </Viewbox>
+        </Grid>
+
+        <Grid Style="{StaticResource CardStyle}" Visibility="Hidden" Margin="0,0,0,0">
+            <Border Background="{StaticResource OsuGrayBrush}"/>
+            <Viewbox HorizontalAlignment="Right" Margin="10">
+                <Image Source="/osi.Desktop;component/Image/Modes/mode-osu.png"></Image>
+            </Viewbox>
+
+        </Grid>
+
+        <Grid Style="{StaticResource CardStyle}" Visibility="Hidden">
+            <Border Background="{StaticResource OsuYellowBrush}"/>
+            <Viewbox HorizontalAlignment="Right" Margin="10">
+                <Image Source="/osi.Desktop;component/Image/Modes/mode-osu.png"></Image>
+            </Viewbox>
+
+        </Grid>
+
+        <Grid Style="{StaticResource CardStyle}" Visibility="Hidden">
+            <Border Background="{StaticResource OsuGreenBrush}"/>
+            <Viewbox HorizontalAlignment="Right" Margin="10">
+                <Image Source="/osi.Desktop;component/Image/Modes/mode-osu.png"></Image>
+            </Viewbox>
+
+        </Grid>
+        
+    </Grid>
+</UserControl>

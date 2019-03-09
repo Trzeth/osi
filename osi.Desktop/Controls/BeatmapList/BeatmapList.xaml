@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="osi.Desktop.DownloadTaskList"
+﻿<UserControl x:Class="osi.Desktop.BeatmapList"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,15 +6,14 @@
              xmlns:local="clr-namespace:osi.Desktop"
              xmlns:core="clr-namespace:osi.Core;assembly=osi.Core"
              mc:Ignorable="d" 
-             Width="{StaticResource MessageWidth}"
              d:DesignHeight="450" d:DesignWidth="800"
-             DataContext="{x:Static core:DownloadTaskListDesignModel.Instance}">
-    <Grid>
+             Width="{StaticResource MessageWidth}">
+    <Grid DataContext="{x:Static core:DownloadTaskListDesignModel.Instance}">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Items}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <local:DownloadTask Margin="0,10,0,10"/>
+                        <local:DownloadTask/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

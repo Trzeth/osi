@@ -14,10 +14,10 @@
     <Color x:Key="BackgroundLight">#fafafa</Color>
     <SolidColorBrush x:Key="BackgroundLightBrush" Color="{StaticResource BackgroundLight}"/>
 
-    <Color x:Key="ForegroundVeryDark">#34495e</Color>
+    <Color x:Key="ForegroundVeryDark">#2B2B2B</Color>
     <SolidColorBrush x:Key="ForegroundVeryDarkBrush" Color="{StaticResource ForegroundVeryDark}"/>
 
-    <Color x:Key="ForegroundDark">#2c3e50</Color>
+    <Color x:Key="ForegroundDark">#000</Color>
     <SolidColorBrush x:Key="ForegroundDarkBrush" Color="{StaticResource ForegroundDark}"/>
 
     <Color x:Key="ForegroundVeryLight">#fafafa</Color>
@@ -28,4 +28,23 @@
 
     <Color x:Key="ForegroundGreen">#5eb95e</Color>
     <SolidColorBrush x:Key="ForegroundGreenBrush" Color="{StaticResource ForegroundGreen}"/>
+
+    <Color x:Key="OsuPink">#f563a4</Color>
+    <SolidColorBrush x:Key="OsuPinkBrush" Color="{StaticResource OsuPink}"/>
+
+    <Color x:Key="OsuPinkVeryDark">#e25b97</Color>
+    <SolidColorBrush x:Key="OsuPinkVeryDarkBrush" Color="{StaticResource OsuPinkVeryDark}"/>
+
+    <Color x:Key="OsuGray">#b3b3b3</Color>
+    <SolidColorBrush x:Key="OsuGrayBrush" Color="{StaticResource OsuGray}"/>
+
+    <Color x:Key="OsuGreen">#00fa00</Color>
+    <SolidColorBrush x:Key="OsuGreenBrush" Color="{StaticResource OsuGreen}"/>
+
+    <Color x:Key="OsuGreenVeryDark">#32b16c</Color>
+    <SolidColorBrush x:Key="OsuGreenVeryDarkBrush" Color="{StaticResource OsuGreenVeryDark}"/>
+
+    <Color x:Key="OsuYellow">#fdef00</Color>
+    <SolidColorBrush x:Key="OsuYellowBrush" Color="{StaticResource OsuYellow}"/>
+
 </ResourceDictionary>

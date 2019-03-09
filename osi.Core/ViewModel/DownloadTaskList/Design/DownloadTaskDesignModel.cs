@@ -23,11 +23,8 @@ namespace osi.Core
 			Creator = "ATing";
 			Length = TimeSpan.FromSeconds(196);
 
-			DownloadStatus = new DownloadStatusViewModel()
-			{
-				DownloadingStatus = DownloadManager.DownloadingStatus.Downloading,
-				Progress = 1f
-			};
+			DownloadingStatus = DownloadManager.DownloadingStatus.Downloading;
+			Progress = 1f;
 		}
 
 		#endregion
