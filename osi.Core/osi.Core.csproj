@@ -83,6 +83,10 @@
     <Compile Include="ViewModel\Base\RelayCommand.cs" />
     <Compile Include="ViewModel\BeatmapInformation\BeatmapInformation.cs" />
     <Compile Include="ViewModel\BeatmapInformation\BeatmapsetInformation.cs" />
+    <Compile Include="ViewModel\BeatmapList\BeatmapListItemViewModel.cs" />
+    <Compile Include="ViewModel\BeatmapList\BeatmapListViewModel.cs" />
+    <Compile Include="ViewModel\BeatmapList\Design\BeatmapListItemDesignModel.cs" />
+    <Compile Include="ViewModel\BeatmapList\Design\BeatmapListDesignModel.cs" />
     <Compile Include="ViewModel\DownloadTaskList\Design\DownloadTaskListDesignModel.cs" />
     <Compile Include="ViewModel\DownloadTaskList\Design\DownloadTaskDesignModel.cs" />
     <Compile Include="ViewModel\DownloadTaskList\DownloadStatusViewModel.cs" />

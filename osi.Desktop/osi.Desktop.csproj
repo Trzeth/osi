@@ -127,6 +127,7 @@
       <DependentUpon>SideBarControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BaseValueConverter.cs" />
+    <Compile Include="Converters\DoubleToMarginConverter.cs" />
     <Compile Include="Converters\RectangleConverter.cs" />
     <Compile Include="Converters\BeatmapIdToImageConverter.cs" />
     <Compile Include="Helper\AnalyticsHelper\AnalyticsModel.cs" />

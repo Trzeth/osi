@@ -5,95 +5,120 @@
                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                    xmlns:local="clr-namespace:osi.Desktop"
                    mc:Ignorable="d" 
-                   d:DesignHeight="90" d:DesignWidth="350"
-                   Width="{StaticResource MessageWidth}"
-                   Height="{StaticResource MessageSuggestHeight}"
+                   d:DesignHeight="95" d:DesignWidth="{StaticResource MessageWidth}"
                    xmlns:core="clr-namespace:osi.Core;assembly=osi.Core">
     <local:BaseMessage.Resources>
         <Style x:Key="ContentStyle" TargetType="{x:Type ContentControl}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ContentControl}">
-                        <Grid Margin="5">
-                            <Grid.Effect>
-                                <DropShadowEffect ShadowDepth="0" Opacity="0.15" />
-                            </Grid.Effect>
+                        <Grid Margin="{TemplateBinding Padding}">
+                            <Grid x:Name="Grid"
+                                  Margin="20,5,5,5">
+                                <Grid.Triggers>
+                                    <EventTrigger RoutedEvent="MouseEnter">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ThicknessAnimation Storyboard.TargetName="Grid"
+                                                                    Storyboard.TargetProperty="Margin"
+                                                                    To="5"
+                                                                    Duration="0:0:0.2"
+                                                                    DecelerationRatio="0.5"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                    <EventTrigger RoutedEvent="MouseLeave">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ThicknessAnimation Storyboard.TargetName="Grid"
+                                                                    Storyboard.TargetProperty="Margin"
+                                                                    Duration="0:0:0.2"
+                                                                    DecelerationRatio="0.5"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Grid.Triggers>
+                                
+                                <Grid.Effect>
+                                    <DropShadowEffect ShadowDepth="0" Opacity="0.3" />
+                                </Grid.Effect>
 
-                            <Grid x:Name="Grid">
-                                <Grid.Clip>
-                                    <CombinedGeometry>
-                                        <CombinedGeometry.Geometry1>
-                                            <RectangleGeometry RadiusX="3" RadiusY="3" Rect="0,0,340,80"/>
-                                        </CombinedGeometry.Geometry1>
-                                    </CombinedGeometry>
-                                </Grid.Clip>
+                                <Border x:Name="Container" CornerRadius="3"
+                                    Background="{StaticResource BackgroundLightBrush}"/>
 
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Name="ProgressBarHeight" Height="0.15*"/>
-                                </Grid.RowDefinitions>
+                                <Grid>
+                                    <Grid.OpacityMask>
+                                        <VisualBrush Visual="{Binding ElementName=Container}"/>
+                                    </Grid.OpacityMask>
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Name="SideBarWidth" Width="0.15*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Name="ProgressBarHeight"
+                                                   Height="10"
+                                                   MinHeight="{Binding Path=Height,RelativeSource={RelativeSource Mode=Self}}"/>
+                                    </Grid.RowDefinitions>
 
-                                <local:DownloadTaskProgressBar Grid.ColumnSpan="2" 
-                                                               Grid.RowSpan="2" 
-                                                               ProgressBarHeight="{Binding ElementName=ProgressBarHeight,Path=Height}"
-                                                               SideBarWidth="{Binding ElementName=SideBarWidth,Path=Width}"
-                                                               DownloadingStatus="{Binding Path=DownloadingStatus}"
-                                                               Progress="{Binding Path=Progress}"
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Name="SideBarWidth" Width="0.15*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <local:DownloadTaskProgressBar Grid.ColumnSpan="2" 
+                                                                   Grid.RowSpan="2" 
+                                                                   ProgressBarHeight="{Binding ElementName=ProgressBarHeight,Path=Height}"
+                                                                   SideBarWidth="{Binding ElementName=SideBarWidth,Path=Width}"
+                                                                   DownloadingStatus="{Binding Path=DownloadingStatus}"
+                                                                   Progress="{Binding Path=Progress}"
                                                                />
 
-                                <!-- Beatmapset Information -->
-                                <Grid Grid.Row="0" Grid.Column="1" SnapsToDevicePixels="True" Background="{StaticResource BackgroundLightBrush}">
-                                    <Grid.Clip>
-                                        <CombinedGeometry>
-                                            <CombinedGeometry.Geometry1>
-                                                <RectangleGeometry RadiusX="3" RadiusY="3" Rect="0,0,296,70">
-                                                </RectangleGeometry>
-                                            </CombinedGeometry.Geometry1>
-                                        </CombinedGeometry>
+                                    <!-- Beatmapset Information -->
+                                    <Grid Grid.Row="0" 
+                                          Grid.Column="1"
+                                          Background="{StaticResource BackgroundLightBrush}">
+                                        <Border x:Name="BeatmapsetInfoContainer"
+                                                CornerRadius="3"
+                                                Background="{StaticResource BackgroundLightBrush}"/>
 
-                                    </Grid.Clip>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width='*'/>
-                                        </Grid.ColumnDefinitions>
+                                        <Grid>
+                                            <Grid.OpacityMask>
+                                                <VisualBrush Visual="{Binding ElementName=BeatmapsetInfoContainer}"/>
+                                            </Grid.OpacityMask>
 
-                                        <Image Height="70" MinWidth="{Binding Path=Height,RelativeSource={RelativeSource Mode=Self}}" Stretch="UniformToFill" Source="{Binding Path=BeatmapsetId,Converter={local:BeatmapsetIdToImageConverter}}"/>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width='*'/>
+                                            </Grid.ColumnDefinitions>
 
-                                        <Grid Grid.Column="1" Margin="5,5">
-                                            <StackPanel VerticalAlignment="Top">
-                                                <TextBlock FontSize="{StaticResource FontSizeRegular}"
-                                                           Text="{Binding Title}"
+                                            <Image Height="70" MinWidth="{Binding Path=Height,RelativeSource={RelativeSource Mode=Self}}" Stretch="UniformToFill" Source="{Binding Path=BeatmapsetId,Converter={local:BeatmapsetIdToImageConverter}}"/>
+
+                                            <Grid Grid.Column="1" Margin="5,5">
+                                                <StackPanel VerticalAlignment="Top">
+                                                    <TextBlock FontSize="{StaticResource FontSizeRegular}"
+                                                               Text="{Binding Title}"
                                                            />
-                                                <TextBlock FontSize="{StaticResource FontSizeSmall}"
-                                                           Text="{Binding Artist}"
+                                                    <TextBlock FontSize="{StaticResource FontSizeSmall}"
+                                                               Text="{Binding Artist}"
                                                            />
-                                            </StackPanel>
+                                                </StackPanel>
 
-                                            <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
-                                                <TextBlock FontSize="{StaticResource FontSizeSmall}"
-                                                           Text="{Binding Creator}"
-                                                           />
-                                                <TextBlock FontSize="{StaticResource FontSizeSmall}"
-                                                           Margin="5,0,5,0"
-                                                           >
-                                                    <TextBlock.Text>
-                                                        <Binding Path="Length" 
-                                                                 StringFormat="[{0:mm}:{0:ss}]"
+                                                <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Creator}"
+                                                               FontSize="{StaticResource FontSizeSmall}"/>
+                                                    
+                                                    <TextBlock Margin="5,0,5,0"
+                                                               FontSize="{StaticResource FontSizeSmall}">
+                                                        <TextBlock.Text>
+                                                            <Binding Path="Length" 
+                                                                     StringFormat="[{0:mm}:{0:ss}]"
                                                                  />
-                                                    </TextBlock.Text>
-                                                </TextBlock>
-                                                <TextBlock FontSize="{StaticResource FontSizeSmall}"
-                                                           Margin="5,0,5,0"
-                                                           Text="{Binding BPM,StringFormat={}{0}~}"
-                                                           >
-                                                </TextBlock>
-                                            </StackPanel>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                    
+                                                    <TextBlock Margin="5,0,5,0"
+                                                               Text="{Binding BPM,StringFormat={}{0}~}"
+                                                               FontSize="{StaticResource FontSizeSmall}"/>
+                                                </StackPanel>
+                                            </Grid>
                                         </Grid>
                                     </Grid>
                                 </Grid>

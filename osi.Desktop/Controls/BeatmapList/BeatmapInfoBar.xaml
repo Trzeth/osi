@@ -6,48 +6,114 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:osi.Desktop"
              mc:Ignorable="d"
-             d:DesignHeight="80" d:DesignWidth="340">
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             d:DesignHeight="80" d:DesignWidth="450">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary>
-                    <Style x:Key="CardStyle" TargetType="Grid">
-                        <Setter Property="Clip" Value="{Binding ElementName=Control,Path=CardClip}"/>
-                        <Setter Property="Width" Value="{Binding ElementName=Control,Path=PanelWidth}"/>
-                    </Style>
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <sys:Double x:Key="ImageHeight">40</sys:Double>
+        <sys:Double x:Key="ImageWidth">40</sys:Double>
+        <Thickness x:Key="ImageThickness">10,0,15,0</Thickness>
     </UserControl.Resources>
     <Grid>
-        <Grid Style="{StaticResource CardStyle}" HorizontalAlignment="Left">
-            <Border Background="{StaticResource OsuPinkBrush}"/>
-            <Viewbox HorizontalAlignment="Right" Margin="15,10,15,10">
-                <Image Source="/osi.Desktop;component/Image/Modes/mode-osu.png"></Image>
-            </Viewbox>
-        </Grid>
+        <StackPanel Orientation="Horizontal" Margin="{Binding ElementName=Control,Path=PanelWidth,Converter={local:DoubleToMarginConverter},ConverterParameter=-5}">
+            <Grid x:Name="Standard" 
+                  Width="65"
+                  HorizontalAlignment="Right"
+                  Margin="0,0,0,0"
+                  Panel.ZIndex="4">
+                
+                <Border Grid.RowSpan="2" Background="{StaticResource OsuPinkBrush}"
+                        CornerRadius="{Binding ElementName=Control,Path=CornerRadius,FallbackValue='0,3,3,0'}"/>
+                <Viewbox Width="{StaticResource ImageWidth}" Height="{StaticResource ImageHeight}" 
+                         HorizontalAlignment="Right" 
+                         Margin="{StaticResource ImageThickness}" 
+                         Grid.Row="0">
+                    <Image Source="/osi.Desktop;component/Image/Modes/mode-osu.png"></Image>
+                </Viewbox>
 
-        <Grid Style="{StaticResource CardStyle}" Visibility="Hidden" Margin="0,0,0,0">
-            <Border Background="{StaticResource OsuGrayBrush}"/>
-            <Viewbox HorizontalAlignment="Right" Margin="10">
-                <Image Source="/osi.Desktop;component/Image/Modes/mode-osu.png"></Image>
-            </Viewbox>
+                <!--<Grid Grid.Row="1">
+                    <Expander>
+                        <GridView>
+                            <GridViewColumn>
+                                
+                            </GridViewColumn>
+                        </GridView>
+                    </Expander>
+                </Grid>-->
+            </Grid>
 
-        </Grid>
+            <Grid x:Name="Mania" 
+                  HorizontalAlignment="Left"
+                  Visibility="Visible"
+                  Margin="-5,0,0,0"
+                  Width="15"
+                  Panel.ZIndex="3">
+                <Border Background="{StaticResource OsuGrayBrush}"
+                        CornerRadius="{Binding ElementName=Control,Path=CornerRadius,FallbackValue='0,3,3,0'}"/>
+                <Viewbox Width="{StaticResource ImageWidth}" 
+                         Height="{StaticResource ImageHeight}" 
+                         Margin="{StaticResource ImageThickness}" 
+                         HorizontalAlignment="Right" 
+                         >
+                    <Image Source="/osi.Desktop;component/Image/Modes/mode-mania.png"></Image>
+                </Viewbox>
 
-        <Grid Style="{StaticResource CardStyle}" Visibility="Hidden">
-            <Border Background="{StaticResource OsuYellowBrush}"/>
-            <Viewbox HorizontalAlignment="Right" Margin="10">
-                <Image Source="/osi.Desktop;component/Image/Modes/mode-osu.png"></Image>
-            </Viewbox>
 
-        </Grid>
+            </Grid>
 
-        <Grid Style="{StaticResource CardStyle}" Visibility="Hidden">
-            <Border Background="{StaticResource OsuGreenBrush}"/>
-            <Viewbox HorizontalAlignment="Right" Margin="10">
-                <Image Source="/osi.Desktop;component/Image/Modes/mode-osu.png"></Image>
-            </Viewbox>
+            <Grid x:Name="Taiko" 
+                  HorizontalAlignment="Left"
+                  Visibility="Visible"
+                  Width="15"
+                  Margin="-5,0,0,0"
+                  Panel.ZIndex="2">
+
+                <Border Background="{StaticResource OsuYellowBrush}"
+                        CornerRadius="{Binding ElementName=Control,Path=CornerRadius,FallbackValue='0,3,3,0'}"/>
+                <Viewbox Width="{StaticResource ImageWidth}" Height="{StaticResource ImageHeight}"
+                         HorizontalAlignment="Right" 
+                         Margin="{StaticResource ImageThickness}">
+                    <Image Source="/osi.Desktop;component/Image/Modes/mode-taiko.png"></Image>
+                </Viewbox>
+
+            </Grid>
+
+            <Grid x:Name="Ctb" 
+                  HorizontalAlignment="Left"
+                  Visibility="Visible"
+                  Margin="-5,0,0,0"
+                  Width="15"
+                  Panel.ZIndex="1">
+                <Border Background="{StaticResource OsuGreenBrush}"
+                        CornerRadius="{Binding ElementName=Control,Path=CornerRadius,FallbackValue='0,3,3,0'}"/>
+
+                <Viewbox Width="{StaticResource ImageWidth}" Height="{StaticResource ImageHeight}"
+                         HorizontalAlignment="Right" 
+                         Margin="{StaticResource ImageThickness}">
+                    <Image Source="/osi.Desktop;component/Image/Modes/mode-fruits.png"></Image>
+                </Viewbox>
+
+            </Grid>
+
+            <Grid x:Name="DownloadStatus"
+                  HorizontalAlignment="Left"
+                  Visibility="Hidden"
+                  Width="{Binding ElementName=Control,Path=PanelWidth,FallbackValue=300}"
+                  Panel.ZIndex="0">
+                <Border Background="{StaticResource OsuGreenVeryDarkBrush}"
+                        CornerRadius="{Binding ElementName=Control,Path=CornerRadius,FallbackValue=3}"/>
+
+                <Viewbox Width="{StaticResource ImageWidth}" Height="{StaticResource ImageHeight}"
+                         HorizontalAlignment="Right"
+                         Margin="{StaticResource ImageThickness}">
+                    <TextBlock Style="{StaticResource IconTextBlock}"
+                               Text="{StaticResource FontAwesomeDownloadIcon}"
+                               Foreground="White"></TextBlock>
+                </Viewbox>
+
+            </Grid>
+
+        </StackPanel>
+        <Grid x:Name="Pannel" HorizontalAlignment="Left">
 
         </Grid>
         

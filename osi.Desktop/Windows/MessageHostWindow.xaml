@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:osi.Desktop"
         mc:Ignorable="d"
+        xmlns:core="clr-namespace:osi.Core;assembly=osi.Core"
         WindowStyle="None"
         ResizeMode="NoResize"
         AllowsTransparency="True"
@@ -25,8 +26,10 @@
     </Window.Resources>
 
     <Grid>
+        <local:BeatmapList DataContext="{x:Static core:DownloadTaskListDesignModel.Instance}"></local:BeatmapList>
         <local:MessageHost x:Name="MessageHost"></local:MessageHost>
-        <local:DownloadTaskList x:Name="DownloadTaskList"
+        
+        <local:DownloadTaskList Visibility="Hidden" x:Name="DownloadTaskList"
                                  DataContext="{Binding DownloadTaskListViewModel,Source={x:Static local:ViewModelLocator.Instance}}"/>
         <Button Height="20" VerticalAlignment="Bottom" Click="Button_Click">Click</Button>
     </Grid>

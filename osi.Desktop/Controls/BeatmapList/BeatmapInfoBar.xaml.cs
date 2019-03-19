@@ -33,8 +33,7 @@ namespace osi.Desktop
 				SetValue(BeatmapListProperty, value);
 			}
 		}
-		public static readonly DependencyProperty BeatmapListProperty = DependencyProperty.Register(nameof(BeatmapList), typeof(List<BeatmapInformation>), typeof(BeatmapInfoBar), new UIPropertyMetadata(new List<BeatmapInformation>()));
-
+		public static readonly DependencyProperty BeatmapListProperty = DependencyProperty.Register(nameof(BeatmapList), typeof(List<BeatmapInformation>), typeof(BeatmapInfoBar), new UIPropertyMetadata(new List<BeatmapInformation>(),BeatmapListChanged));
 
 		public double PanelWidth
 		{
@@ -47,72 +46,99 @@ namespace osi.Desktop
 
 		public static readonly DependencyProperty PanelWidthProperty = DependencyProperty.Register(nameof(PanelWidth), typeof(double), typeof(BeatmapInfoBar), new UIPropertyMetadata(new double()));
 
-		public Geometry CardClip
+		public CornerRadius CornerRadius
 		{
-			get { return (Geometry)GetValue(CardClipProperty); }
+			get { return (CornerRadius)GetValue(CornerRadiusProperty); }
 			set
 			{
-				SetValue(CardClipProperty, value);
+				SetValue(CornerRadiusProperty, value);
 			}
 		}
 
-		public static readonly DependencyProperty CardClipProperty = DependencyProperty.Register(nameof(CardClip), typeof(Geometry), typeof(BeatmapInfoBar), new UIPropertyMetadata(new CombinedGeometry()));
+		public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register(nameof(CornerRadius),typeof(CornerRadius),typeof(BeatmapInfoBar),new UIPropertyMetadata(new CornerRadius()));
 
 
 		#endregion
 
 		public BeatmapInfoBar()
 		{
-			RectangleGeometry rect = new RectangleGeometry();
-			rect.Rect = new Rect();
 			InitializeComponent();
 		}
 
-		private void SpinnerIcon_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+		private static void BeatmapListChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
+			if (e.NewValue == null)
+				return;
 
+
+			BeatmapInfoBar bar = (BeatmapInfoBar)d;
+			List<BeatmapInformation> list = (List<BeatmapInformation>)e.NewValue;
+
+			Mode[] mode = { Mode.Standard, Mode.Mania, Mode.Taiko,Mode.Catch_the_Beat };
+
+			int count = 0;
+			foreach (Mode m in mode)
+			{
+				if (list.Exists((x) => x.Mode == m))
+				{
+
+					Grid grid = GetBeatmapInfoBar(m, bar);
+
+					grid.MouseEnter += Grid_MouseEnter;
+					grid.MouseLeave += Grid_MouseLeave;
+
+					count++;
+
+				}
+				else
+				{
+					GetBeatmapInfoBar(m, bar).Visibility = Visibility.Collapsed;
+				}
+			}
 		}
 
-		private static void ProgressChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		private static void Grid_MouseEnter(object sender, MouseEventArgs e)
 		{
+			Grid grid = (Grid)sender;
 
+			DoubleAnimation dAG = new DoubleAnimation();
+
+			dAG.To = 65;
+			dAG.DecelerationRatio = 0.5f;
+			dAG.Duration = TimeSpan.FromMilliseconds(400);
+
+			grid.BeginAnimation(WidthProperty, dAG);
 		}
 
-
-		private static void DownloadingStatusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		private static void Grid_MouseLeave(object sender, MouseEventArgs e)
 		{
-		}
+			Grid grid = (Grid)sender;
 
-		#region Animation
-
-		public static DoubleAnimation FadeOutAnimation(float seconds,FrameworkElement frameworkElement,TimeSpan? beginTime = null)
-		{
 			DoubleAnimation dA = new DoubleAnimation();
-			dA.Duration = TimeSpan.FromMilliseconds(seconds);
-			dA.To = 0;
-			if (beginTime != null) dA.BeginTime = beginTime;
-			dA.DecelerationRatio = 0.9f;
-			Storyboard.SetTargetName(dA, frameworkElement.Name);
-			Storyboard.SetTargetProperty(dA, new PropertyPath("Opacity"));
 
-			dA.Completed += (sender, e) => { frameworkElement.Visibility = Visibility.Hidden; };
-			return dA;
+			dA.To = 15;
+			dA.DecelerationRatio = 0.5f;
+			dA.Duration = TimeSpan.FromMilliseconds(400);
+
+			grid.BeginAnimation(WidthProperty, dA);
 		}
 
-		public static DoubleAnimation FadeInAnimation(float seconds, FrameworkElement frameworkElement, TimeSpan? beginTime = null)
+
+		private static Grid GetBeatmapInfoBar(Mode m,BeatmapInfoBar bar)
 		{
-			frameworkElement.Opacity = 0;
-			frameworkElement.Visibility = Visibility.Visible;
-
-			DoubleAnimation dA = new DoubleAnimation();
-			dA.Duration = TimeSpan.FromMilliseconds(seconds);
-			dA.To = 1;
-			if (beginTime != null) dA.BeginTime = beginTime;
-			dA.DecelerationRatio = 0.9f;
-			Storyboard.SetTargetName(dA, frameworkElement.Name);
-			Storyboard.SetTargetProperty(dA, new PropertyPath("Opacity"));
-			return dA;
+			switch (m)
+			{
+				case Mode.Standard:
+					return bar.Standard;
+				case Mode.Mania:
+					return bar.Mania;
+				case Mode.Taiko:
+					return bar.Taiko;
+				case Mode.Catch_the_Beat:
+					return bar.Ctb;
+				default:
+					return null;
+			}
 		}
-		#endregion
 	}
 }

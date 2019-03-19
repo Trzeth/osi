@@ -6,10 +6,27 @@
              xmlns:local="clr-namespace:osi.Desktop"
              xmlns:core="clr-namespace:osi.Core;assembly=osi.Core"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             Width="{StaticResource MessageWidth}">
-    <Grid DataContext="{x:Static core:DownloadTaskListDesignModel.Instance}">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid DataContext="{x:Static core:BeatmapListDesignModel.Instance}">
+        <ListView ItemsSource="{Binding Items}" 
+                  Background="{x:Null}"
+                  BorderBrush="{x:Null}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  Grid.IsSharedSizeScope="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid >
+                        <local:BeatmapListItem/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" Grid.IsSharedSizeScope="True"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
+        <!--<ScrollViewer VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Items}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -17,6 +34,6 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </ScrollViewer>
+        </ScrollViewer>-->
     </Grid>
 </UserControl>

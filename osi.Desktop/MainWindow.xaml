@@ -40,7 +40,7 @@
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
                                         <!-- Title -->
-                                        <Viewbox Margin="45,10" Grid.Row="0">
+                                        <Viewbox Margin="40,30" Grid.Row="0">
                                             <TextBlock Style="{StaticResource BaseTextBlockStyle}"
                                                        Foreground="{StaticResource ForegroundVeryLightBrush}">osi</TextBlock>
                                         </Viewbox>
@@ -188,7 +188,7 @@
     </Window.Resources>
 
     <Grid>
-        <local:MessageHost VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+        <local:BeatmapList></local:BeatmapList>        
         <!--<local:BeatmapsetDownloadListControl x:Name="List" DataContext="{Binding BeatmapsetDownloadList}"/>-->
     </Grid>
 </Window>

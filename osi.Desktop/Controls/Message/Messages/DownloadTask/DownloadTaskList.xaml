@@ -14,7 +14,7 @@
             <ItemsControl ItemsSource="{Binding Items}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <local:DownloadTask Margin="0,10,0,10"/>
+                        <local:DownloadTask Padding="0,3,0,3"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
