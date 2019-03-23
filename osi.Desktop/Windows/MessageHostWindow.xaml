@@ -29,7 +29,7 @@
         <local:BeatmapList DataContext="{x:Static core:DownloadTaskListDesignModel.Instance}"></local:BeatmapList>
         <local:MessageHost x:Name="MessageHost"></local:MessageHost>
         
-        <local:DownloadTaskList Visibility="Hidden" x:Name="DownloadTaskList"
+        <local:DownloadTaskList Visibility="Visible" x:Name="DownloadTaskList"
                                  DataContext="{Binding DownloadTaskListViewModel,Source={x:Static local:ViewModelLocator.Instance}}"/>
         <Button Height="20" VerticalAlignment="Bottom" Click="Button_Click">Click</Button>
     </Grid>

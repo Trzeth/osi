@@ -12,5 +12,7 @@ namespace osi.Desktop
 		public static ViewModelLocator Instance { get; private set; } = new ViewModelLocator();
 
 		public DownloadTaskListViewModel DownloadTaskListViewModel => IoC.Get<DownloadTaskListViewModel>();
+
+		public ApplicationViewModel ApplicationViewModel => IoC.Get<ApplicationViewModel>();
 	}
 }

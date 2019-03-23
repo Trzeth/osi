@@ -11,7 +11,7 @@
     <UserControl.Resources>
         <sys:Double x:Key="ImageHeight">40</sys:Double>
         <sys:Double x:Key="ImageWidth">40</sys:Double>
-        <Thickness x:Key="ImageThickness">10,0,15,0</Thickness>
+        <Thickness x:Key="ImageThickness">0,0,15,0</Thickness>
     </UserControl.Resources>
     <Grid>
         <StackPanel Orientation="Horizontal" Margin="{Binding ElementName=Control,Path=PanelWidth,Converter={local:DoubleToMarginConverter},ConverterParameter=-5}">

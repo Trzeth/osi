@@ -188,7 +188,11 @@
     </Window.Resources>
 
     <Grid>
-        <local:BeatmapList></local:BeatmapList>        
+        <local:PageHost d:DataContext=""
+                        DataContext="{Binding ApplicationViewModel.CurrentPage, 
+                                     Source={x:Static local:ViewModelLocator.Instance},  
+                                     Converter={local:ApplicationPageValueConverter}}"
+                        CurrentPage="{Binding}" />
         <!--<local:BeatmapsetDownloadListControl x:Name="List" DataContext="{Binding BeatmapsetDownloadList}"/>-->
     </Grid>
 </Window>

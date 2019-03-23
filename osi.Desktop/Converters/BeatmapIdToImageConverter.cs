@@ -19,6 +19,7 @@ namespace osi.Desktop
 
 			bitmapImage.DownloadFailed += (sender, e) =>
 			{
+				
 				//bitmapImage = new BitmapImage(new Uri("pack://application:,,,/Image/File.png", UriKind.Absolute));
 			};
 			//WebClient webClient = new WebClient();

@@ -57,6 +57,16 @@ namespace osi.Desktop
 
 		public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register(nameof(CornerRadius),typeof(CornerRadius),typeof(BeatmapInfoBar),new UIPropertyMetadata(new CornerRadius()));
 
+		public bool IsExpanded
+		{
+			get { return (bool)GetValue(IsExpandedProperty); }
+			set
+			{
+				SetValue(IsExpandedProperty, value);
+			}
+		}
+
+		public static readonly DependencyProperty IsExpandedProperty = DependencyProperty.Register(nameof(IsExpanded), typeof(bool), typeof(BeatmapInfoBar), new UIPropertyMetadata(new bool(),OnIsExpandedChanged));
 
 		#endregion
 
@@ -84,8 +94,16 @@ namespace osi.Desktop
 
 					Grid grid = GetBeatmapInfoBar(m, bar);
 
-					grid.MouseEnter += Grid_MouseEnter;
-					grid.MouseLeave += Grid_MouseLeave;
+					if(count == 0)
+					{
+						grid.Tag = "First";
+					}
+					else
+					{
+						grid.MouseEnter += bar.Grid_MouseEnter;
+						grid.MouseLeave += bar.Grid_MouseLeave;
+
+					}
 
 					count++;
 
@@ -97,7 +115,9 @@ namespace osi.Desktop
 			}
 		}
 
-		private static void Grid_MouseEnter(object sender, MouseEventArgs e)
+		#region Grid Animation
+
+		private void Grid_MouseEnter(object sender, MouseEventArgs e)
 		{
 			Grid grid = (Grid)sender;
 
@@ -108,9 +128,10 @@ namespace osi.Desktop
 			dAG.Duration = TimeSpan.FromMilliseconds(400);
 
 			grid.BeginAnimation(WidthProperty, dAG);
+			IsExpanded = true;
 		}
 
-		private static void Grid_MouseLeave(object sender, MouseEventArgs e)
+		private void Grid_MouseLeave(object sender, MouseEventArgs e)
 		{
 			Grid grid = (Grid)sender;
 
@@ -121,10 +142,10 @@ namespace osi.Desktop
 			dA.Duration = TimeSpan.FromMilliseconds(400);
 
 			grid.BeginAnimation(WidthProperty, dA);
+			IsExpanded = false;
 		}
 
-
-		private static Grid GetBeatmapInfoBar(Mode m,BeatmapInfoBar bar)
+		private static Grid GetBeatmapInfoBar(Mode m, BeatmapInfoBar bar)
 		{
 			switch (m)
 			{
@@ -140,5 +161,35 @@ namespace osi.Desktop
 					return null;
 			}
 		}
+
+		private static void OnIsExpandedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			Mode[] mode = { Mode.Standard, Mode.Mania, Mode.Taiko, Mode.Catch_the_Beat };
+			foreach (Mode m in mode)
+			{
+				Grid grid = GetBeatmapInfoBar(m, (BeatmapInfoBar)d);
+				if (grid.Tag.ToString() == "First")
+				{
+					DoubleAnimation dA = new DoubleAnimation();
+					dA.DecelerationRatio = 0.5f;
+					dA.Duration = TimeSpan.FromMilliseconds(400);
+
+					if ((bool)e.NewValue)
+					{
+						dA.To = 15;
+					}
+					else
+					{
+						dA.To = 65;
+					}
+
+					grid.BeginAnimation(WidthProperty, dA);
+					break;
+				}
+			}
+		}
+
+		#endregion
+
 	}
 }

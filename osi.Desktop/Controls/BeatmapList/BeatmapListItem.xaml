@@ -15,7 +15,7 @@
                     <ControlTemplate TargetType="{x:Type ContentControl}">
                         <Grid Margin="5">
                             <Grid.Effect>
-                                <DropShadowEffect ShadowDepth="0" Opacity="0.15" />
+                                <DropShadowEffect ShadowDepth="0" Opacity="0.2" />
                             </Grid.Effect>
 
                             <Grid x:Name="Grid">
@@ -86,7 +86,8 @@
                                                     BorderThickness="0"
                                                     Style="{StaticResource IconButtonStyle}"
                                                     Background="Transparent"
-                                                    Padding="10">
+                                                    Padding="10"
+                                                    Command="{Binding ClickCommand}">
                                                     <TextBlock Style="{StaticResource IconTextBlock}"
                                                            Text="{StaticResource FontAwesomeDownloadIcon}"
                                                            FontSize="{StaticResource FontSizeXXLarge}"

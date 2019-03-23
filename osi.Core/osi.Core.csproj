@@ -59,6 +59,7 @@
     <Compile Include="BeatmapsetHelper\WebClient.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DataModels\ApplicationPage.cs" />
     <Compile Include="DownloadManager\ApiModel\Common\Converter.cs" />
     <Compile Include="DownloadManager\ApiModel\Common\Genre.cs" />
     <Compile Include="DownloadManager\ApiModel\Common\Language.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="DownloadManager\DownloadingStatus.cs" />
     <Compile Include="IoC\IoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\ApplicationViewModel.cs" />
     <Compile Include="ViewModel\Base\AsyncObservableCollection.cs" />
     <Compile Include="ViewModel\Base\BaseViewModel.cs" />
     <Compile Include="ViewModel\Base\RelayCommand.cs" />
