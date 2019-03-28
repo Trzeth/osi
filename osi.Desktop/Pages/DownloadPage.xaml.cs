@@ -13,12 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace osi.Desktop.Pages
+namespace osi.Desktop
 {
     /// <summary>
     /// DownloadPage.xaml 的交互逻辑
     /// </summary>
-    public partial class DownloadPage : Page
+    public partial class DownloadPage : BasePage
     {
         public DownloadPage()
         {

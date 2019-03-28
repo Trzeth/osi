@@ -131,11 +131,15 @@
     <Compile Include="Controls\PageHost.xaml.cs">
       <DependentUpon>PageHost.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SideBarControl.xaml.cs">
-      <DependentUpon>SideBarControl.xaml</DependentUpon>
+    <Compile Include="Controls\SideBarCollapsed.xaml.cs">
+      <DependentUpon>SideBarCollapsed.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SideBar.xaml.cs">
+      <DependentUpon>SideBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\ApplicationPageValueConverter.cs" />
     <Compile Include="Converters\BaseValueConverter.cs" />
+    <Compile Include="Converters\NumberOverStackConverter.cs" />
     <Compile Include="Converters\DoubleToMarginConverter.cs" />
     <Compile Include="Converters\RectangleConverter.cs" />
     <Compile Include="Converters\BeatmapIdToImageConverter.cs" />
@@ -208,7 +212,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\SideBarControl.xaml">
+    <Page Include="Controls\SideBarCollapsed.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\SideBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

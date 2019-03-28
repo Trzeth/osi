@@ -17,7 +17,7 @@ namespace osi.Desktop
             {
                 case ApplicationPage.BeatmapListPage:
 					//Todo
-					return null;
+					return new BeatmapListPage();
 
 				case ApplicationPage.FavoritePage:
 					return null;

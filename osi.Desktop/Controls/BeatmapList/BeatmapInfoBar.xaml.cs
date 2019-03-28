@@ -25,15 +25,15 @@ namespace osi.Desktop
     {
 		#region Dependency Properties
 
-		public List<BeatmapInformation> BeatmapList
+		public List<Mode> Modes
 		{
-			get { return (List<BeatmapInformation>)GetValue(BeatmapListProperty); }
+			get { return (List<Mode>)GetValue(ModesProperty); }
 			set
 			{
-				SetValue(BeatmapListProperty, value);
+				SetValue(ModesProperty, value);
 			}
 		}
-		public static readonly DependencyProperty BeatmapListProperty = DependencyProperty.Register(nameof(BeatmapList), typeof(List<BeatmapInformation>), typeof(BeatmapInfoBar), new UIPropertyMetadata(new List<BeatmapInformation>(),BeatmapListChanged));
+		public static readonly DependencyProperty ModesProperty = DependencyProperty.Register(nameof(Modes), typeof(List<Mode>), typeof(BeatmapInfoBar), new UIPropertyMetadata(new List<Mode>(), ModesChanged));
 
 		public double PanelWidth
 		{
@@ -75,35 +75,27 @@ namespace osi.Desktop
 			InitializeComponent();
 		}
 
-		private static void BeatmapListChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		private static void ModesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			if (e.NewValue == null)
 				return;
 
 
 			BeatmapInfoBar bar = (BeatmapInfoBar)d;
-			List<BeatmapInformation> list = (List<BeatmapInformation>)e.NewValue;
+			List<Mode> list = (List<Mode>)e.NewValue;
 
 			Mode[] mode = { Mode.Standard, Mode.Mania, Mode.Taiko,Mode.Catch_the_Beat };
 
 			int count = 0;
 			foreach (Mode m in mode)
 			{
-				if (list.Exists((x) => x.Mode == m))
+				if (list.Exists((x) => x == m))
 				{
 
 					Grid grid = GetBeatmapInfoBar(m, bar);
 
-					if(count == 0)
-					{
-						grid.Tag = "First";
-					}
-					else
-					{
-						grid.MouseEnter += bar.Grid_MouseEnter;
-						grid.MouseLeave += bar.Grid_MouseLeave;
-
-					}
+					grid.MouseEnter += bar.Grid_MouseEnter;
+					grid.MouseLeave += bar.Grid_MouseLeave;
 
 					count++;
 
@@ -164,29 +156,29 @@ namespace osi.Desktop
 
 		private static void OnIsExpandedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
-			Mode[] mode = { Mode.Standard, Mode.Mania, Mode.Taiko, Mode.Catch_the_Beat };
-			foreach (Mode m in mode)
-			{
-				Grid grid = GetBeatmapInfoBar(m, (BeatmapInfoBar)d);
-				if (grid.Tag.ToString() == "First")
-				{
-					DoubleAnimation dA = new DoubleAnimation();
-					dA.DecelerationRatio = 0.5f;
-					dA.Duration = TimeSpan.FromMilliseconds(400);
+			//Mode[] mode = { Mode.Standard, Mode.Mania, Mode.Taiko, Mode.Catch_the_Beat };
+			//foreach (Mode m in mode)
+			//{
+			//	Grid grid = GetBeatmapInfoBar(m, (BeatmapInfoBar)d);
+			//	if (grid.Tag.ToString() == "First")
+			//	{
+			//		DoubleAnimation dA = new DoubleAnimation();
+			//		dA.DecelerationRatio = 0.5f;
+			//		dA.Duration = TimeSpan.FromMilliseconds(400);
 
-					if ((bool)e.NewValue)
-					{
-						dA.To = 15;
-					}
-					else
-					{
-						dA.To = 65;
-					}
+			//		if ((bool)e.NewValue)
+			//		{
+			//			dA.To = 15;
+			//		}
+			//		else
+			//		{
+			//			dA.To = 65;
+			//		}
 
-					grid.BeginAnimation(WidthProperty, dA);
-					break;
-				}
-			}
+			//		grid.BeginAnimation(WidthProperty, dA);
+			//		break;
+			//	}
+			//}
 		}
 
 		#endregion

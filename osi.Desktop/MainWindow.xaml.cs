@@ -96,5 +96,10 @@ namespace osi.Desktop
 			BeginAnimation(OpacityProperty, da);
 
 		}
+
+		private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			this.DragMove();
+		}
 	}
 }

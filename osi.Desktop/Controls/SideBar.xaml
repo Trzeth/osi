@@ -1,0 +1,133 @@
+﻿<UserControl x:Class="osi.Desktop.SideBarCollapsedSideBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:osi.Desktop"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             Width="150"
+             d:DesignHeight="560"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <Thickness x:Key="ButtonContentMargin">18,14</Thickness>
+        <Thickness x:Key="ButtonTextMargin">20,0,0,0</Thickness>
+    </UserControl.Resources>
+    <Grid>
+        <Grid Background="{StaticResource PrimaryBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <!--  Title  -->
+            <Viewbox Grid.Row="0"
+                     Width="50"
+                     Margin="40,20">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="{StaticResource ForegroundVeryLightBrush}" Style="{StaticResource BaseTextBlockStyle}">o</TextBlock>
+                    <TextBlock Margin="0.5,0,0,0"
+                               Foreground="{StaticResource ForegroundVeryLightBrush}"
+                               Style="{StaticResource BaseTextBlockStyle}">
+                        s
+                    </TextBlock>
+                    <TextBlock Margin="0.5,0,0,0"
+                               Foreground="{StaticResource ForegroundVeryLightBrush}"
+                               Style="{StaticResource BaseTextBlockStyle}">
+                        i
+                    </TextBlock>
+                </StackPanel>
+            </Viewbox>
+
+            <StackPanel Grid.Row="2"
+                        Margin="0,0,0,50"
+                        VerticalAlignment="Bottom">
+
+                <RadioButton HorizontalContentAlignment="Left"
+                             Background="Transparent"
+                             Click="BeatmapListPage_Click"
+                             IsChecked="True"
+                             Style="{StaticResource BaseRadioButtonStyle}">
+                    <StackPanel Margin="{StaticResource ButtonContentMargin}" Orientation="Horizontal">
+                        <TextBlock FontSize="17"
+                                   Foreground="{StaticResource ForegroundVeryLightBrush}"
+                                   Style="{StaticResource IconTextBlock}"
+                                   Text="{StaticResource FontAwesomeCircleIcon}" />
+                        <TextBlock Margin="{StaticResource ButtonTextMargin}"
+                                   FontSize="17"
+                                   Foreground="{StaticResource ForegroundVeryLightBrush}">
+                            图谱
+                        </TextBlock>
+                    </StackPanel>
+                </RadioButton>
+
+                <RadioButton HorizontalContentAlignment="Left"
+                             Background="Transparent"
+                             Click="FavoritePage_Click"
+                             Style="{StaticResource BaseRadioButtonStyle}">
+                    <StackPanel Margin="{StaticResource ButtonContentMargin}" Orientation="Horizontal">
+                        <TextBlock FontSize="17"
+                                   Foreground="{StaticResource ForegroundVeryLightBrush}"
+                                   Style="{StaticResource IconTextBlock}"
+                                   Text="{StaticResource FontAwesomeStarIcon}" />
+                        <TextBlock Margin="{StaticResource ButtonTextMargin}"
+                                   FontSize="17"
+                                   Foreground="{StaticResource ForegroundVeryLightBrush}">
+                            收藏夹
+                        </TextBlock>
+                    </StackPanel>
+                </RadioButton>
+
+                <RadioButton HorizontalContentAlignment="Left"
+                             Background="Transparent"
+                             Click="BackupPage_Click"
+                             Style="{StaticResource BaseRadioButtonStyle}">
+                    <StackPanel Margin="{StaticResource ButtonContentMargin}" Orientation="Horizontal">
+                        <TextBlock FontSize="17"
+                                   Foreground="{StaticResource ForegroundVeryLightBrush}"
+                                   Style="{StaticResource IconTextBlock}"
+                                   Text="{StaticResource FontAwesomeCopyIcon}" />
+                        <TextBlock Margin="{StaticResource ButtonTextMargin}"
+                                   FontSize="17"
+                                   Foreground="{StaticResource ForegroundVeryLightBrush}">
+                            备份
+                        </TextBlock>
+                    </StackPanel>
+                </RadioButton>
+
+                <RadioButton HorizontalContentAlignment="Left"
+                             Background="Transparent"
+                             Click="DownloadPage_Click"
+                             Style="{StaticResource BaseRadioButtonStyle}">
+                    <StackPanel Margin="{StaticResource ButtonContentMargin}" Orientation="Horizontal">
+                        <TextBlock FontSize="17"
+                                   Foreground="{StaticResource ForegroundVeryLightBrush}"
+                                   Style="{StaticResource IconTextBlock}"
+                                   Text="{StaticResource FontAwesomeDownloadIcon}" />
+                        <TextBlock Margin="{StaticResource ButtonTextMargin}"
+                                   FontSize="17"
+                                   Foreground="{StaticResource ForegroundVeryLightBrush}">
+                            下载
+                        </TextBlock>
+                    </StackPanel>
+                </RadioButton>
+
+                <RadioButton HorizontalContentAlignment="Left"
+                             Background="Transparent"
+                             Click="SettingPage_Click"
+                             Style="{StaticResource BaseRadioButtonStyle}">
+                    <StackPanel Margin="{StaticResource ButtonContentMargin}" Orientation="Horizontal">
+                        <TextBlock FontSize="17"
+                                   Foreground="{StaticResource ForegroundVeryLightBrush}"
+                                   Style="{StaticResource IconTextBlock}"
+                                   Text="{StaticResource FontAwesomeSettingIcon}" />
+                        <TextBlock Margin="{StaticResource ButtonTextMargin}"
+                                   FontSize="17"
+                                   Foreground="{StaticResource ForegroundVeryLightBrush}">
+                            设置
+                        </TextBlock>
+                    </StackPanel>
+                </RadioButton>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

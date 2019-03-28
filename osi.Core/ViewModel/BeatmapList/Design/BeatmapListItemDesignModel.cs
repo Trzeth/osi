@@ -18,19 +18,23 @@ namespace osi.Core
 
 		public BeatmapListItemDesignModel()
 		{
-			BeatmapsetId = 923990;
-			BPM = 218;
-			Title = "White parade";
-			Artist = "Umeboshi Chazuke";
-			Creator = "ATing";
-			Length = TimeSpan.FromSeconds(196);
-
-			Beatmaps = new List<BeatmapInformation>
+			BeatmapsetInformation = new BeatmapsetInformation()
 			{
-				new BeatmapInformation(){ Mode = Mode.Standard},
-				new BeatmapInformation(){ Mode = Mode.Mania },
+				BeatmapsetId = 923990,
+				BPM = 218,
+				Title = "White parade",
+				Artist = "Umeboshi Chazuke",
+				Creator = "ATing",
+				Length = TimeSpan.FromSeconds(196),
+
+				Beatmaps = new List<BeatmapInformation>
+				{
+					new BeatmapInformation(){ Mode = Mode.Standard},
+					new BeatmapInformation(){ Mode = Mode.Mania },
+				}
+
 			};
-		}
+	}
 
 		#endregion
 

@@ -1,4 +1,6 @@
-﻿using osi.Core.DownloadManager.ApiRoute;
+﻿using Newtonsoft.Json;
+using osi.Core.DownloadManager.ApiModel.V1;
+using osi.Core.DownloadManager.ApiRoute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +49,16 @@ namespace osi.Core.DownloadManager
 
 		#endregion
 
+		public static async Task<List<BeatmapsetInformation>> GetBeatmapListAsync()
+		{
+			var p = Router.Api.BeatmapList.GetBeatmapListString(Router.Api.BeatmapList.ListType.Hot);
+			WebClient webClient = new WebClient();
+			string s = webClient.DownloadString(Router.Api.BeatmapList.GetBeatmapListString(Router.Api.BeatmapList.ListType.Hot));
+			List<BeatmapsetInformation> list = new List<BeatmapsetInformation>();
+			list = (JsonConvert.DeserializeObject<BeatmapList>(s)).ToBeatmapInformationList();
+
+			return list;
+		}
 
 		public async Task DownloadBeatmapsetAsync(int beatmapsetId)
 		{

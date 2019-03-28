@@ -1,101 +1,114 @@
 ﻿<local:BaseMessage x:Class="osi.Desktop.BeatmapListItem"
-                   x:Name="Control"
                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                   xmlns:core="clr-namespace:osi.Core;assembly=osi.Core"
+                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                    xmlns:local="clr-namespace:osi.Desktop"
-                   mc:Ignorable="d" 
-                   d:DesignHeight="90" d:DesignWidth="400"
-                   xmlns:core="clr-namespace:osi.Core;assembly=osi.Core">
+                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                   x:Name="Control"
+                   d:DesignHeight="90"
+                   d:DesignWidth="350"
+                   mc:Ignorable="d">
     <local:BaseMessage.Resources>
         <Style x:Key="ContentStyle" TargetType="{x:Type ContentControl}">
+            <Setter Property="Width" Value="{Binding ElementName=Control, Path=Width}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ContentControl}">
-                        <Grid Margin="5">
-                            <Grid.Effect>
-                                <DropShadowEffect ShadowDepth="0" Opacity="0.2" />
-                            </Grid.Effect>
+                        <Grid Width="{TemplateBinding Width}">
+                            <Grid Margin="5">
+                                <Grid.Effect>
+                                    <DropShadowEffect Opacity="0.2" ShadowDepth="0" />
+                                </Grid.Effect>
 
-                            <Grid x:Name="Grid">
-                                <local:BeatmapInfoBar PanelWidth="{Binding ElementName=Panel,Path=ActualWidth}" 
-                                                      CornerRadius="3"
-                                                      Height="{Binding ElementName=Grid,Path=ActualHeight}"
-                                                      Width="{Binding ElementName=Control,Path=ActualWidth}"
-                                                      BeatmapList="{Binding Path=Beatmaps}"/>
-                                
-                                <Grid HorizontalAlignment="Left">
-                                    <Border x:Name="Container" CornerRadius="3"
-                                            Background="{StaticResource BackgroundLightBrush}"/>
+                                <Grid x:Name="Grid">
 
-                                    <!-- Beatmapset Information -->
-                                    <Grid x:Name="Panel" 
-                                          SnapsToDevicePixels="True" 
-                                          Background="{StaticResource BackgroundLightBrush}">
+                                    <!--  BeatmapInfo bar  -->
+                                    <local:BeatmapInfoBar Width="{Binding ElementName=Control, Path=ActualWidth}"
+                                                          Height="{Binding ElementName=Grid, Path=ActualHeight}"
+                                                          CornerRadius="3"
+                                                          Modes="{Binding BeatmapsetInformation.Modes}"
+                                                          PanelWidth="{Binding ElementName=Panel, Path=ActualWidth}" />
 
-                                        <Grid.OpacityMask>
-                                            <VisualBrush Visual="{Binding ElementName=Container}"/>
-                                        </Grid.OpacityMask>
+                                    <Grid HorizontalAlignment="Left">
+                                        <Border x:Name="Container"
+                                                Background="{StaticResource BackgroundLightBrush}"
+                                                CornerRadius="3" />
 
-                                        <Grid UseLayoutRounding="True">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width='*'/>
-                                                <ColumnDefinition Width='Auto'/>
-                                            </Grid.ColumnDefinitions>
+                                        <!--  Beatmapset Information  -->
+                                        <Grid x:Name="Panel"
+                                              Background="{StaticResource BackgroundLightBrush}"
+                                              SnapsToDevicePixels="True">
 
-                                            <Image Height="70"  MinWidth="90" Stretch="UniformToFill" Source="{Binding Path=BeatmapsetId,Converter={local:BeatmapsetIdToImageConverter}}"/>
+                                            <Grid.OpacityMask>
+                                                <VisualBrush Visual="{Binding ElementName=Container}" />
+                                            </Grid.OpacityMask>
 
-                                            <Grid Grid.Column="1" Margin="5,5">
-                                                <StackPanel VerticalAlignment="Top">
-                                                    <TextBlock FontSize="{StaticResource FontSizeRegular}"
-                                                           Text="{Binding Title}"
-                                                           />
-                                                    <TextBlock FontSize="{StaticResource FontSizeSmall}"
-                                                           Foreground="{StaticResource ForegroundVeryDarkBrush}"
-                                                           Text="{Binding Artist}"
-                                                           />
-                                                </StackPanel>
+                                            <Grid UseLayoutRounding="True">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
 
-                                                <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
-                                                    <TextBlock FontSize="{StaticResource FontSizeSmall}"
-                                                           Text="{Binding Creator}"
-                                                           Foreground="{StaticResource ForegroundVeryDarkBrush}"
-                                                           />
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Style="{StaticResource IconTextBlock}"
-                                                               FontSize="{StaticResource FontSizeSmall}"
-                                                               Text="{StaticResource FontAwesomeHeartIcon}"
-                                                               Foreground="{StaticResource ForegroundVeryDarkBrush}"
-                                                               Margin="10,0,5,0"
-                                                               />
+                                                <Image Height="70"
+                                                       MinWidth="90"
+                                                       Source="{Binding BeatmapsetInformation.BeatmapsetId, Converter={local:BeatmapsetIdToImageConverter}}"
+                                                       Stretch="UniformToFill" />
 
-
-                                                        <TextBlock FontSize="{StaticResource FontSizeSmall}"
-                                                               Text="{Binding FavouriteCount}"
-                                                               Foreground="{StaticResource ForegroundVeryDarkBrush}"
-                                                               >
-                                                        </TextBlock>
+                                                <Grid Grid.Column="1" Margin="5,5">
+                                                    <StackPanel VerticalAlignment="Top">
+                                                        <TextBlock MaxWidth="100"
+                                                                   HorizontalAlignment="Left"
+                                                                   FontSize="{StaticResource FontSizeRegular}"
+                                                                   Text="{Binding BeatmapsetInformation.Title}"
+                                                                   TextTrimming="CharacterEllipsis" />
+                                                        <TextBlock MaxWidth="100"
+                                                                   HorizontalAlignment="Left"
+                                                                   FontSize="{StaticResource FontSizeSmall}"
+                                                                   Foreground="{StaticResource ForegroundVeryDarkBrush}"
+                                                                   Text="{Binding BeatmapsetInformation.Artist}"
+                                                                   TextTrimming="CharacterEllipsis" />
                                                     </StackPanel>
-                                                </StackPanel>
-                                            </Grid>
 
-                                            <Button Grid.Column="2"
-                                                    Margin="5,0,0,0"
-                                                    BorderThickness="0"
-                                                    Style="{StaticResource IconButtonStyle}"
-                                                    Background="Transparent"
-                                                    Padding="10"
-                                                    Command="{Binding ClickCommand}">
-                                                    <TextBlock Style="{StaticResource IconTextBlock}"
-                                                           Text="{StaticResource FontAwesomeDownloadIcon}"
-                                                           FontSize="{StaticResource FontSizeXXLarge}"
-                                                           Foreground="{StaticResource OsuGreenVeryDarkBrush}"/>
-                                            </Button>
+                                                    <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
+                                                        <TextBlock MaxWidth="50"
+                                                                   HorizontalAlignment="Left"
+                                                                   FontSize="{StaticResource FontSizeSmall}"
+                                                                   Foreground="{StaticResource ForegroundVeryDarkBrush}"
+                                                                   Text="{Binding BeatmapsetInformation.Creator}"
+                                                                   TextTrimming="CharacterEllipsis" />
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Margin="10,0,5,0"
+                                                                       FontSize="{StaticResource FontSizeSmall}"
+                                                                       Foreground="{StaticResource ForegroundVeryDarkBrush}"
+                                                                       Style="{StaticResource IconTextBlock}"
+                                                                       Text="{StaticResource FontAwesomeHeartIcon}" />
+
+
+                                                            <TextBlock FontSize="{StaticResource FontSizeSmall}"
+                                                                       Foreground="{StaticResource ForegroundVeryDarkBrush}"
+                                                                       Text="{Binding BeatmapsetInformation.FavouriteCount, Converter={local:NumberOverStackConverter}}" />
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Grid>
+
+                                                <Button Grid.Column="2"
+                                                        Margin="5,0,0,0"
+                                                        Padding="10"
+                                                        Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Command="{Binding ClickCommand}"
+                                                        Style="{StaticResource IconButtonStyle}">
+                                                    <TextBlock FontSize="{StaticResource FontSizeXXLarge}"
+                                                               Foreground="{StaticResource OsuGreenVeryDarkBrush}"
+                                                               Style="{StaticResource IconTextBlock}"
+                                                               Text="{StaticResource FontAwesomeDownloadIcon}" />
+                                                </Button>
+                                            </Grid>
                                         </Grid>
+
                                     </Grid>
-                                    
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -105,6 +118,5 @@
         </Style>
     </local:BaseMessage.Resources>
 
-    <ContentControl Style="{StaticResource ContentStyle}"
-                    d:DataContext="{x:Static core:BeatmapListItemDesignModel.Instance}"/>
+    <ContentControl d:DataContext="{x:Static core:BeatmapListItemDesignModel.Instance}" Style="{StaticResource ContentStyle}" />
 </local:BaseMessage>

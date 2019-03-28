@@ -37,11 +37,11 @@ namespace osi.Desktop
 			IoC.Setup();
 			Task.Run(()=> mLinkMonitor.StartMointorAsync());
 
-			Current.MainWindow = new MessageHostWindow();
-			Current.MainWindow.ShowDialog();
+			//Current.MainWindow = new MessageHostWindow();
+			//Current.MainWindow.ShowDialog();
 
 
-			ShutdownMode = ShutdownMode.OnExplicitShutdown;
+			//ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
 			bool HasUpdate = false;
 

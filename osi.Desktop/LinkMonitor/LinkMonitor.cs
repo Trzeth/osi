@@ -22,13 +22,16 @@ namespace osi.Desktop
 		{
 			NamedPipeServerStream server = new NamedPipeServerStream("osi", PipeDirection.In);
 			string link = null;
-			while (link != "Stop")
+			while (true)
 			{
 				server.WaitForConnection();
 
 				StreamReader sr = new StreamReader(server);
 				link = sr.ReadToEnd();
 				server.Disconnect();
+
+				if (link == "Stop")
+					return;
 
 				Uri uri = null;
 

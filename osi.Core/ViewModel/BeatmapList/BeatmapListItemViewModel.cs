@@ -7,8 +7,9 @@ using osi.Core.DownloadManager;
 
 namespace osi.Core
 {
-	public class BeatmapListItemViewModel:BeatmapsetInformation
+	public class BeatmapListItemViewModel:BaseViewModel
 	{
+		public BeatmapsetInformation BeatmapsetInformation { get; set; }
 		public RelayCommand ClickCommand { get; set; }
 		public BeatmapListItemViewModel()
 		{

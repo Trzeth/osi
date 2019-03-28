@@ -1,121 +1,120 @@
-﻿<UserControl x:Name="Control"
-             x:Class="osi.Desktop.BeatmapInfoBar"
+﻿<UserControl x:Class="osi.Desktop.BeatmapInfoBar"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:osi.Desktop"
-             mc:Ignorable="d"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             d:DesignHeight="80" d:DesignWidth="450">
+             x:Name="Control"
+             d:DesignHeight="80"
+             d:DesignWidth="350"
+             mc:Ignorable="d">
     <UserControl.Resources>
         <sys:Double x:Key="ImageHeight">40</sys:Double>
         <sys:Double x:Key="ImageWidth">40</sys:Double>
         <Thickness x:Key="ImageThickness">0,0,15,0</Thickness>
     </UserControl.Resources>
     <Grid>
-        <StackPanel Orientation="Horizontal" Margin="{Binding ElementName=Control,Path=PanelWidth,Converter={local:DoubleToMarginConverter},ConverterParameter=-5}">
-            <Grid x:Name="Standard" 
-                  Width="65"
-                  HorizontalAlignment="Right"
+        <StackPanel Margin="{Binding ElementName=Control, Path=PanelWidth, Converter={local:DoubleToMarginConverter}, ConverterParameter=-5}" Orientation="Horizontal">
+            <Grid x:Name="Standard"
+                  Width="15"
                   Margin="0,0,0,0"
+                  HorizontalAlignment="Right"
                   Panel.ZIndex="4">
-                
-                <Border Grid.RowSpan="2" Background="{StaticResource OsuPinkBrush}"
-                        CornerRadius="{Binding ElementName=Control,Path=CornerRadius,FallbackValue='0,3,3,0'}"/>
-                <Viewbox Width="{StaticResource ImageWidth}" Height="{StaticResource ImageHeight}" 
-                         HorizontalAlignment="Right" 
-                         Margin="{StaticResource ImageThickness}" 
-                         Grid.Row="0">
-                    <Image Source="/osi.Desktop;component/Image/Modes/mode-osu.png"></Image>
+
+                <Border Grid.RowSpan="2"
+                        Background="{StaticResource OsuPinkBrush}"
+                        CornerRadius="{Binding ElementName=Control, Path=CornerRadius, FallbackValue='0,3,3,0'}" />
+                <Viewbox Grid.Row="0"
+                         Width="{StaticResource ImageWidth}"
+                         Height="{StaticResource ImageHeight}"
+                         Margin="{StaticResource ImageThickness}"
+                         HorizontalAlignment="Right">
+                    <Image Source="/osi.Desktop;component/Image/Modes/mode-osu.png" />
                 </Viewbox>
 
                 <!--<Grid Grid.Row="1">
                     <Expander>
                         <GridView>
                             <GridViewColumn>
-                                
+
                             </GridViewColumn>
                         </GridView>
                     </Expander>
                 </Grid>-->
             </Grid>
 
-            <Grid x:Name="Mania" 
-                  HorizontalAlignment="Left"
-                  Visibility="Visible"
-                  Margin="-5,0,0,0"
+            <Grid x:Name="Mania"
                   Width="15"
-                  Panel.ZIndex="3">
-                <Border Background="{StaticResource OsuGrayBrush}"
-                        CornerRadius="{Binding ElementName=Control,Path=CornerRadius,FallbackValue='0,3,3,0'}"/>
-                <Viewbox Width="{StaticResource ImageWidth}" 
-                         Height="{StaticResource ImageHeight}" 
-                         Margin="{StaticResource ImageThickness}" 
-                         HorizontalAlignment="Right" 
-                         >
-                    <Image Source="/osi.Desktop;component/Image/Modes/mode-mania.png"></Image>
+                  Margin="-5,0,0,0"
+                  HorizontalAlignment="Left"
+                  Panel.ZIndex="3"
+                  Visibility="Visible">
+                <Border Background="{StaticResource OsuGrayBrush}" CornerRadius="{Binding ElementName=Control, Path=CornerRadius, FallbackValue='0,3,3,0'}" />
+                <Viewbox Width="{StaticResource ImageWidth}"
+                         Height="{StaticResource ImageHeight}"
+                         Margin="{StaticResource ImageThickness}"
+                         HorizontalAlignment="Right">
+                    <Image Source="/osi.Desktop;component/Image/Modes/mode-mania.png" />
                 </Viewbox>
 
 
             </Grid>
 
-            <Grid x:Name="Taiko" 
-                  HorizontalAlignment="Left"
-                  Visibility="Visible"
+            <Grid x:Name="Taiko"
                   Width="15"
                   Margin="-5,0,0,0"
-                  Panel.ZIndex="2">
+                  HorizontalAlignment="Left"
+                  Panel.ZIndex="2"
+                  Visibility="Visible">
 
-                <Border Background="{StaticResource OsuYellowBrush}"
-                        CornerRadius="{Binding ElementName=Control,Path=CornerRadius,FallbackValue='0,3,3,0'}"/>
-                <Viewbox Width="{StaticResource ImageWidth}" Height="{StaticResource ImageHeight}"
-                         HorizontalAlignment="Right" 
-                         Margin="{StaticResource ImageThickness}">
-                    <Image Source="/osi.Desktop;component/Image/Modes/mode-taiko.png"></Image>
+                <Border Background="{StaticResource OsuYellowBrush}" CornerRadius="{Binding ElementName=Control, Path=CornerRadius, FallbackValue='0,3,3,0'}" />
+                <Viewbox Width="{StaticResource ImageWidth}"
+                         Height="{StaticResource ImageHeight}"
+                         Margin="{StaticResource ImageThickness}"
+                         HorizontalAlignment="Right">
+                    <Image Source="/osi.Desktop;component/Image/Modes/mode-taiko.png" />
                 </Viewbox>
 
             </Grid>
 
-            <Grid x:Name="Ctb" 
-                  HorizontalAlignment="Left"
-                  Visibility="Visible"
-                  Margin="-5,0,0,0"
+            <Grid x:Name="Ctb"
                   Width="15"
-                  Panel.ZIndex="1">
-                <Border Background="{StaticResource OsuGreenBrush}"
-                        CornerRadius="{Binding ElementName=Control,Path=CornerRadius,FallbackValue='0,3,3,0'}"/>
+                  Margin="-5,0,0,0"
+                  HorizontalAlignment="Left"
+                  Panel.ZIndex="1"
+                  Visibility="Visible">
+                <Border Background="{StaticResource OsuGreenBrush}" CornerRadius="{Binding ElementName=Control, Path=CornerRadius, FallbackValue='0,3,3,0'}" />
 
-                <Viewbox Width="{StaticResource ImageWidth}" Height="{StaticResource ImageHeight}"
-                         HorizontalAlignment="Right" 
-                         Margin="{StaticResource ImageThickness}">
-                    <Image Source="/osi.Desktop;component/Image/Modes/mode-fruits.png"></Image>
+                <Viewbox Width="{StaticResource ImageWidth}"
+                         Height="{StaticResource ImageHeight}"
+                         Margin="{StaticResource ImageThickness}"
+                         HorizontalAlignment="Right">
+                    <Image Source="/osi.Desktop;component/Image/Modes/mode-fruits.png" />
                 </Viewbox>
 
             </Grid>
 
             <Grid x:Name="DownloadStatus"
+                  Width="{Binding ElementName=Control, Path=PanelWidth, FallbackValue=300}"
                   HorizontalAlignment="Left"
-                  Visibility="Hidden"
-                  Width="{Binding ElementName=Control,Path=PanelWidth,FallbackValue=300}"
-                  Panel.ZIndex="0">
-                <Border Background="{StaticResource OsuGreenVeryDarkBrush}"
-                        CornerRadius="{Binding ElementName=Control,Path=CornerRadius,FallbackValue=3}"/>
+                  Panel.ZIndex="0"
+                  Visibility="Hidden">
+                <Border Background="{StaticResource OsuGreenVeryDarkBrush}" CornerRadius="{Binding ElementName=Control, Path=CornerRadius, FallbackValue=3}" />
 
-                <Viewbox Width="{StaticResource ImageWidth}" Height="{StaticResource ImageHeight}"
-                         HorizontalAlignment="Right"
-                         Margin="{StaticResource ImageThickness}">
-                    <TextBlock Style="{StaticResource IconTextBlock}"
-                               Text="{StaticResource FontAwesomeDownloadIcon}"
-                               Foreground="White"></TextBlock>
+                <Viewbox Width="{StaticResource ImageWidth}"
+                         Height="{StaticResource ImageHeight}"
+                         Margin="{StaticResource ImageThickness}"
+                         HorizontalAlignment="Right">
+                    <TextBlock Foreground="White"
+                               Style="{StaticResource IconTextBlock}"
+                               Text="{StaticResource FontAwesomeDownloadIcon}" />
                 </Viewbox>
 
             </Grid>
 
         </StackPanel>
-        <Grid x:Name="Pannel" HorizontalAlignment="Left">
+        <Grid x:Name="Pannel" HorizontalAlignment="Left" />
 
-        </Grid>
-        
     </Grid>
 </UserControl>

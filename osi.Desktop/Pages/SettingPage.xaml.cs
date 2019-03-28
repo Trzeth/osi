@@ -13,12 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace osi.Desktop.Pages
+namespace osi.Desktop
 {
     /// <summary>
     /// SettingPage.xaml 的交互逻辑
     /// </summary>
-    public partial class SettingPage : Page
+    public partial class SettingPage : BasePage
     {
         public SettingPage()
         {

@@ -12,58 +12,73 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Grid ClipToBounds="True" Background="{TemplateBinding Background}" >
-                        <Border x:Name="pShadow" Background="Transparent" BorderBrush="LightGray" BorderThickness="6" Margin="-8" Opacity="0">
+                    <Grid Background="{TemplateBinding Background}" ClipToBounds="True">
+                        <Border x:Name="pShadow"
+                                Margin="-8"
+                                Background="Transparent"
+                                BorderBrush="LightGray"
+                                BorderThickness="6"
+                                Opacity="0">
                             <Border.Effect>
-                                <DropShadowEffect ShadowDepth="0" BlurRadius="10"/>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="0" />
                             </Border.Effect>
                         </Border>
-                        <Canvas x:Name="oShadow" Background="Black" Opacity="0">
+                        <Canvas x:Name="oShadow"
+                                Background="Black"
+                                Opacity="0">
                             <Canvas.Effect>
-                                <BlurEffect Radius="1"></BlurEffect>
+                                <BlurEffect Radius="1" />
                             </Canvas.Effect>
                         </Canvas>
-                        <ContentPresenter x:Name="Content" 
-                                          Opacity="0.9" 
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                          Margin="{TemplateBinding Padding}"/>
+                        <ContentPresenter x:Name="Content"
+                                          Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Opacity="0.9" />
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup>
                                 <VisualState x:Name="Normal">
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="oShadow" 
-                                                        Storyboard.TargetProperty="Opacity" 
-                                                        To="0" Duration="0:0:0.15" />
-                                        <DoubleAnimation Storyboard.TargetName="Content" 
-                                                        Storyboard.TargetProperty="Opacity" 
-                                                        To="0.9" Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="oShadow"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="Content"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.9"
+                                                         Duration="0:0:0.15" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="MouseOver">
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="oShadow" 
-                                                        Storyboard.TargetProperty="Opacity" 
-                                                        To="0.15" Duration="0:0:0.15"/>
-                                        <DoubleAnimation Storyboard.TargetName="Content" 
-                                                        Storyboard.TargetProperty="Opacity" 
-                                                        To="1" Duration="0:0:0.15" />
-                                        <DoubleAnimation Storyboard.TargetName="pShadow" 
-                                                        Storyboard.TargetProperty="Opacity"
-                                                        To="0" Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="oShadow"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.15"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="Content"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="pShadow"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0:0:0.15" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Pressed">
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="oShadow" 
-                                                        Storyboard.TargetProperty="Opacity" 
-                                                        To="0.25" Duration="0:0:0.15"/>
-                                        <DoubleAnimation Storyboard.TargetName="Content" 
-                                                        Storyboard.TargetProperty="Opacity" 
-                                                        To="1" Duration="0:0:0.15" />
-                                        <DoubleAnimation Storyboard.TargetName="pShadow" 
-                                                        Storyboard.TargetProperty="Opacity"
-                                                        To=".8" Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="oShadow"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.25"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="Content"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="pShadow"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To=".8"
+                                                         Duration="0:0:0.15" />
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
@@ -74,12 +89,126 @@
         </Setter>
     </Style>
 
-    <Style x:Key="IconButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="FontFamily" Value="{StaticResource FontAwesome}"/>
+    <Style x:Key="IconButtonStyle"
+           BasedOn="{StaticResource BaseButtonStyle}"
+           TargetType="{x:Type Button}">
+        <Setter Property="FontFamily" Value="{StaticResource FontAwesome}" />
     </Style>
 
-    <Style x:Key="WindowChromeButton" TargetType="{x:Type Button}" BasedOn="{StaticResource IconButtonStyle}">
-        <Setter Property="Background" Value="Transparent"/>
+    <Style x:Key="WindowChromeButton"
+           BasedOn="{StaticResource IconButtonStyle}"
+           TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="Transparent" />
     </Style>
-    
+
+    <Style x:Key="BaseRadioButtonStyle" TargetType="{x:Type RadioButton}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Grid Background="{TemplateBinding Background}" ClipToBounds="True">
+                        <Border x:Name="pShadow"
+                                Margin="-8"
+                                Background="Transparent"
+                                BorderBrush="LightGray"
+                                BorderThickness="6"
+                                Opacity="0">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="0" />
+                            </Border.Effect>
+                        </Border>
+                        <Canvas x:Name="oShadow"
+                                Background="Black"
+                                Opacity="0">
+                            <Canvas.Effect>
+                                <BlurEffect Radius="1" />
+                            </Canvas.Effect>
+                        </Canvas>
+                        <ContentPresenter x:Name="Content"
+                                          Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Opacity="0.9" />
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup>
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="oShadow"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="Content"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.9"
+                                                         Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="oShadow"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.15"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="Content"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="pShadow"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="oShadow"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.25"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="Content"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="pShadow"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To=".8"
+                                                         Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="oShadow"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.15"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="Content"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="pShadow"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unckecked">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="oShadow"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0"
+                                                         Duration="0:0:0.15" />
+                                        <DoubleAnimation Storyboard.TargetName="Content"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="0.9"
+                                                         Duration="0:0:0.15" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

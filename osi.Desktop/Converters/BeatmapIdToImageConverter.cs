@@ -15,7 +15,7 @@ namespace osi.Desktop
 		{
 			int BeatmapsetId = int.Parse(value.ToString());
 			BitmapImage bitmapImage;
-			bitmapImage = new BitmapImage(new Uri($"https://cdn.sayobot.cn:25225/thumb/{BeatmapsetId}l.jpg"));
+			bitmapImage = new BitmapImage(new Uri($"https://b.ppy.sh/thumb/{BeatmapsetId}l.jpg"));
 
 			bitmapImage.DownloadFailed += (sender, e) =>
 			{

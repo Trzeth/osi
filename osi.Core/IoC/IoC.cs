@@ -19,6 +19,7 @@ namespace osi.Core
 		private static void BindViewModels()
 		{
 			Kernel.Bind<DownloadTaskListViewModel>().ToConstant(new DownloadTaskListViewModel());
+			Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
 		}
 
 		public static T Get<T>()

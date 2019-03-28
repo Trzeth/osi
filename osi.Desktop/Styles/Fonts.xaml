@@ -2,27 +2,27 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:osi.Desktop"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
-    
+
     <FontFamily x:Key="LatoRegular">pack://application:,,,/Fonts/#Lato Regular</FontFamily>
     <FontFamily x:Key="LatoLight">pack://application:,,,/Fonts/#Lato Light</FontFamily>
     <FontFamily x:Key="LatoBold">pack://application:,,,/Fonts/#Lato Bold</FontFamily>
     <FontFamily x:Key="FontAwesome">pack://Application:,,,/Fonts/#Font Awesome 5 Pro Light</FontFamily>
-    
-    <Style TargetType="{x:Type Control}" x:Key="BaseStyle">
-        <Setter Property="FontFamily" Value="{StaticResource LatoRegular}"></Setter>
-        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+
+    <Style x:Key="BaseStyle" TargetType="{x:Type Control}">
+        <Setter Property="FontFamily" Value="{StaticResource LatoRegular}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}" />
     </Style>
 
     <Style x:Key="BaseTextBlockStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="FontFamily" Value="{StaticResource LatoRegular}"/>
-        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+        <Setter Property="FontFamily" Value="{StaticResource LatoRegular}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}" />
     </Style>
-    
-    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource BaseStyle}"/>
-    <Style TargetType="{x:Type Label}" BasedOn="{StaticResource BaseStyle}"/>
-    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource BaseStyle}"/>
-    <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource BaseStyle}"/>
-    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlockStyle}"/>
+
+    <Style BasedOn="{StaticResource BaseStyle}" TargetType="{x:Type Button}" />
+    <Style BasedOn="{StaticResource BaseStyle}" TargetType="{x:Type Label}" />
+    <Style BasedOn="{StaticResource BaseStyle}" TargetType="{x:Type TextBox}" />
+    <Style BasedOn="{StaticResource BaseStyle}" TargetType="{x:Type ListView}" />
+    <Style BasedOn="{StaticResource BaseTextBlockStyle}" TargetType="{x:Type TextBlock}" />
 
     <system:Double x:Key="FontSizeSmaller">10</system:Double>
     <system:Double x:Key="FontSizeSmall">12</system:Double>
@@ -46,5 +46,7 @@
     <system:String x:Key="FontAwesomeTimesIcon">&#xf00d;</system:String>
     <system:String x:Key="FontAwesomeAnalyticsIcon">&#xf643;</system:String>
     <system:String x:Key="FontAwesomeHeartIcon">&#xf004;</system:String>
+
+    <system:String x:Key="FontAwesomeSearchIcon">&#xf002;</system:String>
 
 </ResourceDictionary>

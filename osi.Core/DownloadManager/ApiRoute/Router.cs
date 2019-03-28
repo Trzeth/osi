@@ -16,7 +16,7 @@ namespace osi.Core.DownloadManager.ApiRoute
 			}
 
 			/// <summary>
-			/// GetBeatmapInfo string
+			/// Get BeatmapInfoApi Path string
 			/// </summary>
 			/// <param name="keyword">关键词</param>
 			/// <param name="isForceBeatmapId">是否强制匹配BeatmapId</param>
@@ -32,17 +32,35 @@ namespace osi.Core.DownloadManager.ApiRoute
 
 			public static class BeatmapList
 			{
-				public enum UriKind
+				public enum ListType
 				{
 					New,
 					Hot,
+					Package,
 					Search
 				}
 
 				//TODO YOU SHOULD FINISH IT
-				public static string GetBeatmapListString()
+				public static string GetBeatmapListString(ListType type, int limit = 25, int offset = 0)
 				{
 					string s = GetAbsoluteRoute(ApiRoutes.Api.BeatmapList);
+					s += $"?0={limit}";
+					s += $"&1={offset}";
+					s += "&2=";
+					switch (type) {
+						case ListType.Hot:
+							s += "1";
+							break;
+						case ListType.New:
+							s += "2";
+							break;
+						case ListType.Package:
+							s += "3";
+							break;
+						case ListType.Search:
+							s += "4";
+							break;
+					}
 
 					return s;
 				}

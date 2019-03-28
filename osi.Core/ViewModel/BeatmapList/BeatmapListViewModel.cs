@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace osi.Core
 {
-	public class BeatmapListViewModel:BeatmapInformation
+	public class BeatmapListViewModel:BaseViewModel
 	{
 		public List<BeatmapListItemViewModel> Items { get; set; } = new List<BeatmapListItemViewModel>();
 	}
