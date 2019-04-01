@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,16 +33,15 @@ namespace osi.Core.DownloadManager.ApiRoute
 
 			public static class BeatmapList
 			{
-				public enum ListType
-				{
-					New,
-					Hot,
-					Package,
-					Search
-				}
-
 				//TODO YOU SHOULD FINISH IT
 				public static string GetBeatmapListString(ListType type, int limit = 25, int offset = 0)
+				{
+					if (type == ListType.Search)
+						Debugger.Break();
+
+					return GetBeatmapListString(type, null, null, limit, offset);
+				}
+				public static string GetBeatmapListString(ListType type, BeatmapsetFilter filter = null,object keyword = null,int limit = 25, int offset = 0)
 				{
 					string s = GetAbsoluteRoute(ApiRoutes.Api.BeatmapList);
 					s += $"?0={limit}";
@@ -61,12 +61,41 @@ namespace osi.Core.DownloadManager.ApiRoute
 							s += "4";
 							break;
 					}
-
+					if (type == ListType.Search)
+					{
+						if(keyword != null)
+						{
+							s += $"&3={keyword}";
+						}
+						if(filter != null)
+						{
+							s += $"&4={GetSum(filter.SubTypes)}";
+							s += $"&5={GetSum(filter.Modes)}";
+							s += $"&6={GetSum(filter.RankStatus)}";
+							s += $"&7={GetSum(filter.Genres)}";
+							s += $"&8={GetSum(filter.Languages)}";
+							s += $"&7={filter.Other}";
+						}
+					}
 					return s;
 				}
+				public static int GetSum<T>(List<T> list)
+				{
+					if (!typeof(T).IsEnum)
+					{
+						Debugger.Break();
+					}
 
+					int i = 0;
+					foreach(T t in list)
+					{
+						i += (int)Enum.Parse(typeof(T),t.ToString());
+					}
+					return i;
+				}
 			}
 		}
+
 		public static class Resource
 		{
 			public static class Beatmapsets

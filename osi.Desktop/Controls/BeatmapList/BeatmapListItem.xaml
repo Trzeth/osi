@@ -1,15 +1,15 @@
-﻿<local:BaseMessage x:Class="osi.Desktop.BeatmapListItem"
-                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                   xmlns:core="clr-namespace:osi.Core;assembly=osi.Core"
-                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                   xmlns:local="clr-namespace:osi.Desktop"
-                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                   x:Name="Control"
-                   d:DesignHeight="90"
-                   d:DesignWidth="350"
-                   mc:Ignorable="d">
-    <local:BaseMessage.Resources>
+﻿<UserControl x:Class="osi.Desktop.BeatmapListItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:core="clr-namespace:osi.Core;assembly=osi.Core"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:osi.Desktop"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Name="Control"
+             d:DesignHeight="90"
+             d:DesignWidth="350"
+             mc:Ignorable="d">
+    <UserControl.Resources>
         <Style x:Key="ContentStyle" TargetType="{x:Type ContentControl}">
             <Setter Property="Width" Value="{Binding ElementName=Control, Path=Width}" />
             <Setter Property="Template">
@@ -22,15 +22,7 @@
                                 </Grid.Effect>
 
                                 <Grid x:Name="Grid">
-
-                                    <!--  BeatmapInfo bar  -->
-                                    <local:BeatmapInfoBar Width="{Binding ElementName=Control, Path=ActualWidth}"
-                                                          Height="{Binding ElementName=Grid, Path=ActualHeight}"
-                                                          CornerRadius="3"
-                                                          Modes="{Binding BeatmapsetInformation.Modes}"
-                                                          PanelWidth="{Binding ElementName=Panel, Path=ActualWidth}" />
-
-                                    <Grid HorizontalAlignment="Left">
+                                    <Grid>
                                         <Border x:Name="Container"
                                                 Background="{StaticResource BackgroundLightBrush}"
                                                 CornerRadius="3" />
@@ -94,8 +86,9 @@
                                                 </Grid>
 
                                                 <Button Grid.Column="2"
-                                                        Margin="5,0,0,0"
+                                                        Margin="0,0,-1,0"
                                                         Padding="10"
+                                                        HorizontalAlignment="Right"
                                                         Background="Transparent"
                                                         BorderThickness="0"
                                                         Command="{Binding ClickCommand}"
@@ -116,7 +109,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-    </local:BaseMessage.Resources>
+    </UserControl.Resources>
 
     <ContentControl d:DataContext="{x:Static core:BeatmapListItemDesignModel.Instance}" Style="{StaticResource ContentStyle}" />
-</local:BaseMessage>
+</UserControl>

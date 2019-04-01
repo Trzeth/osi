@@ -29,7 +29,6 @@ namespace osi.Desktop
 		public DownloadTask()
 		{
 			InitializeComponent();
-			this.SlideAndFadeInFromRight(200);
 		}
 	}
 }

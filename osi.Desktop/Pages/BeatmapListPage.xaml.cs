@@ -25,18 +25,42 @@ namespace osi.Desktop
         public BeatmapListPage()
         {
             InitializeComponent();
-			BeatmapListViewModel beatmapListViewModel = new BeatmapListViewModel();
-			beatmapListViewModel.Items = new List<BeatmapListItemViewModel>();
-
-			foreach (BeatmapsetInformation information in DownloadManager.GetBeatmapListAsync().Result)
+			if (((BeatmapListPageViewModel)DataContext).BeatmapListViewModel == null)
 			{
-				beatmapListViewModel.Items.Add(new BeatmapListItemViewModel() { BeatmapsetInformation = information});
-			}
-			BeatmapList.DataContext = beatmapListViewModel;
+				Task.Run(() =>{
+					ViewModelLocator.Instance.BeatmapListPageViewModel.BeatmapListViewModel = DownloadManager.GetBeatmapListViewModelAsync(ListType.New).Result;
+				});
+			};
 		}
 
 		private void SearchButton_Click(object sender, RoutedEventArgs e)
 		{
+			string searchText = InputBox.Text;
+			Task.Run(() =>
+			{
+				BeatmapListViewModel viewModel = DownloadManager.GetBeatmapListViewModelAsync(ListType.Search, searchText).Result;
+				ViewModelLocator.Instance.BeatmapListPageViewModel.BeatmapListViewModel = viewModel;
+			});
+		}
+
+		private void HotButton_Click(object sender, RoutedEventArgs e)
+		{
+			string searchText = InputBox.Text;
+			Task.Run(() =>
+			{
+				BeatmapListViewModel viewModel = DownloadManager.GetBeatmapListViewModelAsync(ListType.Hot).Result;
+				ViewModelLocator.Instance.BeatmapListPageViewModel.BeatmapListViewModel = viewModel;
+			});
+		}
+
+		private void NewButton_Click(object sender, RoutedEventArgs e)
+		{
+			string searchText = InputBox.Text;
+			Task.Run(() =>
+			{
+				BeatmapListViewModel viewModel = DownloadManager.GetBeatmapListViewModelAsync(ListType.New).Result;
+				ViewModelLocator.Instance.BeatmapListPageViewModel.BeatmapListViewModel = viewModel;
+			});
 		}
 	}
 }

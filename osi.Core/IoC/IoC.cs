@@ -20,6 +20,7 @@ namespace osi.Core
 		{
 			Kernel.Bind<DownloadTaskListViewModel>().ToConstant(new DownloadTaskListViewModel());
 			Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
+			Kernel.Bind<BeatmapListPageViewModel>().ToConstant(new BeatmapListPageViewModel());
 		}
 
 		public static T Get<T>()

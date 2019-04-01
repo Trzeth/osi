@@ -18,7 +18,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <local:BeatmapListItem Width="350" />
+                        <local:BeatmapListItem Width="260" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

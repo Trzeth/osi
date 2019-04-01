@@ -49,4 +49,9 @@
 
     <system:String x:Key="FontAwesomeSearchIcon">&#xf002;</system:String>
 
+
+    <system:String x:Key="FontAwesomeFilterIcon">&#xf0b0;</system:String>
+    <system:String x:Key="FontAwesomeFireIcon">&#xf06d;</system:String>
+    <system:String x:Key="FontAwesomeClockIcon">&#xf017;</system:String>
+
 </ResourceDictionary>

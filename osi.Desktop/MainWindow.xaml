@@ -33,7 +33,7 @@
                                     <local:SideBar HorizontalAlignment="Left" Panel.ZIndex="1" />
 
                                     <!--  MainWindow Content  -->
-                                    <Grid Margin="150,0,0,0">
+                                    <Grid Margin="60,0,0,0">
                                         <Grid.RowDefinitions>
                                             <!--  Titlbe Bar  -->
                                             <RowDefinition Height="{Binding Path=TitleHeight, FallbackValue=40}" />

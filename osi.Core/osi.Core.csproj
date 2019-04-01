@@ -73,13 +73,15 @@
     <Compile Include="DownloadManager\ApiModel\V2\Beatmapset.cs" />
     <Compile Include="DownloadManager\ApiModel\V2\Converter.cs" />
     <Compile Include="DownloadManager\ApiRoute\ApiRoutes.cs" />
+    <Compile Include="DownloadManager\BeatmapsetFilter.cs" />
     <Compile Include="DownloadManager\ApiRoute\Router.cs" />
     <Compile Include="DownloadManager\BeatmapsetInformations.cs" />
     <Compile Include="DownloadManager\DownloadManager.cs" />
     <Compile Include="DownloadManager\DownloadingStatus.cs" />
     <Compile Include="IoC\IoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\ApplicationViewModel.cs" />
+    <Compile Include="ViewModel\Application\BeatmapListPageViewModel.cs" />
+    <Compile Include="ViewModel\Application\ApplicationViewModel.cs" />
     <Compile Include="ViewModel\Base\AsyncObservableCollection.cs" />
     <Compile Include="ViewModel\Base\BaseViewModel.cs" />
     <Compile Include="ViewModel\Base\RelayCommand.cs" />

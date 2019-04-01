@@ -14,5 +14,7 @@ namespace osi.Desktop
 		public DownloadTaskListViewModel DownloadTaskListViewModel => IoC.Get<DownloadTaskListViewModel>();
 
 		public ApplicationViewModel ApplicationViewModel => IoC.Get<ApplicationViewModel>();
+
+		public BeatmapListPageViewModel BeatmapListPageViewModel => IoC.Get<BeatmapListPageViewModel>();
 	}
 }

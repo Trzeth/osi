@@ -3,9 +3,6 @@ using osi.Core.DownloadManager.ApiModel.V1;
 using osi.Core.DownloadManager.ApiRoute;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace osi.Core.DownloadManager
@@ -45,24 +42,67 @@ namespace osi.Core.DownloadManager
 
 		#region Contructor
 
-		public DownloadManager(){ } 
+		public DownloadManager(){ }
 
 		#endregion
 
-		public static async Task<List<BeatmapsetInformation>> GetBeatmapListAsync()
+
+		#region GetBeatmapList Method
+
+		public static async Task<List<BeatmapsetInformation>> GetBeatmapListAsync(ListType type, object keyword = null, int limit = 25, int offset = 0)
 		{
-			var p = Router.Api.BeatmapList.GetBeatmapListString(Router.Api.BeatmapList.ListType.Hot);
-			WebClient webClient = new WebClient();
-			string s = webClient.DownloadString(Router.Api.BeatmapList.GetBeatmapListString(Router.Api.BeatmapList.ListType.Hot));
 			List<BeatmapsetInformation> list = new List<BeatmapsetInformation>();
+
+			WebClient webClient = new WebClient();
+			string s = webClient.DownloadString(Router.Api.BeatmapList.GetBeatmapListString(type, keyword, limit, offset));
 			list = (JsonConvert.DeserializeObject<BeatmapList>(s)).ToBeatmapInformationList();
 
 			return list;
 		}
 
+		public static async Task<List<BeatmapsetInformation>> SearchBeatmapListAsync(object keyword, BeatmapsetFilter filter = null, int limit = 25, int offset = 0)
+		{
+			List<BeatmapsetInformation> list = new List<BeatmapsetInformation>();
+
+			WebClient webClient = new WebClient();
+			string s = webClient.DownloadString(Router.Api.BeatmapList.GetBeatmapListString(ListType.Search, filter,keyword, limit, offset));
+			list = (JsonConvert.DeserializeObject<BeatmapList>(s)).ToBeatmapInformationList();
+
+			return list;
+		}
+		public static async Task<BeatmapListViewModel> SearchBeatmapListViewModelAsync(object keyword, BeatmapsetFilter filter = null, int limit = 25, int offset = 0)
+		{
+			BeatmapListViewModel beatmapListViewModel = new BeatmapListViewModel();
+
+
+			return beatmapListViewModel;
+		}
+
+		public static async Task<BeatmapListViewModel> GetBeatmapListViewModelAsync(ListType type, object keyword = null, int limit = 25, int offset = 0)
+		{
+			return BeatmapListToBeatmapListViewModel(await GetBeatmapListAsync(type, keyword, limit, offset));
+		}
+
+		private static BeatmapListViewModel BeatmapListToBeatmapListViewModel(List<BeatmapsetInformation> BeatmapList)
+		{
+			BeatmapListViewModel beatmapListViewModel = new BeatmapListViewModel();
+			beatmapListViewModel.Items = new List<BeatmapListItemViewModel>();
+
+			foreach (BeatmapsetInformation information in BeatmapList)
+			{
+				beatmapListViewModel.Items.Add(new BeatmapListItemViewModel() { BeatmapsetInformation = information });
+			}
+
+			return beatmapListViewModel;
+		}
+
+		#endregion
+
+		#region Donwload Methods 
+
 		public async Task DownloadBeatmapsetAsync(int beatmapsetId)
 		{
-			DownloadBeatmapsetAsync(new DownloadTaskViewModel(beatmapsetId));
+			await DownloadBeatmapsetAsync(new DownloadTaskViewModel(beatmapsetId));
 		}
 
 		public async Task DownloadBeatmapsetAsync(DownloadTaskViewModel downloadTaskViewModel)
@@ -107,5 +147,7 @@ namespace osi.Core.DownloadManager
 			Uri s = Router.Resource.Beatmapsets.GetBeatmapsetUri(beatmapsetId);
 			webClient.DownloadFileAsync(s, Path);
 		}
+
+		#endregion
+		}
 	}
-}

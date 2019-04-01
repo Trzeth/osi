@@ -20,7 +20,7 @@ namespace osi.Desktop
 	/// <summary>
 	/// DownloadMessage.xaml 的交互逻辑
 	/// </summary>
-	public partial class BeatmapListItem : BaseMessage
+	public partial class BeatmapListItem : UserControl
 	{
 		#region Dependency Properties
 
@@ -29,7 +29,6 @@ namespace osi.Desktop
 		public BeatmapListItem()
 		{
 			InitializeComponent();
-			this.SlideAndFadeInFromRight(200);
 		}
 	}
 }
