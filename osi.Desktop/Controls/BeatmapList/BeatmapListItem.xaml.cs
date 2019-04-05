@@ -12,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using static osi.Core.DownloadManager.BeatmapsetInformationHelper;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
@@ -29,6 +30,21 @@ namespace osi.Desktop
 		public BeatmapListItem()
 		{
 			InitializeComponent();
+		}
+
+		private void Panel_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			BeatmapListItemViewModel viewModel = (BeatmapListItemViewModel)DataContext;
+			if(viewModel.HasGetDetailed == false)
+			{
+				Task.Run(() =>
+				{
+					viewModel = GetDetailBeatmapListItemViewModelAsync(viewModel.BeatmapsetInformation.BeatmapsetId).Result;
+					viewModel.HasGetDetailed = true;
+					Dispatcher.Invoke(() => { DataContext = viewModel; });
+				});
+			}
+
 		}
 	}
 }

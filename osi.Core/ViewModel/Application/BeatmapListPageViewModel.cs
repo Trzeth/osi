@@ -1,4 +1,5 @@
-﻿using System;
+﻿using osi.Core.DownloadManager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,12 @@ namespace osi.Core
     {
 		public BeatmapListViewModel BeatmapListViewModel { get; set; }
 
-		public string SearchBarText { get; set; }
+		public string SearchBarString { get; set; }
+
+		public BeatmapsetFilter CurrentBeatmapsetFilter { get; set; }
+
+		public ExtendFilter DefaultExtendFilterFilter { get; set; }
+
+		public List<ExtendFilter> ExtendFilterFilters { get; set; }
 	}
 }

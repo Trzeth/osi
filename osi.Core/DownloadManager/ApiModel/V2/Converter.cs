@@ -8,7 +8,7 @@ namespace osi.Core.DownloadManager.ApiModel.V2
 {
 	public static class Converter
 	{
-		public static void ToBeatmapsetInformation(this BeatmapInfo info, BeatmapsetInformation sI)
+		public static void ToBeatmapsetInformation(this BeatmapInfo info,ref BeatmapsetInformation sI)
 		{
 			Beatmapset beatmapset = info.data;
 
@@ -34,11 +34,12 @@ namespace osi.Core.DownloadManager.ApiModel.V2
 			//beatmapset.titleU;
 			sI.HasVideo = ApiModel.Converter.IntToBoolen(beatmapset.video);
 
+			List<BeatmapInformation> bI = new List<BeatmapInformation>();
 			foreach (Beatmap b in beatmapset.bid_data)
 			{
-				List<BeatmapInformation> bI = new List<BeatmapInformation>();
 				bI.Add(b.ToBeatmapInformation());
 			}
+			sI.Beatmaps = bI;
 		}
 
 		private static BeatmapInformation ToBeatmapInformation(this Beatmap beatmap)

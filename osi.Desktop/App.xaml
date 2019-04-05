@@ -12,6 +12,8 @@
                 <ResourceDictionary Source="Styles/Message.xaml" />
                 <ResourceDictionary Source="Styles/Windows.xaml" />
                 <ResourceDictionary Source="Styles/TextBoxs.xaml" />
+                <ResourceDictionary Source="Styles/ListViews.xaml" />
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

@@ -7,6 +7,7 @@
     <FontFamily x:Key="LatoLight">pack://application:,,,/Fonts/#Lato Light</FontFamily>
     <FontFamily x:Key="LatoBold">pack://application:,,,/Fonts/#Lato Bold</FontFamily>
     <FontFamily x:Key="FontAwesome">pack://Application:,,,/Fonts/#Font Awesome 5 Pro Light</FontFamily>
+    <FontFamily x:Key="FontAwesomeSolid">pack://Application:,,,/Fonts/#Font Awesome 5 Pro Solid</FontFamily>
 
     <Style x:Key="BaseStyle" TargetType="{x:Type Control}">
         <Setter Property="FontFamily" Value="{StaticResource LatoRegular}" />

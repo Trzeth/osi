@@ -16,39 +16,153 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ContentControl}">
                         <Grid Width="{TemplateBinding Width}">
+
+                            <Grid x:Name="PlaceHolder" VerticalAlignment="Top" />
+
                             <Grid Margin="5">
                                 <Grid.Effect>
-                                    <DropShadowEffect Opacity="0.2" ShadowDepth="0" />
+                                    <DropShadowEffect x:Name="Shadow"
+                                                      Opacity="0.2"
+                                                      ShadowDepth="0" />
                                 </Grid.Effect>
 
-                                <Grid x:Name="Grid">
-                                    <Grid>
-                                        <Border x:Name="Container"
-                                                Background="{StaticResource BackgroundLightBrush}"
-                                                CornerRadius="3" />
+                                <Grid MouseDown="Panel_MouseDown">
+                                    <Grid.Triggers>
+                                        <EventTrigger RoutedEvent="MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation DecelerationRatio="0.5"
+                                                                     Storyboard.TargetName="Image"
+                                                                     Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                                                     To="1.1"
+                                                                     Duration="0:0:0.2" />
+                                                    <DoubleAnimation DecelerationRatio="0.5"
+                                                                     Storyboard.TargetName="Image"
+                                                                     Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                                                     To="1.1"
+                                                                     Duration="0:0:0.2" />
+                                                    <DoubleAnimation DecelerationRatio="0.5"
+                                                                     Storyboard.TargetName="Shadow"
+                                                                     Storyboard.TargetProperty="Opacity"
+                                                                     To="0.4"
+                                                                     Duration="0:0:0.2" />
+                                                    <ThicknessAnimation DecelerationRatio="0.5"
+                                                                        Storyboard.TargetName="InfomationContainer"
+                                                                        Storyboard.TargetProperty="Margin"
+                                                                        To="8,0,0,0"
+                                                                        Duration="0:0:0.2" />
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Container"
+                                                                                   Storyboard.TargetProperty="CornerRadius"
+                                                                                   Duration="0:0:0.2">
+                                                        <ObjectKeyFrameCollection>
+                                                            <DiscreteObjectKeyFrame KeyTime="0:0:0.1">
+                                                                <DiscreteObjectKeyFrame.Value>
+                                                                    <CornerRadius>2</CornerRadius>
+                                                                </DiscreteObjectKeyFrame.Value>
+                                                            </DiscreteObjectKeyFrame>
+                                                            <DiscreteObjectKeyFrame KeyTime="0:0:0.2">
+                                                                <DiscreteObjectKeyFrame.Value>
+                                                                    <CornerRadius>1</CornerRadius>
+                                                                </DiscreteObjectKeyFrame.Value>
+                                                            </DiscreteObjectKeyFrame>
+                                                        </ObjectKeyFrameCollection>
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="MouseDown">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <BooleanAnimationUsingKeyFrames Storyboard.TargetName="BeatmapDetail" Storyboard.TargetProperty="IsOpen">
+                                                        <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True" />
+                                                    </BooleanAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation DecelerationRatio="0.5"
+                                                                     Storyboard.TargetName="Image"
+                                                                     Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                                                     To="1"
+                                                                     Duration="0:0:0.3" />
+                                                    <DoubleAnimation DecelerationRatio="0.5"
+                                                                     Storyboard.TargetName="Image"
+                                                                     Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                                                     To="1"
+                                                                     Duration="0:0:0.3" />
+                                                    <DoubleAnimation DecelerationRatio="0.5"
+                                                                     Storyboard.TargetName="Shadow"
+                                                                     Storyboard.TargetProperty="Opacity"
+                                                                     To="0.2"
+                                                                     Duration="0:0:0.2" />
+                                                    <ThicknessAnimation DecelerationRatio="0.5"
+                                                                        Storyboard.TargetName="InfomationContainer"
+                                                                        Storyboard.TargetProperty="Margin"
+                                                                        To="0"
+                                                                        Duration="0:0:0.2" />
+                                                    <BooleanAnimationUsingKeyFrames Storyboard.TargetName="BeatmapDetail" Storyboard.TargetProperty="IsOpen">
+                                                        <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False" />
+                                                    </BooleanAnimationUsingKeyFrames>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Container"
+                                                                                   Storyboard.TargetProperty="CornerRadius"
+                                                                                   Duration="0:0:0.2">
+                                                        <ObjectKeyFrameCollection>
+                                                            <DiscreteObjectKeyFrame KeyTime="0:0:0.1">
+                                                                <DiscreteObjectKeyFrame.Value>
+                                                                    <CornerRadius>2</CornerRadius>
+                                                                </DiscreteObjectKeyFrame.Value>
+                                                            </DiscreteObjectKeyFrame>
+                                                            <DiscreteObjectKeyFrame KeyTime="0:0:0.2">
+                                                                <DiscreteObjectKeyFrame.Value>
+                                                                    <CornerRadius>3</CornerRadius>
+                                                                </DiscreteObjectKeyFrame.Value>
+                                                            </DiscreteObjectKeyFrame>
+                                                        </ObjectKeyFrameCollection>
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Grid.Triggers>
 
-                                        <!--  Beatmapset Information  -->
-                                        <Grid x:Name="Panel"
-                                              Background="{StaticResource BackgroundLightBrush}"
-                                              SnapsToDevicePixels="True">
+                                    <Border x:Name="Container"
+                                            Background="{StaticResource BackgroundLightBrush}"
+                                            CornerRadius="3" />
 
-                                            <Grid.OpacityMask>
-                                                <VisualBrush Visual="{Binding ElementName=Container}" />
-                                            </Grid.OpacityMask>
+                                    <!--  Region Beatmapset Information  -->
+                                    <Grid x:Name="Panel"
+                                          Height="80"
+                                          Background="{StaticResource BackgroundLightBrush}"
+                                          SnapsToDevicePixels="True">
 
-                                            <Grid UseLayoutRounding="True">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="Auto" />
-                                                </Grid.ColumnDefinitions>
+                                        <Grid.OpacityMask>
+                                            <VisualBrush Visual="{Binding ElementName=Container}" />
+                                        </Grid.OpacityMask>
 
-                                                <Image Height="70"
-                                                       MinWidth="90"
-                                                       Source="{Binding BeatmapsetInformation.BeatmapsetId, Converter={local:BeatmapsetIdToImageConverter}}"
-                                                       Stretch="UniformToFill" />
+                                        <Grid UseLayoutRounding="True">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
 
-                                                <Grid Grid.Column="1" Margin="5,5">
+                                            <Image x:Name="Image"
+                                                   Height="{Binding ElementName=Panel, Path=ActualHeight}"
+                                                   MinWidth="90"
+                                                   RenderTransformOrigin="0.5,0.5"
+                                                   Source="{Binding BeatmapsetInformation.BeatmapsetId, Converter={local:BeatmapsetIdToImageConverter}}"
+                                                   Stretch="UniformToFill">
+                                                <Image.RenderTransform>
+                                                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                                                </Image.RenderTransform>
+                                            </Image>
+
+                                            <Grid x:Name="InfomationContainer"
+                                                  Grid.Column="1"
+                                                  Margin="0"
+                                                  Background="{StaticResource BackgroundLightBrush}">
+                                                <Grid Margin="5">
                                                     <StackPanel VerticalAlignment="Top">
                                                         <TextBlock MaxWidth="100"
                                                                    HorizontalAlignment="Left"
@@ -84,24 +198,60 @@
                                                         </StackPanel>
                                                     </StackPanel>
                                                 </Grid>
-
-                                                <Button Grid.Column="2"
-                                                        Margin="0,0,-1,0"
-                                                        Padding="10"
-                                                        HorizontalAlignment="Right"
-                                                        Background="Transparent"
-                                                        BorderThickness="0"
-                                                        Command="{Binding ClickCommand}"
-                                                        Style="{StaticResource IconButtonStyle}">
-                                                    <TextBlock FontSize="{StaticResource FontSizeXXLarge}"
-                                                               Foreground="{StaticResource OsuGreenVeryDarkBrush}"
-                                                               Style="{StaticResource IconTextBlock}"
-                                                               Text="{StaticResource FontAwesomeDownloadIcon}" />
-                                                </Button>
                                             </Grid>
-                                        </Grid>
 
+                                            <Button Grid.Column="2"
+                                                    Margin="0,0,-1,0"
+                                                    Padding="10"
+                                                    HorizontalAlignment="Right"
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Command="{Binding ClickCommand}"
+                                                    Style="{StaticResource IconButtonStyle}">
+                                                <TextBlock FontSize="{StaticResource FontSizeXXLarge}"
+                                                           Foreground="{StaticResource OsuGreenVeryDarkBrush}"
+                                                           Style="{StaticResource IconTextBlock}"
+                                                           Text="{StaticResource FontAwesomeDownloadIcon}" />
+                                            </Button>
+                                        </Grid>
                                     </Grid>
+                                    <!--  End Region  -->
+
+                                    <!--  Region Detail  -->
+                                    <Popup x:Name="BeatmapDetail"
+                                           Width="{Binding ElementName=Panel, Path=ActualWidth}"
+                                           AllowsTransparency="True"
+                                           Placement="Bottom"
+                                           PlacementTarget="{Binding ElementName=Panel}">
+                                        <Grid>
+                                            <ListBox HorizontalContentAlignment="Stretch" ItemsSource="{Binding BeatmapsetInformation.Beatmaps}">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel>
+                                                            <TextBlock Text="{Binding Version}" TextTrimming="CharacterEllipsis" />
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="*" />
+                                                                    <ColumnDefinition Width="*" />
+                                                                    <ColumnDefinition Width="*" />
+                                                                    <ColumnDefinition Width="*" />
+                                                                    <ColumnDefinition Width="*" />
+                                                                </Grid.ColumnDefinitions>
+
+                                                                <TextBlock Grid.Column="0" Text="{Binding Star, StringFormat={}{0:N1}*}" />
+                                                                <TextBlock Grid.Column="1" Text="{Binding CircleSize, StringFormat=CS:{0:N1}}" />
+                                                                <TextBlock Grid.Column="2" Text="{Binding ApproachRate, StringFormat=AR:{0:N1}}" />
+                                                                <TextBlock Grid.Column="3" Text="{Binding OverallDifficulty, StringFormat=OD{0:N1}}" />
+                                                                <TextBlock Grid.Column="4" Text="{Binding HPDrain, StringFormat=HP{0:N1}}" />
+                                                            </Grid>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </Grid>
+                                    </Popup>
+                                    <!--  End Region  -->
+
                                 </Grid>
                             </Grid>
                         </Grid>

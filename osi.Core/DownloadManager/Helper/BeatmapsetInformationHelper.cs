@@ -9,7 +9,7 @@ using static osi.Core.DownloadManager.ApiRoute.Router;
 
 namespace osi.Core.DownloadManager
 {
-	public static class BeatmapsetInformations
+	public static class BeatmapsetInformationHelper
 	{
 		public static async Task GetInformationAsync(this BeatmapsetInformation beatmapsetInformation)
 		{
@@ -19,7 +19,22 @@ namespace osi.Core.DownloadManager
 			WebClient webClient = new WebClient();
 			string s = webClient.DownloadString(Api.GetBeatmapInfoString(beatmapsetInformation.BeatmapsetId));
 
-			JsonConvert.DeserializeObject<BeatmapInfo>(s).ToBeatmapsetInformation(beatmapsetInformation);
+			JsonConvert.DeserializeObject<BeatmapInfo>(s).ToBeatmapsetInformation(ref beatmapsetInformation);
+		}
+
+		public static async Task<BeatmapListItemViewModel> GetDetailBeatmapListItemViewModelAsync(int beatmapsetId)
+		{
+
+			WebClient webClient = new WebClient();
+			string s = webClient.DownloadString(Api.GetBeatmapInfoString(beatmapsetId));
+
+			BeatmapsetInformation beatmapsetInformation = new BeatmapsetInformation();
+			JsonConvert.DeserializeObject<BeatmapInfo>(s).ToBeatmapsetInformation(ref beatmapsetInformation);
+
+			BeatmapListItemViewModel viewModel = new BeatmapListItemViewModel();
+			viewModel.BeatmapsetInformation = beatmapsetInformation;
+
+			return viewModel;
 		}
 
 		// TODO FINISH IT
@@ -28,5 +43,6 @@ namespace osi.Core.DownloadManager
 		//	WebClient webClient = new WebClient();
 		//	string s = webClient.DownloadString(Api.)
 		//}
+
 	}
 }

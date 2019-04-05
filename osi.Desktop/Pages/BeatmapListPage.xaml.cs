@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using osi.Core.DownloadManager;
+using static osi.Core.DownloadManager.BeatmapListHelper;
+using static osi.Core.DownloadManager.BeatmapsetInformationHelper;
 using osi.Core;
 
 namespace osi.Desktop
@@ -25,10 +27,14 @@ namespace osi.Desktop
         public BeatmapListPage()
         {
             InitializeComponent();
+
 			if (((BeatmapListPageViewModel)DataContext).BeatmapListViewModel == null)
 			{
 				Task.Run(() =>{
-					ViewModelLocator.Instance.BeatmapListPageViewModel.BeatmapListViewModel = DownloadManager.GetBeatmapListViewModelAsync(ListType.New).Result;
+					BeatmapsetFilter filter = new BeatmapsetFilter(ListType.New, new Range(0, 24));
+					ViewModelLocator.Instance.BeatmapListPageViewModel.CurrentBeatmapsetFilter = filter;
+					BeatmapListViewModel viewModel = GetBeatmapListViewModelAsync(filter).Result;
+					ViewModelLocator.Instance.BeatmapListPageViewModel.BeatmapListViewModel = viewModel;
 				});
 			};
 		}
@@ -38,17 +44,37 @@ namespace osi.Desktop
 			string searchText = InputBox.Text;
 			Task.Run(() =>
 			{
-				BeatmapListViewModel viewModel = DownloadManager.GetBeatmapListViewModelAsync(ListType.Search, searchText).Result;
+				BeatmapsetFilter filter = new BeatmapsetFilter(searchText, new Range(0, 24));
+				ViewModelLocator.Instance.BeatmapListPageViewModel.CurrentBeatmapsetFilter = filter;
+
+				BeatmapListViewModel viewModel = GetBeatmapListViewModelAsync(filter).Result;
 				ViewModelLocator.Instance.BeatmapListPageViewModel.BeatmapListViewModel = viewModel;
 			});
 		}
+
+		private void FilterSearchButton_Click(object sender, RoutedEventArgs e)
+		{
+			string searchText = InputBox.Text;
+			Task.Run(() =>
+			{
+				BeatmapsetFilter filter = new BeatmapsetFilter(searchText, new Range(0, 24));
+				ViewModelLocator.Instance.BeatmapListPageViewModel.CurrentBeatmapsetFilter = filter;
+
+				BeatmapListViewModel viewModel = GetBeatmapListViewModelAsync(filter).Result;
+				ViewModelLocator.Instance.BeatmapListPageViewModel.BeatmapListViewModel = viewModel;
+			});
+		}
+		
 
 		private void HotButton_Click(object sender, RoutedEventArgs e)
 		{
 			string searchText = InputBox.Text;
 			Task.Run(() =>
 			{
-				BeatmapListViewModel viewModel = DownloadManager.GetBeatmapListViewModelAsync(ListType.Hot).Result;
+				BeatmapsetFilter filter = new BeatmapsetFilter(ListType.Hot, new Range(0, 24));
+				ViewModelLocator.Instance.BeatmapListPageViewModel.CurrentBeatmapsetFilter = filter;
+
+				BeatmapListViewModel viewModel = GetBeatmapListViewModelAsync(filter).Result;
 				ViewModelLocator.Instance.BeatmapListPageViewModel.BeatmapListViewModel = viewModel;
 			});
 		}
@@ -58,9 +84,17 @@ namespace osi.Desktop
 			string searchText = InputBox.Text;
 			Task.Run(() =>
 			{
-				BeatmapListViewModel viewModel = DownloadManager.GetBeatmapListViewModelAsync(ListType.New).Result;
+				BeatmapsetFilter filter = new BeatmapsetFilter(ListType.New,new Range(0,24));
+				ViewModelLocator.Instance.BeatmapListPageViewModel.CurrentBeatmapsetFilter = filter;
+
+				BeatmapListViewModel viewModel = GetBeatmapListViewModelAsync(filter).Result;
 				ViewModelLocator.Instance.BeatmapListPageViewModel.BeatmapListViewModel = viewModel;
 			});
+		}
+
+		private void FilterButton_Click(object sender, RoutedEventArgs e)
+		{
+			Filter.IsOpen = true;
 		}
 	}
 }

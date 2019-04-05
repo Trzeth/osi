@@ -15,6 +15,7 @@ using osi.Core.DownloadManager;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
 using osi.Core;
+using Mode = osi.Core.Mode;
 
 namespace osi.Desktop
 {

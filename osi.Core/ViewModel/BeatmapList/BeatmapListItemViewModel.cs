@@ -10,7 +10,11 @@ namespace osi.Core
 	public class BeatmapListItemViewModel:BaseViewModel
 	{
 		public BeatmapsetInformation BeatmapsetInformation { get; set; }
+
 		public RelayCommand ClickCommand { get; set; }
+
+		public bool HasGetDetailed { get; set; } = false;
+
 		public BeatmapListItemViewModel()
 		{
 			ClickCommand = new RelayCommand(() => 

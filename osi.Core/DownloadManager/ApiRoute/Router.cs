@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ardalis.SmartEnum;
 
 namespace osi.Core.DownloadManager.ApiRoute
 {
@@ -34,20 +35,15 @@ namespace osi.Core.DownloadManager.ApiRoute
 			public static class BeatmapList
 			{
 				//TODO YOU SHOULD FINISH IT
-				public static string GetBeatmapListString(ListType type, int limit = 25, int offset = 0)
-				{
-					if (type == ListType.Search)
-						Debugger.Break();
-
-					return GetBeatmapListString(type, null, null, limit, offset);
-				}
-				public static string GetBeatmapListString(ListType type, BeatmapsetFilter filter = null,object keyword = null,int limit = 25, int offset = 0)
+				public static string GetBeatmapListString(BeatmapsetFilter filter)
 				{
 					string s = GetAbsoluteRoute(ApiRoutes.Api.BeatmapList);
-					s += $"?0={limit}";
-					s += $"&1={offset}";
+					s += $"?0={filter.Range.Length()}";
+					s += $"&1={filter.Range.From}";
 					s += "&2=";
-					switch (type) {
+
+					switch (filter.ListType)
+					{
 						case ListType.Hot:
 							s += "1";
 							break;
@@ -61,37 +57,34 @@ namespace osi.Core.DownloadManager.ApiRoute
 							s += "4";
 							break;
 					}
-					if (type == ListType.Search)
+					if (filter.ListType == ListType.Search)
 					{
-						if(keyword != null)
+						if (filter.SearchString != null)
 						{
-							s += $"&3={keyword}";
+							s += $"&3={filter.SearchString}";
 						}
-						if(filter != null)
+						if (filter.ExtendFilter != null)
 						{
-							s += $"&4={GetSum(filter.SubTypes)}";
-							s += $"&5={GetSum(filter.Modes)}";
-							s += $"&6={GetSum(filter.RankStatus)}";
-							s += $"&7={GetSum(filter.Genres)}";
-							s += $"&8={GetSum(filter.Languages)}";
-							s += $"&7={filter.Other}";
+							ExtendFilter extendFilter = filter.ExtendFilter;
+							s += $"&4={GetSum(extendFilter.SubTypes)}";
+							s += $"&5={GetSum(extendFilter.Modes)}";
+							s += $"&6={GetSum(extendFilter.RankStatus)}";
+							s += $"&7={GetSum(extendFilter.Genres)}";
+							s += $"&8={GetSum(extendFilter.Languages)}";
+							s += $"&7={extendFilter.Other}";
 						}
 					}
 					return s;
 				}
-				public static int GetSum<T>(List<T> list)
-				{
-					if (!typeof(T).IsEnum)
-					{
-						Debugger.Break();
-					}
 
-					int i = 0;
+				public static int GetSum<T>(List<T> list) where T : SmartEnum<T>
+				{
+					int sum = 0;
 					foreach(T t in list)
 					{
-						i += (int)Enum.Parse(typeof(T),t.ToString());
+						sum += t.Value;
 					}
-					return i;
+					return sum;
 				}
 			}
 		}
